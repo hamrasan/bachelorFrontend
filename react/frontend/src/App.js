@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm'
 import TheGarden from './views/TheGarden'
 import TheWeather from './views/TheWeather'
 import TheHome from './views/TheHome'
+import PlantDetail from './views/PlantDetail'
 
 import { Route, Switch } from 'react-router-dom';
 
@@ -17,16 +18,19 @@ function App() {
 
     <div>
         <Switch>
-          <Route path="/garden">
-            <TheGarden />
-          </Route>
           <Route path="/login">
             <LoginForm/>
           </Route>
           <Route path="/weather">
             <TheWeather />
           </Route>
-          <Route path="/">
+          <Route path="/garden/detail/:id">
+            <PlantDetail />
+          </Route>
+          <Route path="/garden" exact>
+            <TheGarden />
+          </Route>
+          <Route path="/" exact>
             <TheHome />
           </Route>
         </Switch>

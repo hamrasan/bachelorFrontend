@@ -1,14 +1,13 @@
 import { useState } from "react";
 import PlantCard from "../components/PlantCard";
 
-import {
-    CardDeck
-  } from "react-bootstrap";
+import { CardDeck } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function TheGarden() {
   const [plants, setPlants] = useState([
     {
-        id: 0,
+      id: 0,
       name: "Rajčiak jedlý",
       picture: "../assets/paradajka-lycopersicum-rajciak-semena.jpg",
       minTemperature: "12",
@@ -18,35 +17,38 @@ function TheGarden() {
       category: "ovocie",
     },
     {
-        id: 1,
+      id: 1,
       name: "Paprika červená",
       picture: "../assets/paradajka-lycopersicum-rajciak-semena.jpg",
       minTemperature: "17",
       maxTemperature: "35",
       dateOfPlant: "1.5.2021",
       season: "leto",
-      category: "zelenina"
+      category: "zelenina",
     },
     {
-        id: 2,
+      id: 2,
       name: "Uhorka hadovka",
       picture: "../assets/paradajka-lycopersicum-rajciak-semena.jpg",
       minTemperature: "12",
       maxTemperature: "30",
       dateOfPlant: "1.5.2021",
       season: "leto",
-      category: "zelenina"
+      category: "zelenina",
     },
   ]);
 
-    const mappedPlants = plants.map(plant => {return <PlantCard key={plant.id} plant={plant} />})
-
+  const mappedPlants = plants.map((plant) => {
+    return (
+      <Link to={"/garden/detail/" + plant.id} plant={plant}>
+        <PlantCard key={plant.id} plant={plant} />
+      </Link>
+    );
+  });
 
   return (
     <div>
-      <CardDeck>
-        {mappedPlants}
-      </CardDeck>
+      <CardDeck>{mappedPlants}</CardDeck>
     </div>
   );
 }
