@@ -1,6 +1,7 @@
 // import logo from "./logo.svg";
 // import "./App.css";
 import TheNavigation from './components/TheNavigation'
+import RegisterForm from './components/RegisterForm'
 import LoginForm from './components/LoginForm'
 import TheGarden from './views/TheGarden'
 import TheWeather from './views/TheWeather'
@@ -20,6 +21,9 @@ function App() {
         <Switch>
           <Route path="/login">
             <LoginForm/>
+          </Route>
+          <Route path="/register">
+            <RegisterForm/>
           </Route>
           <Route path="/weather">
             <TheWeather />

@@ -40,7 +40,7 @@ function TheGarden() {
 
   const mappedPlants = plants.map((plant) => {
     return (
-      <Link to={"/garden/detail/" + plant.id} plant={plant}>
+      <Link to={"/garden/detail/" + plant.id}>
         <PlantCard key={plant.id} plant={plant} />
       </Link>
     );
