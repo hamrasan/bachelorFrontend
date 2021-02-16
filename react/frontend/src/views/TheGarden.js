@@ -1,10 +1,14 @@
 import { useState } from "react";
 import PlantCard from "../components/PlantCard";
+import SearchForm from "../components/SearchForm";
+import GardenFilter from "../components/GardenFilter";
 
 import { CardDeck } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function TheGarden() {
+  const [categories, setCategories] = useState(["ovocie", "zelenina", "okrasne", "izbove"])
+
   const [plants, setPlants] = useState([
     {
       id: 0,
@@ -46,8 +50,18 @@ function TheGarden() {
     );
   });
 
+  let count = 0;
+  const mappedCategories = categories.map((category) => {
+    return (
+      <GardenFilter key={count} category={category} />
+    );
+    count++;
+  });
+
   return (
     <div>
+      <SearchForm/>
+      {mappedCategories}
       <CardDeck>{mappedPlants}</CardDeck>
     </div>
   );

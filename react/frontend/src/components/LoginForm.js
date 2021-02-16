@@ -2,10 +2,6 @@ import { Form, Col, Button, Row, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function LoginForm() {
-  //   const styleReg = {
-  //     margin:,
-  //     width: "200px",
-  // }
 
   return (
     <div className="loginForm">
