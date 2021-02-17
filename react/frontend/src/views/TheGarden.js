@@ -7,7 +7,12 @@ import { CardDeck } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function TheGarden() {
-  const [categories, setCategories] = useState(["ovocie", "zelenina", "okrasne", "izbove"])
+  const [categories, setCategories] = useState([
+    "ovocie",
+    "zelenina",
+    "okrasne",
+    "izbove",
+  ]);
 
   const [plants, setPlants] = useState([
     {
@@ -52,16 +57,16 @@ function TheGarden() {
 
   let count = 0;
   const mappedCategories = categories.map((category) => {
-    return (
-      <GardenFilter key={count} category={category} />
-    );
+    return <GardenFilter key={count} category={category} />;
     count++;
   });
 
   return (
     <div>
-      <SearchForm/>
-      {mappedCategories}
+      <SearchForm />
+      <Container className="pt-3">
+        <Form>{mappedCategories}</Form>
+      </Container>
       <CardDeck>{mappedPlants}</CardDeck>
     </div>
   );
