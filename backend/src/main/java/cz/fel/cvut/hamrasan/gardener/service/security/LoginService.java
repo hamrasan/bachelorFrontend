@@ -1,4 +1,4 @@
-package cz.fel.cvut.hamrasan.gardener.service;
+package cz.fel.cvut.hamrasan.gardener.service.security;
 
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.exceptions.AlreadyLoginException;

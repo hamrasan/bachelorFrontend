@@ -21,16 +21,6 @@ public class UserDao extends BaseDao<User>{
 //        }
 //    }
 
-    public User find(Integer id) {
-        Objects.requireNonNull(id);
-        return em.find(User.class, id);
-    }
-
-    public User find(String email) {
-        Objects.requireNonNull(email);
-        return em.find(User.class, email);
-    }
-
     public User findByEmail(String email) {
         try {
             return em.createNamedQuery("User.findByEmail", User.class).setParameter("email", email)

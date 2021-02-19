@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @MappedSuperclass
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class AbstractEntity implements Serializable {
 
     @Id

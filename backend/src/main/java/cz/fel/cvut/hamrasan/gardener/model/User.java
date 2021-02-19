@@ -1,22 +1,18 @@
 package cz.fel.cvut.hamrasan.gardener.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Entity
 @Table(name = "APP_USER")
 @NamedQueries({
         @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email AND u.deleted_at is null")
 })
-@Inheritance(strategy = InheritanceType.JOINED)
 public class User extends AbstractEntity {
 
     @Basic(optional = false)
