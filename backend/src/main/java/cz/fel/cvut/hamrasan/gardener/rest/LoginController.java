@@ -2,6 +2,7 @@ package cz.fel.cvut.hamrasan.gardener.rest;
 
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.exceptions.AlreadyLoginException;
+import cz.fel.cvut.hamrasan.gardener.model.User;
 import cz.fel.cvut.hamrasan.gardener.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -24,7 +25,7 @@ public class LoginController {
     }
 
     @PostMapping(value = "/login",produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserDao login(@RequestBody HashMap<String,String> request) throws AlreadyLoginException {
+    public User login(@RequestBody HashMap<String,String> request) throws AlreadyLoginException {
 
         return service.login(request.get("email"),request.get("password"));
     }
