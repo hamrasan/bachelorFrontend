@@ -7,6 +7,7 @@ import TheGarden from './views/TheGarden'
 import TheWeather from './views/TheWeather'
 import TheHome from './views/TheHome'
 import PlantDetail from './views/PlantDetail'
+import MyProfile from './views/MyProfile'
 
 import { Route, Switch } from 'react-router-dom';
 
@@ -33,6 +34,9 @@ function App() {
           </Route>
           <Route path="/garden" exact>
             <TheGarden />
+          </Route>
+          <Route path="/profile">
+            <MyProfile/>
           </Route>
           <Route path="/" exact>
             <TheHome />

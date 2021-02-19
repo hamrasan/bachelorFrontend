@@ -1,9 +1,9 @@
 import { useState } from "react";
 import PlantCard from "../components/PlantCard";
 import SearchForm from "../components/SearchForm";
-import GardenFilter from "../components/GardenFilter";
+import DropdownFilter from "../components/DropDownFilter";
 
-import { CardDeck } from "react-bootstrap";
+import { CardDeck, Container, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function TheGarden() {
@@ -55,19 +55,13 @@ function TheGarden() {
     );
   });
 
-  let count = 0;
-  const mappedCategories = categories.map((category) => {
-    return <GardenFilter key={count} category={category} />;
-    count++;
-  });
-
   return (
     <div>
       <SearchForm />
-      <Container className="pt-3">
-        <Form>{mappedCategories}</Form>
+      <DropdownFilter categories={categories} />
+      <Container>
+        <CardDeck>{mappedPlants}</CardDeck>
       </Container>
-      <CardDeck>{mappedPlants}</CardDeck>
     </div>
   );
 }
