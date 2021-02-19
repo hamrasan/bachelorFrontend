@@ -17,6 +17,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -74,6 +77,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().invalidateHttpSession(true).deleteCookies(COOKIES_TO_DESTROY)
                 .logoutUrl(SecurityConstants.LOGOUT_URI).logoutSuccessHandler(logoutSuccessHandler)
                 .and().sessionManagement().maximumSessions(1);
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("PATCH");
+        source.registerCorsConfiguration("/logout", config);
+        source.registerCorsConfiguration("/*", config);
+        source.registerCorsConfiguration("/*/*", config);
+        source.registerCorsConfiguration("/*/*/*", config);
+        return new CorsFilter(source);
     }
 
 
