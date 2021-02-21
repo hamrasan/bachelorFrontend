@@ -4,7 +4,6 @@ import cz.fel.cvut.hamrasan.gardener.model.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
-import java.util.Objects;
 
 @Repository
 public class UserDao extends BaseDao<User>{

@@ -1,6 +1,7 @@
 package cz.fel.cvut.hamrasan.gardener.dao;
 
 import cz.fel.cvut.hamrasan.gardener.model.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -49,6 +50,7 @@ public abstract class BaseDao<T extends AbstractEntity> implements GenericDao<T>
     }
 
     @Override
+    @Transactional
     public void persist(T entity) {
         Objects.requireNonNull(entity);
         try {

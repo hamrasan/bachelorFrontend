@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -39,16 +41,40 @@ public class User extends AbstractEntity {
     @NotBlank(message = "Email cannot be blank")
     private String email;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "plants_user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "plant_id"))
+    private List<Plant> plants;
+
 
     public User() {
+        this.plants = new ArrayList<Plant>();
     }
 
-    public User(String password, String firstName, String lastName, String email){
-        this.password = password;
+
+    public User(@Size(max = 30, min = 1, message = "First name is in incorrect format.") @NotBlank(message = "First name cannot be blank") String firstName, @Size(max = 30, min = 1, message = "Last name is in incorrect format.") @NotBlank(message = "Last name cannot be blank") String lastName,
+                @Size(max = 255, min = 6, message = "Password is in incorrect format.") @NotBlank(message = "Password cannot be blank") String password,
+                @Email(message = "Email should be valid") @NotBlank(message = "Email cannot be blank") String email, List<Plant> plants) {
+
         this.firstName = firstName;
         this.lastName = lastName;
+        this.password = password;
         this.email = email;
+        this.plants = plants;
     }
+
+
+    public User(@Size(max = 30, min = 1, message = "First name is in incorrect format.") @NotBlank(message = "First name cannot be blank") String firstName, @Size(max = 30, min = 1, message = "Last name is in incorrect format.") @NotBlank(message = "Last name cannot be blank") String lastName, @Size(max = 255, min = 6, message = "Password is in incorrect format.") @NotBlank(message = "Password cannot be blank") String password, @Email(message = "Email should be valid") @NotBlank(message = "Email cannot be blank") String email) {
+
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.email = email;
+        this.plants = new ArrayList<Plant>();
+    }
+
 
     public User(@Email(message = "Email should be valid") String email,
                 @Size(max = 255, min = 6, message = "Password is in incorrect format.") String password) {
@@ -97,13 +123,23 @@ public class User extends AbstractEntity {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
+    public List<Plant> getPlants() {
+        return plants;
+    }
+
+    public void setPlants(List<Plant> plants) {
+        this.plants = plants;
+    }
+
     @Override
     public String toString() {
+
         return "User{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", plants=" + plants +
                 '}';
     }
 }
