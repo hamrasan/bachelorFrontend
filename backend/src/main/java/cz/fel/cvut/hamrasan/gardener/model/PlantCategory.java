@@ -1,8 +1,11 @@
 package cz.fel.cvut.hamrasan.gardener.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,6 +18,7 @@ import java.util.List;
     private String name;
 
     @OneToMany(mappedBy = "category")
+    @JsonIgnore
     private List<Plant> plants;
 
 
@@ -22,6 +26,11 @@ import java.util.List;
                          @NotBlank(message = "Name cannot be blank") String name, List<Plant> plants) {
         this.name = name;
         this.plants = plants;
+    }
+
+
+    public PlantCategory() {
+        this.plants = new ArrayList<Plant>();
     }
 
     public String getName() {

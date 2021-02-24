@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -60,6 +61,11 @@ public class Plant extends AbstractEntity{
         this.season = season;
         this.category = category;
         this.users = users;
+    }
+
+
+    public Plant() {
+        users = new ArrayList<User>();
     }
 
 

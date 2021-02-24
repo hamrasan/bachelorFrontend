@@ -47,8 +47,13 @@ public class DbSeeder implements
         List<Plant> plants = new ArrayList<Plant>();
         PlantCategory category = new PlantCategory("zelenina", plants );
         plantCategoryDao.persist(category);
-        Plant plant = new Plant("Rajčina veľká", "../../assets/paradajka-lycopersicum-rajciak-semena.jpg", 12, 35, LocalDate.now(), "March", category, userDao.findAll());
+        Plant plant = new Plant("Rajčina veľká", "../../assets/paradajka-lycopersicum-rajciak-semena.jpg", 12, 35, LocalDate.now(), "Marec", category, userDao.findAll());
         plantDao.persist(plant);
+
+        PlantCategory category2 = new PlantCategory("ovocie", new ArrayList<>() );
+        plantCategoryDao.persist(category2);
+        Plant plant2 = new Plant("Jahoda celoročná", "../../assets/paradajka-lycopersicum-rajciak-semena.jpg", 12, 40, LocalDate.now(), "Celoročne", category2, userDao.findAll());
+        plantDao.persist(plant2);
     }
 
     @Transactional

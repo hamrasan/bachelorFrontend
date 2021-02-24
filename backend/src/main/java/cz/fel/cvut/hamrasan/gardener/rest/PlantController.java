@@ -25,7 +25,7 @@ public class PlantController {
     }
 
 
-    @GetMapping( produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping( )
     public List<Plant> getAll() {
 
         if(!SecurityUtils.isAuthenticatedAnonymously()) {

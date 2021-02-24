@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PlantCard from "../components/PlantCard";
 import SearchForm from "../components/SearchForm";
 import DropdownFilter from "../components/DropDownFilter";
@@ -7,45 +7,37 @@ import { CardDeck, Container, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function TheGarden() {
-  const [categories, setCategories] = useState([
-    "ovocie",
-    "zelenina",
-    "okrasne",
-    "izbove",
-  ]);
+  const axios = require("axios");
 
-  const [plants, setPlants] = useState([
-    {
-      id: 0,
-      name: "Rajčiak jedlý",
-      picture: "../assets/paradajka-lycopersicum-rajciak-semena.jpg",
-      minTemperature: "12",
-      maxTemperature: "35",
-      dateOfPlant: "1.5.2021",
-      season: "leto",
-      category: "ovocie",
-    },
-    {
-      id: 1,
-      name: "Paprika červená",
-      picture: "../assets/paradajka-lycopersicum-rajciak-semena.jpg",
-      minTemperature: "17",
-      maxTemperature: "35",
-      dateOfPlant: "1.5.2021",
-      season: "leto",
-      category: "zelenina",
-    },
-    {
-      id: 2,
-      name: "Uhorka hadovka",
-      picture: "../assets/paradajka-lycopersicum-rajciak-semena.jpg",
-      minTemperature: "12",
-      maxTemperature: "30",
-      dateOfPlant: "1.5.2021",
-      season: "leto",
-      category: "zelenina",
-    },
-  ]);
+  const [categories, setCategories] = useState([]);
+
+  const [plants, setPlants] = useState([]);
+
+  const getPlants = () => {
+    axios
+      .get("http://localhost:8080/plants")
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        // const plantsArr = [];
+        // console.log(res.json());
+        // plantsArr.concat(res.data);
+        // res.data.forEach((element) => {
+        //   plantsArr.push(element);
+        // });
+        // setPlants({plants : plantsArr});
+        // setPlants(plants.concat(res.data));
+        // setPlants((plants) => [...plants, res.data[0]]);
+        // console.log(plantsArr);
+        // console.log(plants);
+      });
+  };
+
+  useEffect(() => {
+    console.log("som v effect");
+    // getCategories();
+    getPlants();
+  }, []);
 
   const mappedPlants = plants.map((plant) => {
     return (
