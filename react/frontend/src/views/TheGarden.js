@@ -16,19 +16,21 @@ function TheGarden() {
   const getPlants = () => {
     axios
       .get("http://localhost:8080/plants")
-      .then(res => res.json())
       .then(res => {
-        console.log(res);
-        // const plantsArr = [];
+        console.log(res.data);
+        const plantsArr = [];
         // console.log(res.json());
-        // plantsArr.concat(res.data);
+        // plantArr.concat(res.data);
         // res.data.forEach((element) => {
-        //   plantsArr.push(element);
+        //   // plantsArr.push(element);
+        //    setPlants({plants: element});
         // });
-        // setPlants({plants : plantsArr});
-        // setPlants(plants.concat(res.data));
+        // setPlants(()=> {
+        //   return [res.data];
+        // });
+        setPlants([res.data]);
         // setPlants((plants) => [...plants, res.data[0]]);
-        // console.log(plantsArr);
+        console.log(plants);
         // console.log(plants);
       });
   };
