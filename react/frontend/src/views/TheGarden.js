@@ -14,25 +14,10 @@ function TheGarden() {
   const [plants, setPlants] = useState([]);
 
   const getPlants = () => {
-    axios
-      .get("http://localhost:8080/plants")
-      .then(res => {
-        console.log(res.data);
-        const plantsArr = [];
-        // console.log(res.json());
-        // plantArr.concat(res.data);
-        // res.data.forEach((element) => {
-        //   // plantsArr.push(element);
-        //    setPlants({plants: element});
-        // });
-        // setPlants(()=> {
-        //   return [res.data];
-        // });
-        setPlants([res.data]);
-        // setPlants((plants) => [...plants, res.data[0]]);
-        console.log(plants);
-        // console.log(plants);
-      });
+    axios.get("http://localhost:8080/plants").then((res) => {
+      console.log(res.data);
+      setPlants(res.data);
+    });
   };
 
   useEffect(() => {
@@ -41,20 +26,37 @@ function TheGarden() {
     getPlants();
   }, []);
 
-  const mappedPlants = plants.map((plant) => {
-    return (
-      <Link to={"/garden/detail/" + plant.id}>
-        <PlantCard key={plant.id} plant={plant} />
-      </Link>
-    );
-  });
+  // const mappedPlants = plants.map((plant) => {
+  //   return (
+  //     <Link to={"/garden/detail/" + plant.id}>
+  //       <PlantCard key={plant.id} plant={plant} />
+  //     </Link>
+  //   );
+  // });
+
+  //   return (
+  //     <div>
+  //       <SearchForm />
+  //       <DropdownFilter categories={categories} />
+  //       <Container>
+  //         <CardDeck>{mappedPlants}</CardDeck>
+  //       </Container>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div>
       <SearchForm />
       <DropdownFilter categories={categories} />
       <Container>
-        <CardDeck>{mappedPlants}</CardDeck>
+        <CardDeck>
+          {plants.map((plant) => (
+            <Link key={plant.id} to={"/garden/detail/" + plant.id}>
+              <PlantCard key={plant.id} plant={plant} />
+            </Link>
+          ))}
+        </CardDeck>
       </Container>
     </div>
   );
