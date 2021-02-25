@@ -1,5 +1,6 @@
 package cz.fel.cvut.hamrasan.gardener.rest;
 
+import cz.fel.cvut.hamrasan.gardener.dto.PlantDto;
 import cz.fel.cvut.hamrasan.gardener.model.Plant;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.PlantService;
@@ -25,9 +26,8 @@ public class PlantController {
     }
 
 
-    @GetMapping( )
-    public List<Plant> getAll() {
-
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE )
+    public List<PlantDto> getAll() {
         if(!SecurityUtils.isAuthenticatedAnonymously()) {
                 return plantService.getUserPlants();
         }

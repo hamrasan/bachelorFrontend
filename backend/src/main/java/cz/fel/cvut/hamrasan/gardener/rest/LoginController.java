@@ -1,5 +1,6 @@
 package cz.fel.cvut.hamrasan.gardener.rest;
 
+import cz.fel.cvut.hamrasan.gardener.dto.UserDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.AlreadyLoginException;
 import cz.fel.cvut.hamrasan.gardener.model.User;
 import cz.fel.cvut.hamrasan.gardener.service.security.LoginService;
@@ -24,7 +25,7 @@ public class LoginController {
     }
 
     @PostMapping(value = "/login",produces = MediaType.APPLICATION_JSON_VALUE)
-    public User login(@RequestBody HashMap<String,String> request) throws AlreadyLoginException {
+    public UserDto login(@RequestBody HashMap<String,String> request) throws AlreadyLoginException {
 
         return service.login(request.get("email"),request.get("password"));
     }

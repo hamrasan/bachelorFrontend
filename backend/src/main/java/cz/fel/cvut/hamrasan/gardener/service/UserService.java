@@ -1,12 +1,14 @@
 package cz.fel.cvut.hamrasan.gardener.service;
 
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
+import cz.fel.cvut.hamrasan.gardener.dto.UserDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.BadPassword;
 import cz.fel.cvut.hamrasan.gardener.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,24 +16,33 @@ import java.util.Objects;
 public class UserService {
 
     UserDao userDao;
+    TranslateService translateService;
 
     @Autowired
-    public UserService(UserDao userDao) {
+    public UserService(UserDao userDao, TranslateService translateService) {
         this.userDao = userDao;
+        this.translateService = translateService;
     }
 
-    public List<User> findAll() {
-        return userDao.findAll();
+    public List<UserDto> findAll() {
+        List<UserDto> userDtos = new ArrayList<>();
+
+        for (User user : userDao.findAll()) {
+            userDtos.add(translateService.translateUser(user));
+        }
+        return userDtos;
     }
 
 
-    public User find(Long id) {
-        return userDao.find(id);
+    public UserDto find(Long id) {
+        Objects.requireNonNull(id);
+        return translateService.translateUser(userDao.find(id));
     }
 
 
-    public User find(String name) {
-        return userDao.findByEmail(name);
+    public UserDto find(String email) {
+        Objects.requireNonNull(email);
+        return translateService.translateUser(userDao.findByEmail(email));
     }
 
     @Transactional
