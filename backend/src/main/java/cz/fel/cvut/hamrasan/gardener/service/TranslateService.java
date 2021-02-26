@@ -1,5 +1,6 @@
 package cz.fel.cvut.hamrasan.gardener.service;
 
+import cz.fel.cvut.hamrasan.gardener.dto.CategoryDto;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantCategoryDto;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantDto;
 import cz.fel.cvut.hamrasan.gardener.dto.UserDto;
@@ -43,11 +44,17 @@ public class TranslateService {
         }
 
         return new PlantDto(plant.getId(), plant.getName(), plant.getPicture(), plant.getMinTemperature(),
-                plant.getMaxTemperature(), plant.getDateOfPlant(), plant.getSeason(), plant.getCategory().getId(), usersDtos );
+                plant.getMaxTemperature(), plant.getDateOfPlant(), plant.getSeason(), translatePlantCategory(plant.getCategory()), usersDtos );
     }
 
     @Transactional
     public PlantCategoryDto translatePlantCategory(PlantCategory plantCategory){
+        Objects.requireNonNull(plantCategory);
+        return new PlantCategoryDto(plantCategory.getId(), plantCategory.getName());
+    }
+
+    @Transactional
+    public CategoryDto translateCategory(PlantCategory plantCategory){
         Objects.requireNonNull(plantCategory);
         List<PlantDto> plantDtos = new ArrayList<PlantDto>();
         List<Plant> plants = plantCategory.getPlants();
@@ -57,6 +64,6 @@ public class TranslateService {
                 plantDtos.add(translatePlant(plant));
             }
         }
-        return new PlantCategoryDto(plantCategory.getId(), plantCategory.getName(),plantDtos );
+        return new CategoryDto(plantCategory.getId(), plantCategory.getName(),plantDtos );
     }
 }

@@ -16,7 +16,7 @@ function PlantCard(props) {
         <Card.Body>
           <Card.Title>{plant.name}</Card.Title>
           <Card.Text>
-            {/* {plant.category.name} */}
+            {plant.category.name}
           </Card.Text>
         </Card.Body>
         <Card.Footer>

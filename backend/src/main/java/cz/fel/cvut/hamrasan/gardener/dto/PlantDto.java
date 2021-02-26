@@ -1,5 +1,7 @@
 package cz.fel.cvut.hamrasan.gardener.dto;
 
+import cz.fel.cvut.hamrasan.gardener.model.PlantCategory;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
@@ -33,10 +35,9 @@ public class PlantDto {
     @Basic(optional = false)
     private String season;
 
-    private Long categoryId;
+    private PlantCategoryDto category;
 
     private List<Long> users;
-
 
     public PlantDto() {
         users = new ArrayList<Long>();
@@ -44,7 +45,7 @@ public class PlantDto {
 
 
     public PlantDto(@NotNull(message = "Id cannot be blank") Long id, @Size(max = 30, min = 1, message = "Name is in incorrect format.") @NotNull(message = "Name cannot be blank") String name, String picture, double minTemperature,
-                    double maxTemperature, @PastOrPresent LocalDate dateOfPlant, String season, Long categoryId, List<Long> users) {
+                    double maxTemperature, @PastOrPresent LocalDate dateOfPlant, String season, PlantCategoryDto category, List<Long> users) {
 
         this.id = id;
         this.name = name;
@@ -53,7 +54,7 @@ public class PlantDto {
         this.maxTemperature = maxTemperature;
         this.dateOfPlant = dateOfPlant;
         this.season = season;
-        this.categoryId = categoryId;
+        this.category = category;
         this.users = users;
     }
 
@@ -142,15 +143,15 @@ public class PlantDto {
     }
 
 
-    public Long getCategory() {
+    public PlantCategoryDto getCategory() {
 
-        return categoryId;
+        return category;
     }
 
 
-    public void setCategory(Long category) {
+    public void setCategory(PlantCategoryDto category) {
 
-        this.categoryId = category;
+        this.category = category;
     }
 
 

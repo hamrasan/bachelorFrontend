@@ -1,7 +1,7 @@
 package cz.fel.cvut.hamrasan.gardener.service;
 
 import cz.fel.cvut.hamrasan.gardener.dao.PlantCategoryDao;
-import cz.fel.cvut.hamrasan.gardener.dto.PlantCategoryDto;
+import cz.fel.cvut.hamrasan.gardener.dto.CategoryDto;
 import cz.fel.cvut.hamrasan.gardener.model.PlantCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +25,11 @@ class PlantCategoryService {
     }
 
     @Transactional
-    public List<PlantCategoryDto> findAll() {
-        List<PlantCategoryDto> dtos = new ArrayList<PlantCategoryDto>();
+    public List<CategoryDto> findAll() {
+        List<CategoryDto> dtos = new ArrayList<CategoryDto>();
 
         for (PlantCategory category: plantCategoryDao.findAll() ) {
-            dtos.add(translateService.translatePlantCategory(category));
+            dtos.add(translateService.translateCategory(category));
         }
 
         return dtos;
@@ -37,8 +37,8 @@ class PlantCategoryService {
 
 
     @Transactional
-    public PlantCategoryDto find(Long id) {
-        return translateService.translatePlantCategory(plantCategoryDao.find(id));
+    public CategoryDto find(Long id) {
+        return translateService.translateCategory(plantCategoryDao.find(id));
     }
 
 }

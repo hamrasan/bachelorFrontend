@@ -3,7 +3,6 @@ package cz.fel.cvut.hamrasan.gardener.service.security;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.dto.UserDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.AlreadyLoginException;
-import cz.fel.cvut.hamrasan.gardener.model.User;
 import cz.fel.cvut.hamrasan.gardener.security.DefaultAuthenticationProvider;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.TranslateService;
