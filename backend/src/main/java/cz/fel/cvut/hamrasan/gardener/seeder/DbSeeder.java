@@ -52,7 +52,7 @@ public class DbSeeder implements
 
         PlantCategory category2 = new PlantCategory("ovocie", new ArrayList<>() );
         plantCategoryDao.persist(category2);
-        Plant plant2 = new Plant("Jahoda celoročná", "../../assets/paradajka-lycopersicum-rajciak-semena.jpg", 12, 40, LocalDate.now(), "Celoročne", category2, userDao.findAll());
+        Plant plant2 = new Plant("Jahoda celoročná", "../../assets/jahoda.jpg", 12, 40, LocalDate.now(), "Celoročne", category2, userDao.findAll());
         plantDao.persist(plant2);
     }
 
