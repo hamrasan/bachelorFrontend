@@ -1,7 +1,6 @@
 package cz.fel.cvut.hamrasan.gardener.amqp.rpc;
 
 
-import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,13 @@ public class Tut6Client {
     @Autowired
     private RabbitTemplate template;
 
+//    @Autowired
+//    @Qualifier("QueueCommmand")
+//    private Queue queue;
+
     @Autowired
-    @Qualifier("QueueCommmand")
-    private Queue queue;
+    @Qualifier("ExchangeCommmand")
+    private TopicExchange exchange;
 
     int start = 0;
 
@@ -27,8 +30,10 @@ public class Tut6Client {
     @Scheduled(fixedDelay = 1000, initialDelay = 500)
     public void send() {
         System.out.println(" [x] Requesting fib(" + start + ")");
-        String message = "Kolko je stupnov!";
-        this.template.convertAndSend(queue.getName(), message);
+        String message = "num " + start;
+        template.convertAndSend("amq.topic","commands", message );
+        start++;
+        //this.template.convertAndSend(queue.getName(), message);
        // Integer response = (Integer) template.convertSendAndReceive(exchange.getName(), "rpc", start++);
         //System.out.println(" [.] Got '" + response + "'");
     }

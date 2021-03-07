@@ -1,9 +1,11 @@
 package cz.fel.cvut.hamrasan.gardener.amqp.rpc;
 
 import org.springframework.amqp.core.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
 /**
@@ -15,39 +17,33 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class Tut6Config {
 
-//    @Profile("client")
-//    private static class ClientConfig {
-//
-//        @Bean
-//        public DirectExchange exchange() {
-//            return new DirectExchange("tut.rpc");
-//        }
-//
-//        @Bean
-//        public Tut6Client client() {
-//            return new Tut6Client();
-//        }
-//
-//    }
 @Bean
 public FanoutExchange fanout() {
     return new FanoutExchange("tut.fanout");
 }
 
+
+
+
     @Profile("client")
     private static class ClientConfig {
 
-        @Bean(name="QueueCommmand")
-        public Queue queueComm() {
-//            return new AnonymousQueue();
-            return new Queue("tut.rpc.commands");
-        }
+//        @Bean(name="QueueCommmand")
+//        @Primary
+//        public Queue queueComm() {
+////            mqtt-subscription-ESP_Gardenqos0
+//            return new Queue("mqtt-subscription-ESP_Gardenqos0");
+//        }
 
+        @Bean(name="ExchangeCommmand")
+        public TopicExchange exchangeComm() {
+            return new TopicExchange("tut.topic");
+        }
+//
 //        @Bean
-//        @Qualifier("QueueCommmand")
-//        public Binding binding2(DirectExchange directExchange,
-//                                Queue queueComm) {
-//            return BindingBuilder.bind(queueComm).to(fanout);
+//        public Binding binding2(TopicExchange exchange,
+//                                Queue queue) {
+//            return BindingBuilder.bind(queue).to(exchange).with("tut.commands");
 //        }
 
         @Bean
@@ -59,33 +55,16 @@ public FanoutExchange fanout() {
     @Profile("server")
     private static class ServerConfig {
 
-        @Bean
+        @Bean(name="QueueInfo")
         public Queue queueInfo() {
-//            return new AnonymousQueue();
             return new Queue("tut.rpc.info");
         }
 
-        @Bean
+        @Bean(name="QueueRes")
         public Queue queueRes() {
-//           return new AnonymousQueue();
             return new Queue("tut.rpc.response");
         }
 
-//        @Bean
-//        public DirectExchange exchangeServer() {
-//            return new DirectExchange("tut.rpc");
-//        }
-//
-//        @Bean
-//        public Binding binding(DirectExchange exchange, Queue queue) {
-//            return BindingBuilder.bind(queue).to(exchange).with("rpc");
-//        }
-
-        @Bean
-        public Binding binding1(FanoutExchange fanout,
-                                Queue queueInfo) {
-            return BindingBuilder.bind(queueInfo).to(fanout);
-        }
 
         @Bean
         public Tut6Server server() {
@@ -93,5 +72,7 @@ public FanoutExchange fanout() {
         }
 
     }
+
+
 
 }
