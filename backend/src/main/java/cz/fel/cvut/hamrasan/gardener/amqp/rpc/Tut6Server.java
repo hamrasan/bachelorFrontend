@@ -9,14 +9,25 @@ import org.springframework.messaging.handler.annotation.SendTo;
  */
 public class Tut6Server {
 
-    @RabbitListener(queues = "tut.rpc.info")
+    @RabbitListener(queues = "tut.rpc.temperature")
     @SendTo("tut.rpc.commands")
 //    used when the client doesn't set replyTo.
-    public String fibonacci(String n) {
-        System.out.println(" [x] Received req for " + n);
+    public String temperature(String n) {
+        System.out.println(" [x] Received temperature for " + n);
         String result = fib(n);
         System.out.println(" [.] Returned " + result);
         return result;
+    }
+
+    @RabbitListener(queues = "tut.rpc.humidity")
+    public void humidity(String n) {
+        System.out.println(" [x] Received humidity is " + n);
+    }
+
+    @RabbitListener(queues = "tut.rpc.pressure")
+    public void pressure(String n) {
+        System.out.println(" [x] Received pressure in hPa is " + n);
+
     }
 
 

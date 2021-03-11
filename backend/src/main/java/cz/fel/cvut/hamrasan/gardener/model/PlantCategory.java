@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "APP_PLANT_CATEGORY")public class PlantCategory extends AbstractEntity {
+@Table(name = "APP_PLANT_CATEGORY")
+public class PlantCategory extends AbstractEntity {
 
     @Basic(optional = false)
     @Column(nullable = false, length = 50)

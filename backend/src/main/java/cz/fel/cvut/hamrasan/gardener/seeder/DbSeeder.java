@@ -1,5 +1,6 @@
 package cz.fel.cvut.hamrasan.gardener.seeder;
 
+import cz.fel.cvut.hamrasan.gardener.dao.GardenDao;
 import cz.fel.cvut.hamrasan.gardener.dao.PlantCategoryDao;
 import cz.fel.cvut.hamrasan.gardener.dao.PlantDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
@@ -23,14 +24,16 @@ public class DbSeeder implements
 
     private PlantDao plantDao;
     private UserDao userDao;
+    private GardenDao gardenDao;
     private PlantCategoryDao plantCategoryDao;
 
     @Autowired
-    public DbSeeder(PlantDao plantDao, UserDao userDao, PlantCategoryDao plantCategorydao) {
+    public DbSeeder(PlantDao plantDao, UserDao userDao, PlantCategoryDao plantCategorydao, GardenDao gardenDao) {
 
         this.plantDao = plantDao;
         this.userDao = userDao;
         this.plantCategoryDao = plantCategorydao;
+        this.gardenDao = gardenDao;
     }
 
 
@@ -47,12 +50,12 @@ public class DbSeeder implements
         List<Plant> plants = new ArrayList<Plant>();
         PlantCategory category = new PlantCategory("zelenina", plants );
         plantCategoryDao.persist(category);
-        Plant plant = new Plant("Rajčina veľká", "../../assets/paradajka-lycopersicum-rajciak-semena.jpg", 12, 35, LocalDate.now(), "Marec", category, userDao.findAll());
+        Plant plant = new Plant("Rajčina veľká", "../../assets/paradajka-lycopersicum-rajciak-semena.jpg", 12, 35, LocalDate.now(), "Marec", category, gardenDao.findAll());
         plantDao.persist(plant);
 
         PlantCategory category2 = new PlantCategory("ovocie", new ArrayList<>() );
         plantCategoryDao.persist(category2);
-        Plant plant2 = new Plant("Jahoda celoročná", "../../assets/jahoda.jpg", 12, 40, LocalDate.now(), "Celoročne", category2, userDao.findAll());
+        Plant plant2 = new Plant("Jahoda celoročná", "../../assets/jahoda.jpg", 12, 40, LocalDate.now(), "Celoročne", category2, gardenDao.findAll());
         plantDao.persist(plant2);
     }
 

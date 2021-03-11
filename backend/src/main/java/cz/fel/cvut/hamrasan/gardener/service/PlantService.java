@@ -3,6 +3,7 @@ package cz.fel.cvut.hamrasan.gardener.service;
 import cz.fel.cvut.hamrasan.gardener.dao.PlantDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantDto;
+import cz.fel.cvut.hamrasan.gardener.model.Garden;
 import cz.fel.cvut.hamrasan.gardener.model.Plant;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +52,10 @@ public class PlantService {
     public List<PlantDto> getUserPlants(){
         List<PlantDto> dtos = new ArrayList<PlantDto>();
 
-        for (Plant plant:userDao.find(SecurityUtils.getCurrentUser().getId()).getPlants()) {
-            dtos.add(translateService.translatePlant(plant));
+        for (Garden garden:userDao.find(SecurityUtils.getCurrentUser().getId()).getGardens()) {
+            for (Plant plant: garden.getPlants()) {
+                dtos.add(translateService.translatePlant(plant));
+            }
         }
         return dtos;
     }

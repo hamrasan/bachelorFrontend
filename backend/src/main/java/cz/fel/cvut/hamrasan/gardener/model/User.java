@@ -41,28 +41,34 @@ public class User extends AbstractEntity {
     @NotBlank(message = "Email cannot be blank")
     private String email;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "plants_user",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "plant_id"))
-    private List<Plant> plants;
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "plants_user",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "plant_id"))
+//    private List<Plant> plants;
 
+
+    @OneToMany(mappedBy = "user")
+    private List<Garden> gardens;
 
     public User() {
-        this.plants = new ArrayList<Plant>();
+
+//        this.plants = new ArrayList<Plant>();
+        this.gardens = new ArrayList<Garden>();
     }
 
 
     public User(@Size(max = 30, min = 1, message = "First name is in incorrect format.") @NotBlank(message = "First name cannot be blank") String firstName, @Size(max = 30, min = 1, message = "Last name is in incorrect format.") @NotBlank(message = "Last name cannot be blank") String lastName,
                 @Size(max = 255, min = 6, message = "Password is in incorrect format.") @NotBlank(message = "Password cannot be blank") String password,
-                @Email(message = "Email should be valid") @NotBlank(message = "Email cannot be blank") String email, List<Plant> plants) {
+                @Email(message = "Email should be valid") @NotBlank(message = "Email cannot be blank") String email, List<Garden> gardens) {
 
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-        this.plants = plants;
+//        this.plants = plants;
+        this.gardens = gardens;
     }
 
 
@@ -72,7 +78,8 @@ public class User extends AbstractEntity {
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-        this.plants = new ArrayList<Plant>();
+//        this.plants = new ArrayList<Plant>();
+        this.gardens = new ArrayList<Garden>();
     }
 
 
@@ -80,6 +87,8 @@ public class User extends AbstractEntity {
                 @Size(max = 255, min = 6, message = "Password is in incorrect format.") String password) {
         this.email = email;
         this.password = password;
+//        this.plants = new ArrayList<Plant>();
+        this.gardens = new ArrayList<Garden>();
     }
 
 
@@ -123,13 +132,26 @@ public class User extends AbstractEntity {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
-    public List<Plant> getPlants() {
-        return plants;
+//    public List<Plant> getPlants() {
+//        return plants;
+//    }
+//
+//    public void setPlants(List<Plant> plants) {
+//        this.plants = plants;
+//    }
+
+
+    public List<Garden> getGardens() {
+
+        return gardens;
     }
 
-    public void setPlants(List<Plant> plants) {
-        this.plants = plants;
+
+    public void setGardens(List<Garden> gardens) {
+
+        this.gardens = gardens;
     }
+
 
     @Override
     public String toString() {
@@ -139,7 +161,8 @@ public class User extends AbstractEntity {
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", plants=" + plants +
+//                ", plants=" + plants +
+                ", gardens=" + gardens +
                 '}';
     }
 }

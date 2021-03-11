@@ -55,9 +55,9 @@ public FanoutExchange fanout() {
     @Profile("server")
     private static class ServerConfig {
 
-        @Bean(name="QueueInfo")
+        @Bean(name="QueueTemperature")
         public Queue queueInfo() {
-            return new Queue("tut.rpc.info");
+            return new Queue("tut.rpc.temperature");
         }
 
         @Bean(name="QueueRes")
@@ -65,6 +65,15 @@ public FanoutExchange fanout() {
             return new Queue("tut.rpc.response");
         }
 
+        @Bean(name="QueueHumidity")
+        public Queue queueHum() {
+            return new Queue("tut.rpc.humidity");
+        }
+
+        @Bean(name="QueuePressure")
+        public Queue queuePress() {
+            return new Queue("tut.rpc.pressure");
+        }
 
         @Bean
         public Tut6Server server() {

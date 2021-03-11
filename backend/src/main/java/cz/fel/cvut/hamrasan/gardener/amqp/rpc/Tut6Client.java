@@ -29,10 +29,11 @@ public class Tut6Client {
 
     @Scheduled(fixedDelay = 1000, initialDelay = 500)
     public void send() {
-        System.out.println(" [x] Requesting fib(" + start + ")");
-        String message = "num " + start;
-        template.convertAndSend("amq.topic","commands", message );
-        start++;
+//        System.out.println(" [x] Requesting fib(" + start + ")");
+//        String message = "num " + start;
+//        template.convertAndSend("amq.topic","commands", message );
+//        start++;
+
         //this.template.convertAndSend(queue.getName(), message);
        // Integer response = (Integer) template.convertSendAndReceive(exchange.getName(), "rpc", start++);
         //System.out.println(" [.] Got '" + response + "'");

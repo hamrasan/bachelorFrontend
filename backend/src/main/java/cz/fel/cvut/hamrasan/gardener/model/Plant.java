@@ -1,5 +1,7 @@
 package cz.fel.cvut.hamrasan.gardener.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
@@ -21,7 +23,6 @@ public class Plant extends AbstractEntity{
     @Size(max = 30, min = 1, message = "Name is in incorrect format.")
     @NotBlank(message = "Name cannot be blank")
     private String name;
-
 
     private String picture;
 
@@ -46,12 +47,16 @@ public class Plant extends AbstractEntity{
     @JoinColumn(name = "category_id", nullable = false)
     private PlantCategory category;
 
-    @ManyToMany
-    private List<User> users;
+//    @ManyToMany
+//    private List<User> users;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Garden> gardens;
 
 
     public Plant(@Size(max = 30, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name, String picture, double minTemperature,
-                 double maxTemperature, @PastOrPresent LocalDate dateOfPlant, String season, PlantCategory category, List<User> users) {
+                 double maxTemperature, @PastOrPresent LocalDate dateOfPlant, String season, PlantCategory category, List<Garden> gardens) {
 
         this.name = name;
         this.picture = picture;
@@ -60,12 +65,14 @@ public class Plant extends AbstractEntity{
         this.dateOfPlant = dateOfPlant;
         this.season = season;
         this.category = category;
-        this.users = users;
+//        this.users = users;
+        this.gardens = gardens;
     }
 
 
     public Plant() {
-        users = new ArrayList<User>();
+//        users = new ArrayList<User>();
+        gardens = new ArrayList<Garden>();
     }
 
 
@@ -80,7 +87,8 @@ public class Plant extends AbstractEntity{
                 ", dateOfPlant=" + dateOfPlant +
                 ", season='" + season + '\'' +
                 ", category=" + category +
-                ", users=" + users +
+//                ", users=" + users +
+                ", gardens=" + gardens +
                 '}';
     }
 
@@ -169,14 +177,26 @@ public class Plant extends AbstractEntity{
     }
 
 
-    public List<User> getUsers() {
+//    public List<User> getUsers() {
+//
+//        return users;
+//    }
+//
+//
+//    public void setUsers(List<User> users) {
+//
+//        this.users = users;
+//    }
 
-        return users;
+
+    public List<Garden> getGardens() {
+
+        return gardens;
     }
 
 
-    public void setUsers(List<User> users) {
+    public void setGardens(List<Garden> gardens) {
 
-        this.users = users;
+        this.gardens = gardens;
     }
 }
