@@ -17,13 +17,10 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class Tut6Config {
 
-@Bean
-public FanoutExchange fanout() {
-    return new FanoutExchange("tut.fanout");
-}
-
-
-
+//@Bean
+//public TopicExchange topic() {
+//    return new TopicExchange("amq.topic");
+//}
 
     @Profile("client")
     private static class ClientConfig {
@@ -74,6 +71,7 @@ public FanoutExchange fanout() {
         public Queue queuePress() {
             return new Queue("tut.rpc.pressure");
         }
+
 
         @Bean
         public Tut6Server server() {

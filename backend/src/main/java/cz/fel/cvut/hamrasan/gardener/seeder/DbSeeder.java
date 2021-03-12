@@ -4,6 +4,7 @@ import cz.fel.cvut.hamrasan.gardener.dao.GardenDao;
 import cz.fel.cvut.hamrasan.gardener.dao.PlantCategoryDao;
 import cz.fel.cvut.hamrasan.gardener.dao.PlantDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
+import cz.fel.cvut.hamrasan.gardener.model.Garden;
 import cz.fel.cvut.hamrasan.gardener.model.Plant;
 import cz.fel.cvut.hamrasan.gardener.model.PlantCategory;
 import cz.fel.cvut.hamrasan.gardener.model.User;
@@ -43,6 +44,7 @@ public class DbSeeder implements
         System.out.println("Vypis po stupusteni aplikacie.");
         createUsers();
         createPlants();
+        createGarden();
     }
 
     @Transactional
@@ -64,4 +66,15 @@ public class DbSeeder implements
         User user = new User("Jozef", "Pročko", BCrypt.hashpw("hesloo",BCrypt.gensalt()), "jozef@gmail.com");
         userDao.persist(user);
     }
+
+    @Transactional
+    void createGarden(){
+        List<User> users= userDao.findAll();
+        if (users.size()>0){
+            Garden garden = new Garden("Zahrada", users.get(0));
+            gardenDao.persist(garden);
+        }
+
+    }
+
 }

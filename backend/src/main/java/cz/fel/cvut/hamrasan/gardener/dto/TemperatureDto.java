@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class TemperatureDto {
 
@@ -12,7 +13,7 @@ public class TemperatureDto {
 
     @Basic(optional = false)
     @PastOrPresent
-    private LocalDate date;
+    private LocalDateTime date;
 
     @Basic(optional = false)
     private float value;
@@ -21,7 +22,7 @@ public class TemperatureDto {
     private Long garden;
 
 
-    public TemperatureDto(@NotNull(message = "Id cannot be blank") Long id, @PastOrPresent LocalDate date,
+    public TemperatureDto(@NotNull(message = "Id cannot be blank") Long id, @PastOrPresent LocalDateTime date,
                           float value, Long garden) {
 
         this.id = id;
@@ -43,13 +44,13 @@ public class TemperatureDto {
     }
 
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
 
         return date;
     }
 
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
 
         this.date = date;
     }

@@ -63,9 +63,14 @@ public class Garden extends AbstractEntity {
     }
 
 
-    public Garden(@Size(max = 100, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name) {
+    public Garden(@Size(max = 100, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name, User user) {
 
         this.name = name;
+        this.user = user;
+        this.humidities = new ArrayList<Humidity>();
+        this.plants = new ArrayList<Plant>();
+        this.pressures = new ArrayList<Pressure>();
+        this.temperatures = new ArrayList<Temperature>();
     }
 
 

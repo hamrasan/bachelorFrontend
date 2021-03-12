@@ -1,7 +1,24 @@
 package cz.fel.cvut.hamrasan.gardener.amqp.rpc;
 
+import cz.fel.cvut.hamrasan.gardener.dao.GardenDao;
+import cz.fel.cvut.hamrasan.gardener.dao.HumidityDao;
+import cz.fel.cvut.hamrasan.gardener.dao.PressureDao;
+import cz.fel.cvut.hamrasan.gardener.dao.TemperatureDao;
+import cz.fel.cvut.hamrasan.gardener.model.Humidity;
+import cz.fel.cvut.hamrasan.gardener.model.Pressure;
+import cz.fel.cvut.hamrasan.gardener.model.Temperature;
+import cz.fel.cvut.hamrasan.gardener.service.RpcService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
+import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
+import org.springframework.amqp.support.AmqpHeaders;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.util.StopWatch;
+
+import java.time.LocalDate;
 
 /**
  * @author Gary Russell
@@ -9,27 +26,35 @@ import org.springframework.messaging.handler.annotation.SendTo;
  */
 public class Tut6Server {
 
+    @Autowired
+    private RpcService rpcService;
+
+
     @RabbitListener(queues = "tut.rpc.temperature")
-    @SendTo("tut.rpc.commands")
+//    @SendTo("tut.rpc.commands")
 //    used when the client doesn't set replyTo.
-    public String temperature(String n) {
+    public void temperature(@Payload String n,
+                              @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String key) {
         System.out.println(" [x] Received temperature for " + n);
-        String result = fib(n);
-        System.out.println(" [.] Returned " + result);
-        return result;
+        System.out.println(" [x] Received temperature is " + key);
+//        String result = fib(n);
+        rpcService.saveTemperatue(n,key);
     }
 
     @RabbitListener(queues = "tut.rpc.humidity")
-    public void humidity(String n) {
+    public void humidity(@Payload String n,
+                         @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String key) {
         System.out.println(" [x] Received humidity is " + n);
+        System.out.println(" [x] Received humidity is " + key);
+        rpcService.saveHumidity(n,key);
     }
 
     @RabbitListener(queues = "tut.rpc.pressure")
-    public void pressure(String n) {
+    public void pressure(@Payload String n ,@Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String key) {
         System.out.println(" [x] Received pressure in hPa is " + n);
-
+        System.out.println(" [x] Received pressure is " + key);
+        rpcService.savePress(n,key);
     }
-
 
     @RabbitListener(queues = "tut.rpc.response")
 //    @SendTo("tut.rpc.commands")
@@ -38,8 +63,14 @@ public class Tut6Server {
         System.out.println(" [x] Received request for " + n);
     }
 
-    public String fib(String n) {
-        return n ;
+
+    private void savePress(String n, String key){
+//        float press = Float.parseFloat(n);
+        String s = "";
+        for (int i = 7; i < key.length(); i++) {
+            s = s + n.charAt(i);
+        }
+//        long id = Long.parseLong(s);
     }
 
 }

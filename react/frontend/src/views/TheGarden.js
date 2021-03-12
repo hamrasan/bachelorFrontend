@@ -3,7 +3,7 @@ import PlantCard from "../components/PlantCard";
 import SearchForm from "../components/SearchForm";
 import DropdownFilter from "../components/DropDownFilter";
 
-import { CardDeck, Container, Form } from "react-bootstrap";
+import { CardDeck, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function TheGarden() {

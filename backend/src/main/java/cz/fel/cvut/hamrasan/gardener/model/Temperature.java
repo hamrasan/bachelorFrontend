@@ -2,14 +2,18 @@ package cz.fel.cvut.hamrasan.gardener.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "APP_TEMPERATURE")
+@NamedQueries({
+        @NamedQuery(name = "Temperature.findLatest", query = "SELECT t FROM Temperature t WHERE t.deleted_at is null ORDER BY t.date DESC ")
+})
 public class Temperature extends AbstractEntity {
 
     @Basic(optional = false)
     @Column(nullable = false)
-   private LocalDate date;
+   private LocalDateTime date;
 
     @Basic(optional = false)
     @Column(nullable = false)
@@ -20,7 +24,7 @@ public class Temperature extends AbstractEntity {
     private Garden garden;
 
 
-    public Temperature(LocalDate date, float value, Garden garden) {
+    public Temperature(LocalDateTime date, float value, Garden garden) {
 
         this.date = date;
         this.value = value;
@@ -33,13 +37,13 @@ public class Temperature extends AbstractEntity {
     }
 
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
 
         return date;
     }
 
 
-    public void setDate(LocalDate localDate) {
+    public void setDate(LocalDateTime localDate) {
 
         this.date = localDate;
     }
