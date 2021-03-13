@@ -5,6 +5,9 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "APP_PRESSURE")
+@NamedQueries({
+        @NamedQuery(name = "Pressure.findLatest", query = "SELECT p FROM Pressure p WHERE p.deleted_at is null ORDER BY p.date DESC ")
+})
 public class Pressure extends AbstractEntity {
 
     @Basic(optional = false)

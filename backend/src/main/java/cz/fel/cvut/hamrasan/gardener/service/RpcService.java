@@ -4,6 +4,8 @@ import cz.fel.cvut.hamrasan.gardener.dao.GardenDao;
 import cz.fel.cvut.hamrasan.gardener.dao.HumidityDao;
 import cz.fel.cvut.hamrasan.gardener.dao.PressureDao;
 import cz.fel.cvut.hamrasan.gardener.dao.TemperatureDao;
+import cz.fel.cvut.hamrasan.gardener.dto.HumidityDto;
+import cz.fel.cvut.hamrasan.gardener.dto.PressureDto;
 import cz.fel.cvut.hamrasan.gardener.dto.TemperatureDto;
 import cz.fel.cvut.hamrasan.gardener.model.Humidity;
 import cz.fel.cvut.hamrasan.gardener.model.Pressure;
@@ -54,5 +56,15 @@ public class RpcService {
     @Transactional
     public TemperatureDto getLatestTemperature(){
         return translateService.translateTemp(temperatureDao.findLatest());
+    }
+
+    @Transactional
+    public HumidityDto getLatestHumidity(){
+        return translateService.translateHumidity(humidityDao.findLatest());
+    }
+
+    @Transactional
+    public PressureDto getLatestPressure(){
+        return translateService.translatePressure(pressureDao.findLatest());
     }
 }

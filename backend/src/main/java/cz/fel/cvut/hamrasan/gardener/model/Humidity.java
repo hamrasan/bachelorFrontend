@@ -5,6 +5,9 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "APP_HUMIDITY")
+@NamedQueries({
+        @NamedQuery(name = "Humidity.findLatest", query = "SELECT h FROM Humidity h WHERE h.deleted_at is null ORDER BY h.date DESC ")
+})
 public class Humidity extends AbstractEntity {
 
     @Basic(optional = false)

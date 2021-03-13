@@ -1,5 +1,7 @@
 package cz.fel.cvut.hamrasan.gardener.rest;
 
+import cz.fel.cvut.hamrasan.gardener.dto.HumidityDto;
+import cz.fel.cvut.hamrasan.gardener.dto.PressureDto;
 import cz.fel.cvut.hamrasan.gardener.dto.TemperatureDto;
 import cz.fel.cvut.hamrasan.gardener.service.RpcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,17 @@ public class RpcController {
     }
 
     @GetMapping(value = "/temperature", produces = MediaType.APPLICATION_JSON_VALUE )
-    public TemperatureDto getPlant() {
+    public TemperatureDto getTemperature() {
         return rpcService.getLatestTemperature();
+    }
+
+    @GetMapping(value = "/humidity", produces = MediaType.APPLICATION_JSON_VALUE )
+    public HumidityDto getHumidity() {
+        return rpcService.getLatestHumidity();
+    }
+
+    @GetMapping(value = "/pressure", produces = MediaType.APPLICATION_JSON_VALUE )
+    public PressureDto getPressure() {
+        return rpcService.getLatestPressure();
     }
 }
