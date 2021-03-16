@@ -109,4 +109,9 @@ public class TranslateService {
         }
         return new CategoryDto(plantCategory.getId(), plantCategory.getName(),plantDtos );
     }
+
+    @Transactional
+    public RainDto translateRain(Rain rain){
+        return new RainDto(rain.getId(), rain.getDate(), rain.getRaining(), rain.getGarden().getId());
+    }
 }

@@ -3,10 +3,9 @@ package cz.fel.cvut.hamrasan.gardener.dto;
 import javax.persistence.Basic;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class HumidityDto {
+public class RainDto {
 
     @NotNull(message = "Id cannot be blank")
     private Long id;
@@ -16,17 +15,17 @@ public class HumidityDto {
     private LocalDateTime date;
 
     @Basic(optional = false)
-    private float value;
+    private boolean raining;
 
     @Basic(optional = false)
     private Long garden;
 
 
-    public HumidityDto(@NotNull(message = "Id cannot be blank") Long id, LocalDateTime date, float value, Long garden) {
+    public RainDto(@NotNull(message = "Id cannot be blank") Long id, @PastOrPresent LocalDateTime date, boolean raining, Long garden) {
 
         this.id = id;
         this.date = date;
-        this.value = value;
+        this.raining = raining;
         this.garden = garden;
     }
 
@@ -55,15 +54,15 @@ public class HumidityDto {
     }
 
 
-    public float getValue() {
+    public boolean isRaining() {
 
-        return value;
+        return raining;
     }
 
 
-    public void setValue(float value) {
+    public void setRaining(boolean raining) {
 
-        this.value = value;
+        this.raining = raining;
     }
 
 

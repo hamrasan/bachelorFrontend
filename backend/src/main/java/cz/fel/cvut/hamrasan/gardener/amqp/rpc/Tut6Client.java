@@ -6,11 +6,14 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Gary Russell
  * @author Scott Deeg
  */
+@Service
 public class Tut6Client {
 
     @Autowired
@@ -20,23 +23,29 @@ public class Tut6Client {
 //    @Qualifier("QueueCommmand")
 //    private Queue queue;
 
-    @Autowired
-    @Qualifier("ExchangeCommmand")
-    private TopicExchange exchange;
+//    @Autowired
+//    @Qualifier("ExchangeCommmand")
+//    private TopicExchange exchange;
 
     int start = 0;
 
 
-    @Scheduled(fixedDelay = 1000, initialDelay = 500)
-    public void send() {
+//    @Scheduled(fixedDelay = 1000, initialDelay = 500)
+//    public void send() {
 //        System.out.println(" [x] Requesting fib(" + start + ")");
-//        String message = "num " + start;
+//        String message = "measure";
 //        template.convertAndSend("amq.topic","commands", message );
 //        start++;
 
         //this.template.convertAndSend(queue.getName(), message);
        // Integer response = (Integer) template.convertSendAndReceive(exchange.getName(), "rpc", start++);
         //System.out.println(" [.] Got '" + response + "'");
+//    }
+
+    public void getData() {
+        System.out.println(" [x] Requesting fib(" + start + ")");
+        String message = "measure";
+        template.convertAndSend("amq.topic","commands", message );
     }
 
 }

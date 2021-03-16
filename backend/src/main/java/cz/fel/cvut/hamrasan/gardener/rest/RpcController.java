@@ -1,5 +1,6 @@
 package cz.fel.cvut.hamrasan.gardener.rest;
 
+import cz.fel.cvut.hamrasan.gardener.amqp.rpc.Tut6Client;
 import cz.fel.cvut.hamrasan.gardener.dto.HumidityDto;
 import cz.fel.cvut.hamrasan.gardener.dto.PressureDto;
 import cz.fel.cvut.hamrasan.gardener.dto.TemperatureDto;
@@ -17,6 +18,7 @@ public class RpcController {
 
     @Autowired
     public RpcController(RpcService rpcService) {
+
         this.rpcService = rpcService;
     }
 
@@ -33,5 +35,10 @@ public class RpcController {
     @GetMapping(value = "/pressure", produces = MediaType.APPLICATION_JSON_VALUE )
     public PressureDto getPressure() {
         return rpcService.getLatestPressure();
+    }
+
+    @GetMapping(value = "/request", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void requestDate() {
+         rpcService.requestData();
     }
 }

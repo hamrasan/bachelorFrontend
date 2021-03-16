@@ -53,8 +53,13 @@ public class Tut6Config {
     private static class ServerConfig {
 
         @Bean(name="QueueTemperature")
-        public Queue queueInfo() {
+        public Queue queueTemp() {
             return new Queue("tut.rpc.temperature");
+        }
+
+        @Bean(name="QueueRain")
+        public Queue queueRain() {
+            return new Queue("tut.rpc.rain");
         }
 
         @Bean(name="QueueRes")

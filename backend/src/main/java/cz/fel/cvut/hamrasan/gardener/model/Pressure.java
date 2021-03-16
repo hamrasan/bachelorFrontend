@@ -2,6 +2,7 @@ package cz.fel.cvut.hamrasan.gardener.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "APP_PRESSURE")
@@ -12,7 +13,7 @@ public class Pressure extends AbstractEntity {
 
     @Basic(optional = false)
     @Column(nullable = false)
-    private LocalDate date;
+    private LocalDateTime date;
 
     @Basic(optional = false)
     @Column(nullable = false)
@@ -23,7 +24,7 @@ public class Pressure extends AbstractEntity {
     private Garden garden;
 
 
-    public Pressure(LocalDate date, float value, Garden garden) {
+    public Pressure(LocalDateTime date, float value, Garden garden) {
 
         this.date = date ;
         this.value = value;
@@ -34,13 +35,13 @@ public class Pressure extends AbstractEntity {
     public Pressure() { }
 
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
 
         return date;
     }
 
 
-    public void setDate(LocalDate localDate) {
+    public void setDate(LocalDateTime localDate) {
 
         this.date = localDate;
     }

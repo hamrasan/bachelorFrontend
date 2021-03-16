@@ -52,8 +52,14 @@ public class Tut6Server {
     @RabbitListener(queues = "tut.rpc.pressure")
     public void pressure(@Payload String n ,@Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String key) {
         System.out.println(" [x] Received pressure in hPa is " + n);
-        System.out.println(" [x] Received pressure is " + key);
+        System.out.println(" [x] Received pressure is in" + key);
         rpcService.savePress(n,key);
+    }
+
+    @RabbitListener(queues = "tut.rpc.rain")
+    public void raining(@Payload String n ,@Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String key) {
+        System.out.println(" [x] It is raining in " + key);
+        rpcService.saveRain(n,key);
     }
 
     @RabbitListener(queues = "tut.rpc.response")
