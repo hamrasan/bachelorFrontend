@@ -1,6 +1,7 @@
 import { Card, Container, CardDeck, Spinner, Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import TheSpinner from "../components/TheSpinner";
+import SensorCard from "../components/SensorCard";
 
 function TheHome() {
   const axios = require("axios");
@@ -44,12 +45,7 @@ function TheHome() {
       setRain(res.data);
     });
   };
-
-  const makeFormattedDate = (oldDate) => {
-    let date = new Date(oldDate);
-    return date.toLocaleDateString() + " " + date.toLocaleTimeString();
-  };
-
+  
   useEffect(() => {
     fetchTemperature();
     fetchHumidity();
@@ -65,56 +61,11 @@ function TheHome() {
     <div>
       <Container className="pt-5">
         <CardDeck>
-          <Card>
-            <Card.Img
-              variant="top"
-              src="assets/sensors/teplomer.png"
-              style={{ height: "200px", width: "200px" }}
-            />
-            <Card.Body>
-              <Card.Title>Teplota</Card.Title>
-              <Card.Text>{temperature.value} °C</Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">
-                Dátum merania: {makeFormattedDate(temperature.date)}{" "}
-              </small>
-            </Card.Footer>
-          </Card>
 
-          <Card>
-            <Card.Img
-              variant="top"
-              src="assets/sensors/pressure.png"
-              style={{ height: "200px", width: "200px" }}
-            />
-            <Card.Body>
-              <Card.Title>Tlak vzduchu</Card.Title>
-              <Card.Text>{pressure.value} hPa </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">
-                Dátum merania: {makeFormattedDate(pressure.date)}{" "}
-              </small>
-            </Card.Footer>
-          </Card>
+          <SensorCard key="temperature" sensor={temperature} name="Teplota" text={temperature.value + " °C"} picture="assets/sensors/teplomer.png" ></SensorCard>
+          <SensorCard key="pressure" sensor={pressure} name="Tlak vzduchu" text={pressure.value + " hPa"} picture="assets/sensors/pressure.png" ></SensorCard>
+          <SensorCard key="humidity" sensor={humidity} name="Vlhkosť vzduchu" text={humidity.value + " %"}  picture="assets/sensors/humiditySmaller.png" ></SensorCard>
 
-          <Card>
-            <Card.Img
-              variant="top"
-              src="assets/sensors/humiditySmaller.png"
-              style={{ height: "200px", width: "200px" }}
-            />
-            <Card.Body>
-              <Card.Title>Vlhkosť vzduchu</Card.Title>
-              <Card.Text>{humidity.value} %</Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">
-                Dátum merania: {makeFormattedDate(humidity.date)}{" "}
-              </small>
-            </Card.Footer>
-          </Card>
         </CardDeck>
         <br />
         <button
@@ -130,28 +81,7 @@ function TheHome() {
       {rain != null ? (
         <Container>
           <CardDeck>
-            <Card>
-              <Card.Img
-                variant="top"
-                src={
-                  rain.raining
-                    ? "assets/sensors/rain.jpg"
-                    : "assets/sensors/sun.jpg"
-                }
-                style={{ height: "200px", width: "200px" }}
-              />
-              <Card.Body>
-                <Card.Title>Zrážky</Card.Title>
-                <Card.Text>
-                  {rain.raining ? "Prší" : "V tomto okamžiku neprší"}
-                </Card.Text>
-              </Card.Body>
-              <Card.Footer>
-                <small className="text-muted">
-                  Dátum merania: {makeFormattedDate(rain.date)}{" "}
-                </small>
-              </Card.Footer>
-            </Card>
+            <SensorCard key="rain" sensor={rain} name="Zrážky" text={rain.raining ? "Prší" : "V tomto okamžiku neprší"}  picture={ rain.raining ? "assets/sensors/rain.jpg" : "assets/sensors/sun.jpg"} ></SensorCard>
           </CardDeck>
         </Container>
       ) : (
