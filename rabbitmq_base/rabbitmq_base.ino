@@ -24,11 +24,6 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 
-#define BME_SCK 13
-#define BME_MISO 12
-#define BME_MOSI 11
-#define BME_CS 10
-
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 Adafruit_BME280 bme; // I2C
@@ -41,22 +36,39 @@ const char* password = "C++jesmrt";
 //const char* mqtt_user = "guest";
 //const char* mqtt_password = "guest";
 
-//const char* mqtt_server = "80.211.215.27";
-//const char* mqtt_user = "sandra";
-//const char* mqtt_password = "LAIP3lath*meey!peak";
-
 // Update these with values suitable for your network.
 const char* mqtt_server = "80.211.215.27"; 
 const char* mqtt_user = "sandra";
 const char* mqtt_pass= "LAIP3lath*meey!peak";
-
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 long lastMsg = 0;
 char msg[256];
 int value = 0;
-const int mq2pin = A0; //the MQ2 analog input pin
+//const int mq2pin = A0; //the MQ2 analog input pin
+
+const byte interruptPin = 13; //D7
+int val = 0;
+volatile boolean checkInterrupt = false;
+boolean rain = false;
+int numberOfRain = 0;
+int numberOfNoRain = 0;
+unsigned long debounceTime = 60000; //1000
+unsigned long lastDebounce = 0;
+unsigned long lastTime = 0;
+
+void ICACHE_RAM_ATTR handleInterrupt(){
+  Serial.print("som tu");
+  checkInterrupt = true;
+//  snprintf(msg, sizeof(msg), "1");
+  }
+
+//  void ICACHE_RAM_ATTR handleInterruptRising(){
+//  Serial.print("som tu 5 ");
+//  checkInterruptRising = true;
+////  snprintf(msg, sizeof(msg), "1");
+//  }
 
 void setup_wifi() {
   // Connecting to a WiFi network
@@ -98,22 +110,16 @@ void setup() {
     Serial.println("Could not find a valid BME280 sensor, check wiring!");
     while (1);
   }
+  
+  // rain sensor
+  pinMode(interruptPin, INPUT_PULLUP);
+//  attachInterrupt(digitalPinToInterrupt(interruptPin), handleInterrupt, CHANGE); //start raining
 
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
 }
 
-void callback(char* topic, byte* payload, unsigned int length){
-      Serial.print("Prijate spravy: ");
-      Serial.println(topic);
-      for (int i=0; i<length; i++){
-        Serial.print((char) payload[i]);
-        } 
-        Serial.println();
-  }
-
-  
 void measureTemp(){
     float temp =  bme.readTemperature();
 
@@ -142,12 +148,28 @@ void measureHumidity(){
     client.publish("humidity1", msg);
 }
 
+void callback(char* topic, byte* payload, unsigned int length){
+      Serial.print("Prijate spravy: ");
+      Serial.println(topic);
+      String message="";
+      for (int i=0; i<length; i++){
+//        Serial.print((char) payload[i]);
+        message = message + (char) payload[i];
+        } 
+        Serial.println(message);
+        if(message=="measure") {
+          measureTemp();
+          measureHumidity();
+          measurePressure();
+        }
+        Serial.println();
+  }
+
 void loop() {
   if (!client.connected()) {
     reconnect();
   }
     client.loop();
-    
 // client.println(1.8 * bme.readTemperature() + 32); FAHRENHEIT
 // client.println(bme.readAltitude(SEALEVELPRESSURE_HPA));
 
@@ -160,9 +182,63 @@ long now = millis();
     measurePressure();
 
   }
-//  sprintf(msg,"%i",bme.readTemperature());
-//  client.publish("info", msg);
-//  Serial.print("MQ2 gas value:");
-//  Serial.println(msg);
 
+//  if (checkInterrupt == true && ( (now - lastDebounce)  > debounceTime )) {
+//    lastDebounce = now;
+//    checkInterrupt = false;
+//    //ak prsi
+//    if(digitalRead(interruptPin) == 0) {
+////      rain = true;
+//      numRain++;
+//      }
+//      else{
+//        if(rain == true) 
+//        rain = false;
+//        
+//      }
+// 
+//    client.publish("rain1", "1");
+//    
+//    Serial.print("Rain detected ");
+//  } else checkInterrupt = false;
+
+if( (now - lastTime)  > debounceTime ) {
+  lastTime = now;
+      Serial.print("MERANIE: ");
+      
+  if(digitalRead(interruptPin) == 0) {
+     Serial.print("0 ");
+    numberOfRain++;
+    if(numberOfRain == 4)  {
+      numberOfNoRain = 0;
+      numberOfRain = 0;
+      if(rain == false){
+        rain = true;
+        client.publish("rain1", "1");
+        }
+    }
+    }
+  else{
+         Serial.print("1 ");
+    numberOfNoRain++;
+    if(numberOfNoRain == 4)  {
+      numberOfNoRain = 0;
+      numberOfRain = 0;
+      if(rain == true){
+        rain = false;
+        client.publish("rain1", "0");
+        }
+    }
+    }
+  }
+
+//  if ( rain==true && ( (millis() - stoppedRaining )> 60000)){ //neprsi > 3 min
+//      rain = false;
+//      stoppedRaining = millis();
+//      checkInterruptRising = false;
+//      Serial.print("Rain stoped ");
+//      
+//      client.publish("rain1", "0");
+//    } else checkInterruptRising = false;
+//    
 }

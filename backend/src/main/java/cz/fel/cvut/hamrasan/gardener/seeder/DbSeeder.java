@@ -1,13 +1,7 @@
 package cz.fel.cvut.hamrasan.gardener.seeder;
 
-import cz.fel.cvut.hamrasan.gardener.dao.GardenDao;
-import cz.fel.cvut.hamrasan.gardener.dao.PlantCategoryDao;
-import cz.fel.cvut.hamrasan.gardener.dao.PlantDao;
-import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
-import cz.fel.cvut.hamrasan.gardener.model.Garden;
-import cz.fel.cvut.hamrasan.gardener.model.Plant;
-import cz.fel.cvut.hamrasan.gardener.model.PlantCategory;
-import cz.fel.cvut.hamrasan.gardener.model.User;
+import cz.fel.cvut.hamrasan.gardener.dao.*;
+import cz.fel.cvut.hamrasan.gardener.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -16,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +22,16 @@ public class DbSeeder implements
     private UserDao userDao;
     private GardenDao gardenDao;
     private PlantCategoryDao plantCategoryDao;
+    private RainDao rainDao;
 
     @Autowired
-    public DbSeeder(PlantDao plantDao, UserDao userDao, PlantCategoryDao plantCategorydao, GardenDao gardenDao) {
+    public DbSeeder(PlantDao plantDao, UserDao userDao, PlantCategoryDao plantCategorydao, GardenDao gardenDao, RainDao rainDao) {
 
         this.plantDao = plantDao;
         this.userDao = userDao;
         this.plantCategoryDao = plantCategorydao;
         this.gardenDao = gardenDao;
+        this.rainDao = rainDao;
     }
 
 
@@ -45,6 +42,7 @@ public class DbSeeder implements
         createUsers();
         createPlants();
         createGarden();
+        createRain();
     }
 
     @Transactional
@@ -75,6 +73,11 @@ public class DbSeeder implements
             gardenDao.persist(garden);
         }
 
+    }
+
+    @Transactional
+    void createRain(){
+        rainDao.persist(new Rain(LocalDateTime.now(), false, gardenDao.find((long) 1)));
     }
 
 }

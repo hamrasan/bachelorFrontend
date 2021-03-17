@@ -58,7 +58,7 @@ public class Tut6Server {
 
     @RabbitListener(queues = "tut.rpc.rain")
     public void raining(@Payload String n ,@Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String key) {
-        System.out.println(" [x] It is raining in " + key);
+        System.out.println(" [x] It is " + n + " raining in " + key);
         rpcService.saveRain(n,key);
     }
 

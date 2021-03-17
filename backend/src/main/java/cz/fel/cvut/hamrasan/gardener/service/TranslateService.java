@@ -112,6 +112,7 @@ public class TranslateService {
 
     @Transactional
     public RainDto translateRain(Rain rain){
+        Objects.requireNonNull(rain);
         return new RainDto(rain.getId(), rain.getDate(), rain.getRaining(), rain.getGarden().getId());
     }
 }
