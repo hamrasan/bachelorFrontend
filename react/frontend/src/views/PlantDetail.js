@@ -8,7 +8,7 @@ function PlantDetail(props){
   const params = useParams();
 
   const getPlant = () => {
-    axios.get("http://localhost:8080/plants/" + params.id)
+    axios.get("http://localhost:8080/plants/all/" + params.id)
     .then((res) => {
       setPlant(res.data);
       console.log(res.data);

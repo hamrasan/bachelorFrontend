@@ -1,6 +1,8 @@
 package cz.fel.cvut.hamrasan.gardener.rest;
 
 import cz.fel.cvut.hamrasan.gardener.dto.PlantDto;
+import cz.fel.cvut.hamrasan.gardener.dto.PlantWithoutDateDto;
+import cz.fel.cvut.hamrasan.gardener.exceptions.MissingVariableException;
 import cz.fel.cvut.hamrasan.gardener.model.Plant;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.PlantService;
@@ -23,18 +25,31 @@ public class PlantController {
     }
 
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE )
-    public List<PlantDto> getAll() {
-        if(!SecurityUtils.isAuthenticatedAnonymously()) {
-                return plantService.getUserPlants();
-        }
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE )
+    public List<PlantWithoutDateDto> getAll() {
         return plantService.findAll();
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE )
-    public PlantDto getPlant(@PathVariable Long id) {
+    @GetMapping(produces =  MediaType.APPLICATION_JSON_VALUE )
+    public List<PlantDto> getAllOfUSer(){
+        if(!SecurityUtils.isAuthenticatedAnonymously()) {
+            return plantService.getUserPlants();
+        }
+        else return null;
+    }
+
+    @GetMapping(value = "/all/{id}", produces = MediaType.APPLICATION_JSON_VALUE )
+    public PlantWithoutDateDto getPlant(@PathVariable Long id) {
         return plantService.find(id);
     }
 
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE )
+    public PlantDto getUserPlant(@PathVariable Long id) {
+        return plantService.findUserPlant(id);
+    }
 
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void createPlant(@RequestBody Plant plant)throws MissingVariableException {
+        plantService.create(plant);
+    }
 }

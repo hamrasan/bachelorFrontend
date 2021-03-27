@@ -8,44 +8,89 @@ import TheWeather from './views/TheWeather'
 import TheHome from './views/TheHome'
 import PlantDetail from './views/PlantDetail'
 import MyProfile from './views/MyProfile'
-
+import Context from "./appContext";
+import AuthRoute from "./AuthRoute";
+import { useState, useEffect} from "react";
+import Cookies from "js-cookie";
 import { Route, Switch } from 'react-router-dom';
+import axios from 'axios'
 
 function App() {
+
+  const [isAuth,setIsAuth]= useState(false);
+  const [name,setName]= useState('');
+  const [oldUrl, setOldUrl] = useState(null);
+
+  const login = () => {
+    setIsAuth(true);
+  }
+
+  useEffect(() => {
+    if (Cookies.get("JSESSIONID") && isAuth == false){
+      login();
+    }
+  }, isAuth);
+
+  const logout = () =>{
+    axios({
+      method: 'get',
+      url: 'http://localhost:8080/logout',
+      withCredentials: true,
+    })
+    .then((res) => {
+      console.log(res.data);
+      Cookies.remove("JSESSIONID");
+      setIsAuth(false);
+    });
+  }
+
+  const contextValue = {
+    isAuth: isAuth,
+    login: login,
+    logout: logout,
+    oldUrl: oldUrl,
+    setOldUrl: setOldUrl
+  };
+
   return (
+    <Context.Provider value={contextValue}>
     <div className="App">
+      
     <header className="App-header">
         <TheNavigation/> 
+        
     </header>
-
     <div>
+      
         <Switch>
-          <Route path="/login">
+          <AuthRoute path="/login" guest={true}>
             <LoginForm/>
-          </Route>
-          <Route path="/register">
+          </AuthRoute>
+          <AuthRoute path="/register" guest={true}>
             <RegisterForm/>
-          </Route>
-          <Route path="/weather">
+          </AuthRoute>
+          <AuthRoute path="/weather">
             <TheWeather />
-          </Route>
-          <Route path="/garden/detail/:id">
+          </AuthRoute>
+          <AuthRoute path="/garden/detail/:id">
             <PlantDetail />
-          </Route>
-          <Route path="/garden" exact>
+          </AuthRoute>
+          <AuthRoute path="/garden" exact>
             <TheGarden />
-          </Route>
-          <Route path="/profile">
+          </AuthRoute>          
+          <AuthRoute path="/profile">
             <MyProfile/>
-          </Route>
-          <Route path="/" exact>
+          </AuthRoute>
+          <AuthRoute path="/" exact>
             <TheHome />
-          </Route>
+          </AuthRoute>
         </Switch>
-    </div>
-
+      
     </div>
     
+    </div>
+    </Context.Provider>
+
     // <div className="App">
       
     //     <Form inline>

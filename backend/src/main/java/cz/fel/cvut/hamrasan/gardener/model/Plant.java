@@ -6,7 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +35,6 @@ public class Plant extends AbstractEntity{
 
     @Basic(optional = false)
     @Column(nullable = false)
-    @PastOrPresent
-    private LocalDate dateOfPlant;
-
-    @Basic(optional = false)
-    @Column(nullable = false)
     private String season;
 
     @ManyToOne
@@ -50,29 +44,26 @@ public class Plant extends AbstractEntity{
 //    @ManyToMany
 //    private List<User> users;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Garden> gardens;
+    @OneToMany
+    private List<UserPlant> userPlants;
+
 
 
     public Plant(@Size(max = 30, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name, String picture, double minTemperature,
-                 double maxTemperature, @PastOrPresent LocalDate dateOfPlant, String season, PlantCategory category, List<Garden> gardens) {
+                 double maxTemperature, String season, PlantCategory category) {
 
         this.name = name;
         this.picture = picture;
         this.minTemperature = minTemperature;
         this.maxTemperature = maxTemperature;
-        this.dateOfPlant = dateOfPlant;
         this.season = season;
         this.category = category;
-//        this.users = users;
-        this.gardens = gardens;
+        this.userPlants = new ArrayList<UserPlant>();
     }
 
 
     public Plant() {
-//        users = new ArrayList<User>();
-        gardens = new ArrayList<Garden>();
+        this.userPlants = new ArrayList<UserPlant>();
     }
 
 
@@ -84,11 +75,9 @@ public class Plant extends AbstractEntity{
                 ", picture='" + picture + '\'' +
                 ", minTemperature=" + minTemperature +
                 ", maxTemperature=" + maxTemperature +
-                ", dateOfPlant=" + dateOfPlant +
                 ", season='" + season + '\'' +
                 ", category=" + category +
-//                ", users=" + users +
-                ", gardens=" + gardens +
+                ", userPlants=" + userPlants +
                 '}';
     }
 
@@ -140,19 +129,6 @@ public class Plant extends AbstractEntity{
         this.maxTemperature = maxTemperature;
     }
 
-
-    public LocalDate getDateOfPlant() {
-
-        return dateOfPlant;
-    }
-
-
-    public void setDateOfPlant(LocalDate dateOfPlant) {
-
-        this.dateOfPlant = dateOfPlant;
-    }
-
-
     public String getSeason() {
 
         return season;
@@ -189,14 +165,14 @@ public class Plant extends AbstractEntity{
 //    }
 
 
-    public List<Garden> getGardens() {
+    public List<UserPlant> getUserPlants() {
 
-        return gardens;
+        return userPlants;
     }
 
 
-    public void setGardens(List<Garden> gardens) {
+    public void setUserPlants(List<UserPlant> userPlants) {
 
-        this.gardens = gardens;
+        this.userPlants = userPlants;
     }
 }

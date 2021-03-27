@@ -14,7 +14,7 @@ function TheGarden() {
   const [categoryFilter, setCategoryFilter] = useState([]);
 
   const getPlants = () => {
-    axios.get("http://localhost:8080/plants").then((res) => {
+    axios.get("http://localhost:8080/plants/all").then((res) => {
       console.log(res.data);
       setPlants(res.data);
     });

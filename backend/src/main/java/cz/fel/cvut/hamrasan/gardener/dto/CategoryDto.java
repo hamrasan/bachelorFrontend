@@ -15,11 +15,11 @@ public class CategoryDto {
     @NotBlank(message = "Name cannot be blank")
     private String name;
 
-    private List<PlantDto> plants;
+    private List<PlantWithoutDateDto> plants;
 
 
     public CategoryDto(@NotNull(message = "Id cannot be blank") Long id, @NotBlank(message = "Name cannot be blank") String name,
-                       List<PlantDto> plants) {
+                       List<PlantWithoutDateDto> plants) {
 
         this.id = id;
         this.name = name;
@@ -28,7 +28,7 @@ public class CategoryDto {
 
 
     public CategoryDto() {
-        plants = new ArrayList<PlantDto>();
+        plants = new ArrayList<PlantWithoutDateDto>();
     }
 
 
@@ -42,12 +42,12 @@ public class CategoryDto {
     }
 
 
-    public List<PlantDto> getPlants() {
+    public List<PlantWithoutDateDto> getPlants() {
         return plants;
     }
 
 
-    public void setPlants(List<PlantDto> plants) {
+    public void setPlants(List<PlantWithoutDateDto> plants) {
         this.plants = plants;
     }
 

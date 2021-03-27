@@ -27,6 +27,7 @@ public class LoginController {
     @PostMapping(value = "/login",produces = MediaType.APPLICATION_JSON_VALUE)
     public UserDto login(@RequestBody HashMap<String,String> request) throws AlreadyLoginException {
 
+        System.out.println("guten tag");
         return service.login(request.get("email"),request.get("password"));
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,12 +49,12 @@ public class DbSeeder implements
         List<Plant> plants = new ArrayList<Plant>();
         PlantCategory category = new PlantCategory("zelenina", plants );
         plantCategoryDao.persist(category);
-        Plant plant = new Plant("Rajčina veľká", "../../assets/paradajka-lycopersicum-rajciak-semena.jpg", 12, 35, LocalDate.now(), "Marec", category, gardenDao.findAll());
+        Plant plant = new Plant("Rajčina veľká", "../../assets/paradajka-lycopersicum-rajciak-semena.jpg", 12, 35,  "Marec", category);
         plantDao.persist(plant);
 
         PlantCategory category2 = new PlantCategory("ovocie", new ArrayList<>() );
         plantCategoryDao.persist(category2);
-        Plant plant2 = new Plant("Jahoda celoročná", "../../assets/jahoda.jpg", 12, 40, LocalDate.now(), "Celoročne", category2, gardenDao.findAll());
+        Plant plant2 = new Plant("Jahoda celoročná", "../../assets/jahoda.jpg", 12, 40,  "Celoročne", category2);
         plantDao.persist(plant2);
     }
 

@@ -29,17 +29,27 @@ public class TranslateService {
     }
 
     @Transactional
-    public PlantDto translatePlant(Plant plant){
+    public PlantDto translateUserPlant(UserPlant plant){
         Objects.requireNonNull(plant);
         List<Long> gardenDtos = new ArrayList<Long>();
+        Plant plant1 = plant.getPlant();
         List<Garden> gardens = plant.getGardens();
 
         if(gardens.size() > 0){
             gardens.forEach(garden -> gardenDtos.add(garden.getId()));
         }
 
-        return new PlantDto(plant.getId(), plant.getName(), plant.getPicture(), plant.getMinTemperature(),
-                plant.getMaxTemperature(), plant.getDateOfPlant(), plant.getSeason(), translatePlantCategory(plant.getCategory()), gardenDtos );
+        return new PlantDto(plant.getId(), plant1.getName(), plant1.getPicture(), plant1.getMinTemperature(),
+                plant1.getMaxTemperature(), plant.getDateOfPlant(), plant1.getSeason(), translatePlantCategory(plant1.getCategory()), gardenDtos );
+    }
+
+
+    @Transactional
+    public PlantWithoutDateDto translatePlant(Plant plant){
+        Objects.requireNonNull(plant);
+
+        return new PlantWithoutDateDto(plant.getId(), plant.getName(), plant.getPicture(), plant.getMinTemperature(),
+                plant.getMaxTemperature(), plant.getSeason(), translatePlantCategory(plant.getCategory()) );
     }
 
     @Transactional
@@ -53,7 +63,7 @@ public class TranslateService {
         List<Temperature> temperatures = garden.getTemperatures();
         List<Humidity> humidities = garden.getHumidities();
         List<Pressure> pressures = garden.getPressures();
-        List<Plant> plants = garden.getPlants();
+        List<UserPlant> plants = garden.getPlants();
 
         if (temperatures.size() > 0){
             temperatures.forEach(temperature -> temperatureDtos.add(translateTemp(temperature)));
@@ -68,7 +78,7 @@ public class TranslateService {
         }
 
         if (plants.size() > 0){
-            plants.forEach(plant -> plantDtos.add(translatePlant(plant)));
+            plants.forEach(plant -> plantDtos.add(translateUserPlant(plant)));
         }
 
         return new GardenDto(garden.getId(), garden.getName(), garden.getLocation(), temperatureDtos, humidityDtos, pressureDtos,
@@ -99,7 +109,7 @@ public class TranslateService {
     @Transactional
     public CategoryDto translateCategory(PlantCategory plantCategory){
         Objects.requireNonNull(plantCategory);
-        List<PlantDto> plantDtos = new ArrayList<PlantDto>();
+        List<PlantWithoutDateDto> plantDtos = new ArrayList<PlantWithoutDateDto>();
         List<Plant> plants = plantCategory.getPlants();
 
         if(plants.size() > 0){

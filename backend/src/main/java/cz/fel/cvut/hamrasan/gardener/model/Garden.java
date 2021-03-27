@@ -39,12 +39,12 @@ public class Garden extends AbstractEntity {
             name = "plants_garden",
             joinColumns = @JoinColumn(name = "garden_id"),
             inverseJoinColumns = @JoinColumn(name = "plant_id"))
-    private List<Plant> plants;
+    private List<UserPlant> plants;
 
 
     public Garden(@Size(max = 100, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name,
                   String location, List<Pressure> pressures, List<Temperature> temperatures, List<Humidity> humidities,
-                  User user, List<Plant> plants) {
+                  User user, List<UserPlant> plants) {
 
         this.name = name;
         this.location = location;
@@ -57,7 +57,7 @@ public class Garden extends AbstractEntity {
 
     public Garden() {
         this.humidities = new ArrayList<Humidity>();
-        this.plants = new ArrayList<Plant>();
+        this.plants = new ArrayList<UserPlant>();
         this.pressures = new ArrayList<Pressure>();
         this.temperatures = new ArrayList<Temperature>();
     }
@@ -68,7 +68,7 @@ public class Garden extends AbstractEntity {
         this.name = name;
         this.user = user;
         this.humidities = new ArrayList<Humidity>();
-        this.plants = new ArrayList<Plant>();
+        this.plants = new ArrayList<UserPlant>();
         this.pressures = new ArrayList<Pressure>();
         this.temperatures = new ArrayList<Temperature>();
     }
@@ -146,13 +146,13 @@ public class Garden extends AbstractEntity {
     }
 
 
-    public List<Plant> getPlants() {
+    public List<UserPlant> getPlants() {
 
         return plants;
     }
 
 
-    public void setPlants(List<Plant> plants) {
+    public void setPlants(List<UserPlant> plants) {
 
         this.plants = plants;
     }

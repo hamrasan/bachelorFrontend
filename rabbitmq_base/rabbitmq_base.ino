@@ -25,6 +25,7 @@
 #include <Adafruit_BME280.h>
 
 #define SEALEVELPRESSURE_HPA (1013.25)
+#define SensorPin A0 
 
 Adafruit_BME280 bme; // I2C
 
@@ -232,13 +233,8 @@ if( (now - lastTime)  > debounceTime ) {
     }
   }
 
-//  if ( rain==true && ( (millis() - stoppedRaining )> 60000)){ //neprsi > 3 min
-//      rain = false;
-//      stoppedRaining = millis();
-//      checkInterruptRising = false;
-//      Serial.print("Rain stoped ");
-//      
-//      client.publish("rain1", "0");
-//    } else checkInterruptRising = false;
-//    
+
+  float sensorValue = analogRead(SensorPin);
+  Serial.println(sensorValue);
+
 }
