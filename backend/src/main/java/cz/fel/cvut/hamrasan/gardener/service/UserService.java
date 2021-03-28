@@ -3,7 +3,9 @@ package cz.fel.cvut.hamrasan.gardener.service;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.dto.UserDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.BadPassword;
+import cz.fel.cvut.hamrasan.gardener.exceptions.UnauthorizedException;
 import cz.fel.cvut.hamrasan.gardener.model.User;
+import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +56,11 @@ public class UserService {
         userDao.persist(user);
     }
 
-
+    @Transactional(readOnly = true)
+    public UserDto getCurrentUser() throws UnauthorizedException {
+        if (SecurityUtils.isAuthenticatedAnonymously()) throw new UnauthorizedException();
+        else return translateService.translateUser(SecurityUtils.getCurrentUser());
+    }
 
 
 }

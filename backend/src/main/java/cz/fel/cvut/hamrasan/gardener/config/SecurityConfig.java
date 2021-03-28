@@ -74,9 +74,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl(SecurityConstants.SECURITY_CHECK_URI)
                 .usernameParameter(SecurityConstants.USERNAME_PARAM).passwordParameter(SecurityConstants.PASSWORD_PARAM)
                 .and()
-                .logout().invalidateHttpSession(true).deleteCookies(COOKIES_TO_DESTROY)
+                .addFilter(corsFilter()).logout().invalidateHttpSession(true).deleteCookies(COOKIES_TO_DESTROY)
                 .logoutUrl(SecurityConstants.LOGOUT_URI).logoutSuccessHandler(logoutSuccessHandler)
                 .and().sessionManagement().maximumSessions(1);
+
+
     }
 
     @Bean
@@ -90,7 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
         config.addAllowedMethod("PATCH");
-        source.registerCorsConfiguration("/logout", config);
+        source.registerCorsConfiguration("/logout",config);
         source.registerCorsConfiguration("/*", config);
         source.registerCorsConfiguration("/*/*", config);
         source.registerCorsConfiguration("/*/*/*", config);
