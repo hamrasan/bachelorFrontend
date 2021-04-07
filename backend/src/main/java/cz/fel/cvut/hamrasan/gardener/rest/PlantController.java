@@ -56,4 +56,9 @@ public class PlantController {
     public void createPlant(@RequestBody Plant plant)throws MissingVariableException {
         plantService.create(plant);
     }
+
+    @GetMapping(value = "/subcategory/{id}", produces = MediaType.APPLICATION_JSON_VALUE )
+    public List<PlantWithoutDateDto> getAllOfSubcategory(@PathVariable Long id) {
+        return plantService.findAllOfSubcategory(id);
+    }
 }

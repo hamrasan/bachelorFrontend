@@ -1,14 +1,12 @@
 package cz.fel.cvut.hamrasan.gardener.service;
 
 import cz.fel.cvut.hamrasan.gardener.dao.PlantDao;
+import cz.fel.cvut.hamrasan.gardener.dao.SubcategoryDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserPlantDao;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantDto;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantWithoutDateDto;
-import cz.fel.cvut.hamrasan.gardener.model.Garden;
-import cz.fel.cvut.hamrasan.gardener.model.Plant;
-import cz.fel.cvut.hamrasan.gardener.model.User;
-import cz.fel.cvut.hamrasan.gardener.model.UserPlant;
+import cz.fel.cvut.hamrasan.gardener.model.*;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,13 +23,15 @@ public class PlantService {
     private UserDao userDao;
     private TranslateService translateService;
     private UserPlantDao userPlantDao;
+    private SubcategoryDao subcategoryDao;
 
     @Autowired
-    public PlantService(PlantDao plantDao, UserDao userDao, TranslateService translateService, UserPlantDao userPlantDao) {
+    public PlantService(PlantDao plantDao, UserDao userDao, TranslateService translateService, UserPlantDao userPlantDao, SubcategoryDao subcategoryDao) {
         this.plantDao = plantDao;
         this.userDao = userDao;
         this.translateService = translateService;
         this.userPlantDao = userPlantDao;
+        this.subcategoryDao = subcategoryDao;
     }
 
     @Transactional
@@ -86,5 +86,16 @@ public class PlantService {
     @Transactional
     public void addPlantToList(Plant plant, User current_user){
         User user = userDao.find(current_user.getId());
+    }
+
+    @Transactional
+    public List<PlantWithoutDateDto> findAllOfSubcategory(Long id) {
+        Subcategory subcategory = subcategoryDao.find(id);
+        List<PlantWithoutDateDto> plantsDtos = new ArrayList<PlantWithoutDateDto>();
+
+        for (Plant plant : subcategory.getPlantList()) {
+            plantsDtos.add(translateService.translatePlant(plant));
+        }
+        return plantsDtos;
     }
 }
