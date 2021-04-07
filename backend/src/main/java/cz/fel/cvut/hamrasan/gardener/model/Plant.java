@@ -38,8 +38,8 @@ public class Plant extends AbstractEntity{
     private String season;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private PlantCategory category;
+    @JoinColumn(name = "subcategory_id", nullable = false)
+    private Subcategory subcategory;
 
 //    @ManyToMany
 //    private List<User> users;
@@ -50,14 +50,14 @@ public class Plant extends AbstractEntity{
 
 
     public Plant(@Size(max = 30, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name, String picture, double minTemperature,
-                 double maxTemperature, String season, PlantCategory category) {
+                 double maxTemperature, String season, Subcategory subcategory) {
 
         this.name = name;
         this.picture = picture;
         this.minTemperature = minTemperature;
         this.maxTemperature = maxTemperature;
         this.season = season;
-        this.category = category;
+        this.subcategory = subcategory;
         this.userPlants = new ArrayList<UserPlant>();
     }
 
@@ -76,7 +76,7 @@ public class Plant extends AbstractEntity{
                 ", minTemperature=" + minTemperature +
                 ", maxTemperature=" + maxTemperature +
                 ", season='" + season + '\'' +
-                ", category=" + category +
+                ", subcategory=" + subcategory +
                 ", userPlants=" + userPlants +
                 '}';
     }
@@ -141,15 +141,15 @@ public class Plant extends AbstractEntity{
     }
 
 
-    public PlantCategory getCategory() {
+    public Subcategory getSubcategory() {
 
-        return category;
+        return subcategory;
     }
 
 
-    public void setCategory(PlantCategory category) {
+    public void setSubcategory(Subcategory subcategory ) {
 
-        this.category = category;
+        this.subcategory = subcategory;
     }
 
 

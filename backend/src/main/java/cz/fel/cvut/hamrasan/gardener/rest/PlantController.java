@@ -35,7 +35,7 @@ public class PlantController {
         if(!SecurityUtils.isAuthenticatedAnonymously()) {
             return plantService.getUserPlants();
         }
-        else return null;
+        else { return null; }
     }
 
     @GetMapping(value = "/all/{id}", produces = MediaType.APPLICATION_JSON_VALUE )
@@ -45,7 +45,11 @@ public class PlantController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE )
     public PlantDto getUserPlant(@PathVariable Long id) {
-        return plantService.findUserPlant(id);
+
+        if(!SecurityUtils.isAuthenticatedAnonymously()) {
+            return plantService.findUserPlant(id);
+        }
+        else { return null; }
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

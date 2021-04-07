@@ -34,8 +34,6 @@ public class UserController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void createUser(@RequestBody RequestWrapper requestWrapper) throws BadPassword {
-
-        System.out.println("mam usera");
         userService.createUser(requestWrapper.getUser(), requestWrapper.getPassword_control());
     }
 }

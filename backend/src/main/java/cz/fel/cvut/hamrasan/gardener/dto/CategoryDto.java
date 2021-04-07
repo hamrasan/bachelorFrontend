@@ -15,20 +15,47 @@ public class CategoryDto {
     @NotBlank(message = "Name cannot be blank")
     private String name;
 
-    private List<PlantWithoutDateDto> plants;
+    private List<String> subcategoryNames;
+    private List<Long> subcategoryIds;
 
 
     public CategoryDto(@NotNull(message = "Id cannot be blank") Long id, @NotBlank(message = "Name cannot be blank") String name,
-                       List<PlantWithoutDateDto> plants) {
+                       List<String> subcategoryNames, List<Long> subcategoryIds) {
 
         this.id = id;
         this.name = name;
-        this.plants = plants;
+        this.subcategoryNames = subcategoryNames;
+        this.subcategoryIds = subcategoryIds;
     }
 
 
     public CategoryDto() {
-        plants = new ArrayList<PlantWithoutDateDto>();
+        this.subcategoryIds = new ArrayList<Long>();
+        this.subcategoryNames = new ArrayList<String>();
+    }
+
+
+    public List<String> getSubcategoryNames() {
+
+        return subcategoryNames;
+    }
+
+
+    public void setSubcategoryNames(List<String> subcategoryNames) {
+
+        this.subcategoryNames = subcategoryNames;
+    }
+
+
+    public List<Long> getSubcategoryIds() {
+
+        return subcategoryIds;
+    }
+
+
+    public void setSubcategoryIds(List<Long> subcategoryIds) {
+
+        this.subcategoryIds = subcategoryIds;
     }
 
 
@@ -41,15 +68,6 @@ public class CategoryDto {
         this.name = name;
     }
 
-
-    public List<PlantWithoutDateDto> getPlants() {
-        return plants;
-    }
-
-
-    public void setPlants(List<PlantWithoutDateDto> plants) {
-        this.plants = plants;
-    }
 
 
     public Long getId() {

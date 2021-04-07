@@ -24,9 +24,12 @@ public class UserPlant extends AbstractEntity {
     @JoinColumn(name = "plant_id", nullable = false)
     private Plant plant;
 
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @JoinTable(
+            name = "plants_garden",
+            joinColumns = @JoinColumn(name = "plant_id"),
+            inverseJoinColumns = @JoinColumn(name = "garden_id"))
     private List<Garden> gardens;
 
 

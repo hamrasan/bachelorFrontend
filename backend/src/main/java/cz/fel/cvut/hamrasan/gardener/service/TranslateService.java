@@ -40,17 +40,31 @@ public class TranslateService {
         }
 
         return new PlantDto(plant.getId(), plant1.getName(), plant1.getPicture(), plant1.getMinTemperature(),
-                plant1.getMaxTemperature(), plant.getDateOfPlant(), plant1.getSeason(), translatePlantCategory(plant1.getCategory()), gardenDtos );
+                plant1.getMaxTemperature(), plant.getDateOfPlant(), plant1.getSeason(), translateSubCategory(plant1.getSubcategory()), gardenDtos );
     }
 
 
     @Transactional
     public PlantWithoutDateDto translatePlant(Plant plant){
         Objects.requireNonNull(plant);
+        System.out.println(plant.getSubcategory().getName());
 
         return new PlantWithoutDateDto(plant.getId(), plant.getName(), plant.getPicture(), plant.getMinTemperature(),
-                plant.getMaxTemperature(), plant.getSeason(), translatePlantCategory(plant.getCategory()) );
+                plant.getMaxTemperature(), plant.getSeason(), translateSubCategory(plant.getSubcategory()) );
     }
+
+    @Transactional
+    public SubcategoryDto translateSubCategory(Subcategory subcategory) {
+        Objects.requireNonNull(subcategory);
+        List<Long> plants = new ArrayList<Long>();
+
+        for (Plant plant : subcategory.getPlantList()) {
+            plants.add(plant.getId());
+        }
+
+        return new SubcategoryDto(subcategory.getId(), subcategory.getName(), translateCategory(subcategory.getCategory()), plants);
+    }
+
 
     @Transactional
     public GardenDto translateGarden(Garden garden){
@@ -109,15 +123,17 @@ public class TranslateService {
     @Transactional
     public CategoryDto translateCategory(PlantCategory plantCategory){
         Objects.requireNonNull(plantCategory);
-        List<PlantWithoutDateDto> plantDtos = new ArrayList<PlantWithoutDateDto>();
-        List<Plant> plants = plantCategory.getPlants();
+        List<String> subcategoryNames = new ArrayList<String>();
+        List<Long> subcategoryIds = new ArrayList<Long>();
 
-        if(plants.size() > 0){
-            for (Plant plant: plants) {
-                plantDtos.add(translatePlant(plant));
+
+        if(plantCategory.getSubcategories().size() > 0){
+            for (Subcategory subcategory: plantCategory.getSubcategories()) {
+                subcategoryIds.add(subcategory.getId());
+                subcategoryNames.add(subcategory.getName());
             }
         }
-        return new CategoryDto(plantCategory.getId(), plantCategory.getName(),plantDtos );
+        return new CategoryDto(plantCategory.getId(), plantCategory.getName(), subcategoryNames, subcategoryIds);
     }
 
     @Transactional

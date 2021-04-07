@@ -29,7 +29,7 @@ public class PlantWithoutDateDto {
     @Basic(optional = false)
     private String season;
 
-    private PlantCategoryDto category;
+    private SubcategoryDto subcategory;
 
 //    private List<Long> users;
 
@@ -41,7 +41,7 @@ public class PlantWithoutDateDto {
 
 
     public PlantWithoutDateDto(@NotNull(message = "Id cannot be blank") Long id, @Size(max = 30, min = 1, message = "Name is in incorrect format.") @NotNull(message = "Name cannot be blank") String name, String picture, double minTemperature,
-                    double maxTemperature, String season, PlantCategoryDto category) {
+                    double maxTemperature, String season, SubcategoryDto subcategory) {
 
         this.id = id;
         this.name = name;
@@ -49,7 +49,7 @@ public class PlantWithoutDateDto {
         this.minTemperature = minTemperature;
         this.maxTemperature = maxTemperature;
         this.season = season;
-        this.category = category;
+        this.subcategory = subcategory;
     }
 
 
@@ -125,19 +125,18 @@ public class PlantWithoutDateDto {
     }
 
 
-    public PlantCategoryDto getCategory() {
+    public SubcategoryDto getSubcategory() {
 
-        return category;
+        return subcategory;
     }
 
 
-    public void setCategory(PlantCategoryDto category) {
+    public void setSubcategory(SubcategoryDto subcategory) {
 
-        this.category = category;
+        this.subcategory = subcategory;
     }
 
-
-//    public List<Long> getUsers() {
+    //    public List<Long> getUsers() {
 //
 //        return users;
 //    }

@@ -20,18 +20,19 @@ public class PlantCategory extends AbstractEntity {
 
     @OneToMany(mappedBy = "category")
     @JsonIgnore
-    private List<Plant> plants;
+    private List<Subcategory> subcategories;
+
 
 
     public PlantCategory(@Size(max = 50, min = 1, message = "Name is in incorrect format.")
-                         @NotBlank(message = "Name cannot be blank") String name, List<Plant> plants) {
+                         @NotBlank(message = "Name cannot be blank") String name, List<Subcategory> subcategories) {
         this.name = name;
-        this.plants = plants;
+        this.subcategories = subcategories;
     }
 
 
     public PlantCategory() {
-        this.plants = new ArrayList<Plant>();
+        this.subcategories = new ArrayList<Subcategory>();
     }
 
     public String getName() {
@@ -44,12 +45,14 @@ public class PlantCategory extends AbstractEntity {
     }
 
 
-    public List<Plant> getPlants() {
-        return plants;
+    public List<Subcategory> getSubcategories() {
+
+        return subcategories;
     }
 
 
-    public void setPlants(List<Plant> plants) {
-        this.plants = plants;
+    public void setSubcategories(List<Subcategory> subcategories) {
+
+        this.subcategories = subcategories;
     }
 }

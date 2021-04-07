@@ -34,11 +34,7 @@ public class Garden extends AbstractEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToMany
-    @JoinTable(
-            name = "plants_garden",
-            joinColumns = @JoinColumn(name = "garden_id"),
-            inverseJoinColumns = @JoinColumn(name = "plant_id"))
+    @ManyToMany( mappedBy = "gardens")
     private List<UserPlant> plants;
 
 
@@ -63,12 +59,14 @@ public class Garden extends AbstractEntity {
     }
 
 
-    public Garden(@Size(max = 100, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name, User user) {
+    public Garden(@Size(max = 100, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name, String location, User user, List<UserPlant> plants) {
 
         this.name = name;
         this.user = user;
+        this.location = location;
+        this.plants = plants;
         this.humidities = new ArrayList<Humidity>();
-        this.plants = new ArrayList<UserPlant>();
+//        this.plants = new ArrayList<UserPlant>();
         this.pressures = new ArrayList<Pressure>();
         this.temperatures = new ArrayList<Temperature>();
     }

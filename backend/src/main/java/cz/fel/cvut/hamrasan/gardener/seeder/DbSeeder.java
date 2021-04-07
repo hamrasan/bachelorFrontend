@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +23,19 @@ public class DbSeeder implements
     private GardenDao gardenDao;
     private PlantCategoryDao plantCategoryDao;
     private RainDao rainDao;
+    private SubcategoryDao subcategoryDao;
+    private UserPlantDao userPlantDao;
 
     @Autowired
-    public DbSeeder(PlantDao plantDao, UserDao userDao, PlantCategoryDao plantCategorydao, GardenDao gardenDao, RainDao rainDao) {
+    public DbSeeder(PlantDao plantDao, UserDao userDao, PlantCategoryDao plantCategorydao, GardenDao gardenDao, RainDao rainDao, SubcategoryDao subcategoryDao, UserPlantDao userPlantDao) {
 
         this.plantDao = plantDao;
         this.userDao = userDao;
         this.plantCategoryDao = plantCategorydao;
+        this.subcategoryDao= subcategoryDao;
         this.gardenDao = gardenDao;
         this.rainDao = rainDao;
+        this.userPlantDao = userPlantDao;
     }
 
 
@@ -39,22 +44,28 @@ public class DbSeeder implements
         //TODO - vykona sa hned po spusteni
         System.out.println("Vypis po stupusteni aplikacie.");
         createUsers();
+        createCategories();
         createPlants();
         createGarden();
+        createUserPlant();
         createRain();
     }
 
     @Transactional
     void createPlants(){
         List<Plant> plants = new ArrayList<Plant>();
-        PlantCategory category = new PlantCategory("zelenina", plants );
-        plantCategoryDao.persist(category);
-        Plant plant = new Plant("Rajčina veľká", "../../assets/paradajka-lycopersicum-rajciak-semena.jpg", 12, 35,  "Marec", category);
+        List<Subcategory> subcategories = new ArrayList<Subcategory>();
+
+        Subcategory subcategory = new Subcategory("Rajcina", plantCategoryDao.find((long) 1), plants);
+        subcategoryDao.persist(subcategory);
+
+        Plant plant = new Plant("Rajčina veľká", "../../assets/paradajka-lycopersicum-rajciak-semena.jpg", 12, 35,  "Marec", subcategory);
         plantDao.persist(plant);
 
-        PlantCategory category2 = new PlantCategory("ovocie", new ArrayList<>() );
-        plantCategoryDao.persist(category2);
-        Plant plant2 = new Plant("Jahoda celoročná", "../../assets/jahoda.jpg", 12, 40,  "Celoročne", category2);
+        Subcategory subcategory2 = new Subcategory("None", plantCategoryDao.find((long) 2), plants);
+        subcategoryDao.persist(subcategory2);
+
+        Plant plant2 = new Plant("Jahoda celoročná", "../../assets/jahoda.jpg", 12, 40,  "Celoročne", subcategory2);
         plantDao.persist(plant2);
     }
 
@@ -67,11 +78,33 @@ public class DbSeeder implements
     @Transactional
     void createGarden(){
         List<User> users= userDao.findAll();
+
+        List<UserPlant> userPlants = new ArrayList<UserPlant>();
+
         if (users.size()>0){
-            Garden garden = new Garden("Zahrada", users.get(0));
+            Garden garden = new Garden("Zahrada","Praha",users.get(0),userPlants);
             gardenDao.persist(garden);
         }
+    }
 
+
+    @Transactional
+    void createUserPlant(){
+        List<Plant> plants = plantDao.findAll();
+
+        UserPlant userPlant = new UserPlant(LocalDate.now(), plants.get(0), gardenDao.findAll());
+        userPlantDao.persist(userPlant);
+
+    }
+
+    @Transactional
+    void createCategories(){
+        List<Subcategory> subcategories = new ArrayList<Subcategory>();
+        PlantCategory category = new PlantCategory("zelenina", subcategories );
+        plantCategoryDao.persist(category);
+
+        PlantCategory category2 = new PlantCategory("ovocie", new ArrayList<>() );
+        plantCategoryDao.persist(category2);
     }
 
     @Transactional
