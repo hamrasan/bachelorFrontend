@@ -1,11 +1,9 @@
 package cz.fel.cvut.hamrasan.gardener.service;
 
-import cz.fel.cvut.hamrasan.gardener.dao.PlantDao;
-import cz.fel.cvut.hamrasan.gardener.dao.SubcategoryDao;
-import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
-import cz.fel.cvut.hamrasan.gardener.dao.UserPlantDao;
+import cz.fel.cvut.hamrasan.gardener.dao.*;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantDto;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantWithoutDateDto;
+import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.model.*;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +22,18 @@ public class PlantService {
     private TranslateService translateService;
     private UserPlantDao userPlantDao;
     private SubcategoryDao subcategoryDao;
+    private PlantCategoryDao plantCategoryDao;
 
     @Autowired
-    public PlantService(PlantDao plantDao, UserDao userDao, TranslateService translateService, UserPlantDao userPlantDao, SubcategoryDao subcategoryDao) {
+    public PlantService(PlantDao plantDao, UserDao userDao, TranslateService translateService, UserPlantDao userPlantDao,
+                        SubcategoryDao subcategoryDao, PlantCategoryDao plantCategoryDao) {
+
         this.plantDao = plantDao;
         this.userDao = userDao;
         this.translateService = translateService;
         this.userPlantDao = userPlantDao;
         this.subcategoryDao = subcategoryDao;
+        this.plantCategoryDao = plantCategoryDao;
     }
 
     @Transactional
@@ -89,11 +91,17 @@ public class PlantService {
     }
 
     @Transactional
-    public List<PlantWithoutDateDto> findAllOfSubcategory(Long id) {
-        Subcategory subcategory = subcategoryDao.find(id);
+    public List<PlantWithoutDateDto> findAllOfSubcategory(String categoryName, String subcategoryName) throws NotFoundException {
+        PlantCategory plantCategory = plantCategoryDao.findByName(categoryName);
+        Subcategory subcategoryOfCateogory = null;
         List<PlantWithoutDateDto> plantsDtos = new ArrayList<PlantWithoutDateDto>();
 
-        for (Plant plant : subcategory.getPlantList()) {
+        for (Subcategory subcategory : plantCategory.getSubcategories()) {
+            if(subcategory.getName().equals(subcategoryName)) subcategoryOfCateogory=subcategory;
+        }
+        if(subcategoryOfCateogory == null) throw new NotFoundException();
+
+        for (Plant plant : subcategoryOfCateogory.getPlantList()) {
             plantsDtos.add(translateService.translatePlant(plant));
         }
         return plantsDtos;

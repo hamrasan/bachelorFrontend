@@ -56,17 +56,23 @@ public class DbSeeder implements
         List<Plant> plants = new ArrayList<Plant>();
         List<Subcategory> subcategories = new ArrayList<Subcategory>();
 
-        Subcategory subcategory = new Subcategory("Rajcina", plantCategoryDao.find((long) 1), plants);
+        Subcategory subcategory = new Subcategory("Rajčiny", plantCategoryDao.find((long) 1), plants);
         subcategoryDao.persist(subcategory);
 
-        Plant plant = new Plant("Rajčina veľká", "../../assets/paradajka-lycopersicum-rajciak-semena.jpg", 12, 35,  "Marec", subcategory);
+        Subcategory subcategory3 = new Subcategory("None", plantCategoryDao.find((long) 1), plants);
+        subcategoryDao.persist(subcategory3);
+
+        Plant plant = new Plant("Rajčina veľká", "paradajka-lycopersicum-rajciak-semena.jpg", 12, 35,  "Marec", subcategory);
         plantDao.persist(plant);
 
         Subcategory subcategory2 = new Subcategory("None", plantCategoryDao.find((long) 2), plants);
         subcategoryDao.persist(subcategory2);
 
-        Plant plant2 = new Plant("Jahoda celoročná", "../../assets/jahoda.jpg", 12, 40,  "Celoročne", subcategory2);
+        Plant plant2 = new Plant("Jahoda celoročná", "jahoda.jpg", 12, 40,  "Celoročne", subcategory2);
         plantDao.persist(plant2);
+
+        Plant plant3 = new Plant("Reďkev siata pravá", "redkvicka.jpg", 12, 35,  "Marec", subcategory3);
+        plantDao.persist(plant3);
     }
 
     @Transactional

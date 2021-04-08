@@ -3,13 +3,18 @@ package cz.fel.cvut.hamrasan.gardener.rest;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantDto;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantWithoutDateDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.MissingVariableException;
+import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.model.Plant;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.PlantService;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -29,6 +34,7 @@ public class PlantController {
     public List<PlantWithoutDateDto> getAll() {
         return plantService.findAll();
     }
+
 
     @GetMapping(produces =  MediaType.APPLICATION_JSON_VALUE )
     public List<PlantDto> getAllOfUSer(){
@@ -57,8 +63,8 @@ public class PlantController {
         plantService.create(plant);
     }
 
-    @GetMapping(value = "/subcategory/{id}", produces = MediaType.APPLICATION_JSON_VALUE )
-    public List<PlantWithoutDateDto> getAllOfSubcategory(@PathVariable Long id) {
-        return plantService.findAllOfSubcategory(id);
+    @GetMapping(value = "/{category}/{subcategory}", produces = MediaType.APPLICATION_JSON_VALUE )
+    public List<PlantWithoutDateDto> getAllOfSubcategory(@PathVariable String category, @PathVariable String subcategory) throws NotFoundException {
+        return plantService.findAllOfSubcategory(category, subcategory);
     }
 }
