@@ -14,7 +14,7 @@ import java.io.IOException;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials="true")
 public class GalleryController {
 
-    @GetMapping(value = "/test/{src}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/{src}", produces = MediaType.IMAGE_JPEG_VALUE)
     public @ResponseBody byte[] getImage(@PathVariable String src) throws IOException {
         return IOUtils.toByteArray(getClass().getResourceAsStream("/static/images/" + src));
     }

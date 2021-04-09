@@ -12,11 +12,11 @@ function PlantCard(props) {
 
   return (
       <Card>
-        <Card.Img variant="top" src={plant.picture} style={styleImg} />
+        <Card.Img variant="top" src={"http://localhost:8080/gallery/" + plant.picture} style={styleImg} />
         <Card.Body>
           <Card.Title>{plant.name}</Card.Title>
           <Card.Text>
-            {plant.category.name}
+            {plant.subcategoryDto.category.name}
           </Card.Text>
         </Card.Body>
         <Card.Footer>

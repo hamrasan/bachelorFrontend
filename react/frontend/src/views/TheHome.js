@@ -1,4 +1,4 @@
-import { Card, Container, CardDeck, Spinner, Row, Col } from "react-bootstrap";
+import {Container, CardDeck } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import TheSpinner from "../components/TheSpinner";
 import SensorCard from "../components/SensorCard";

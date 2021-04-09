@@ -1,15 +1,15 @@
-import { Form, Row, Col, Container, Button, Spinner } from "react-bootstrap";
+import { Form, Row, Col, Container, Button } from "react-bootstrap";
+import { useState, useEffect } from "react";
 import TheSpinner from "../components/TheSpinner";
 
 function PlantForm(props) {
   let plant = props.plant;
+  console.log(plant);
 
-  if(plant==null) {
-    return(
-      <TheSpinner></TheSpinner>
-    )
+  if (plant == null) {
+    return <TheSpinner></TheSpinner>;
   }
-  
+
   return (
     <div>
       <Container>
@@ -22,7 +22,7 @@ function PlantForm(props) {
         <Row>
           <Col className="d-flex flex-row-reverse">
             <img
-              src={"../" + plant.picture}
+              src={"http://localhost:8080/gallery/" + plant.picture}
               class="img-fluid rounded mx-auto"
               alt={plant.name}
             />
@@ -38,7 +38,6 @@ function PlantForm(props) {
         <Row>
           <Col>
             <Form>
-
               <Form.Group as={Row} controlId="formPlaintextPassword">
                 <Form.Label column sm="2">
                   Najnižsia možná teplota:

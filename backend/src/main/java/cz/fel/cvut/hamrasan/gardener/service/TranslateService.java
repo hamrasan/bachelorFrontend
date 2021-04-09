@@ -31,16 +31,12 @@ public class TranslateService {
     @Transactional
     public PlantDto translateUserPlant(UserPlant plant){
         Objects.requireNonNull(plant);
-        List<Long> gardenDtos = new ArrayList<Long>();
+        Long gardenDto = plant.getGarden().getId();
         Plant plant1 = plant.getPlant();
-        List<Garden> gardens = plant.getGardens();
 
-        if(gardens.size() > 0){
-            gardens.forEach(garden -> gardenDtos.add(garden.getId()));
-        }
 
         return new PlantDto(plant.getId(), plant1.getName(), plant1.getPicture(), plant1.getMinTemperature(),
-                plant1.getMaxTemperature(), plant.getDateOfPlant(), plant1.getSeason(), translateSubCategory(plant1.getSubcategory()), gardenDtos );
+                plant1.getMaxTemperature(), plant.getDateOfPlant(), plant1.getSeason(), translateSubCategory(plant1.getSubcategory()), gardenDto );
     }
 
 

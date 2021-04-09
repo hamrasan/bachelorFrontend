@@ -34,7 +34,7 @@ public class Garden extends AbstractEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToMany( mappedBy = "gardens")
+    @OneToMany( mappedBy = "garden")
     private List<UserPlant> plants;
 
 

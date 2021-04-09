@@ -24,25 +24,21 @@ public class UserPlant extends AbstractEntity {
     @JoinColumn(name = "plant_id", nullable = false)
     private Plant plant;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinTable(
-            name = "plants_garden",
-            joinColumns = @JoinColumn(name = "plant_id"),
-            inverseJoinColumns = @JoinColumn(name = "garden_id"))
-    private List<Garden> gardens;
+    @JoinColumn(name = "garden_id", nullable = false)
+    private Garden garden;
 
 
-    public UserPlant(@PastOrPresent LocalDate dateOfPlant, Plant plant, List<Garden> gardens) {
+    public UserPlant(@PastOrPresent LocalDate dateOfPlant, Plant plant, Garden garden) {
 
         this.dateOfPlant = dateOfPlant;
         this.plant = plant;
-        this.gardens = gardens;
+        this.garden = garden;
     }
 
 
-    public UserPlant() {
-        this.gardens = new ArrayList<Garden>();
+    public UserPlant(){
     }
 
 
@@ -70,14 +66,25 @@ public class UserPlant extends AbstractEntity {
     }
 
 
-    public List<Garden> getGardens() {
+    public Garden getGarden() {
 
-        return gardens;
+        return garden;
     }
 
 
-    public void setGardens(List<Garden> gardens) {
+    public void setGarden(Garden garden) {
 
-        this.gardens = gardens;
+        this.garden = garden;
+    }
+
+
+    @Override
+    public String toString() {
+
+        return "UserPlant{" +
+                "dateOfPlant=" + dateOfPlant +
+                ", plant=" + plant +
+                ", garden=" + garden +
+                '}';
     }
 }

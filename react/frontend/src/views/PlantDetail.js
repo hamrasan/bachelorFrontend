@@ -8,11 +8,20 @@ function PlantDetail(props){
   const params = useParams();
 
   const getPlant = () => {
-    axios.get("http://localhost:8080/plants/all/" + params.id)
-    .then((res) => {
-      setPlant(res.data);
-      console.log(res.data);
-    });
+    axios({
+      method: "get",
+      url: "http://localhost:8080/plants/" + params.id,
+      withCredentials: true,
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          console.log(res.data);
+          setPlant(res.data);
+        } else throw Error(res.status);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   useEffect(() => {

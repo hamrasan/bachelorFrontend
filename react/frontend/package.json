@@ -12,9 +12,11 @@
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
     "react-bootstrap-dropdown-menu": "^1.1.23",
+    "react-datepicker": "^3.7.0",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "tuyapi": "github:codetheweb/tuyapi",
     "web-vitals": "^1.1.0"
   },
   "scripts": {

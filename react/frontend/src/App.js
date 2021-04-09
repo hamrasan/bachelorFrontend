@@ -1,103 +1,141 @@
 // import logo from "./logo.svg";
 // import "./App.css";
-import TheNavigation from './components/TheNavigation'
-import RegisterForm from './components/RegisterForm'
-import LoginForm from './components/LoginForm'
-import TheGarden from './views/TheGarden'
-import TheWeather from './views/TheWeather'
-import TheHome from './views/TheHome'
-import PlantDetail from './views/PlantDetail'
-import MyProfile from './views/MyProfile'
+import TheNavigation from "./components/TheNavigation";
+import RegisterForm from "./components/RegisterForm";
+import LoginForm from "./components/LoginForm";
+import TheGarden from "./views/TheGarden";
+import PlantNewForm from "./components/PlantNewForm";
+import TheWeather from "./views/TheWeather";
+import TheHome from "./views/TheHome";
+import PlantDetail from "./views/PlantDetail";
+import MyProfile from "./views/MyProfile";
 import Context from "./appContext";
 import AuthRoute from "./AuthRoute";
-import { useState, useEffect} from "react";
+import tuyaApi from "./components/sensor/tuyaApi";
+import { useState, useLayoutEffect } from "react";
 import Cookies from "js-cookie";
-import { Route, Switch } from 'react-router-dom';
-import axios from 'axios'
+import { Redirect, Switch } from "react-router-dom";
+import axios from "axios";
 
 function App() {
-
-  const [isAuth,setIsAuth]= useState(false);
-  const [name,setName]= useState('');
+  const [isAuth, setIsAuth] = useState(false);
   const [oldUrl, setOldUrl] = useState(null);
+  const [user, setUser] = useState(null);
+
 
   const login = () => {
-    setIsAuth(true);
-  }
+    console.log("login name");
+    console.log(user);
+    axios({
+      method: "get",
+      url: "http://localhost:8080/user",
+      withCredentials: true
+    })
+    .then((res) => {
+      console.log("res.data");
+      console.log(res);
+      setUser(res.data);
+      setIsAuth(true);
+    })
+    .catch((error) => {
+      logoutFrontEnd();
+      console.log("after logout");
+      console.error(error);
+    });
+    // setName(user.firstName);
+  };
 
-  useEffect(() => {
-    if (Cookies.get("JSESSIONID") && isAuth == false){
-      login();
+  useLayoutEffect(() => {
+    if (Cookies.get("JSESSIONID") && isAuth == false) {
+        login();
     }
   }, isAuth);
 
-  const logout = () =>{
+  const logout = () => {
     axios({
-      method: 'get',
-      url: 'http://localhost:8080/logout',
+      method: "post",
       withCredentials: true,
-    })
-    .then((res) => {
-      console.log(res.data);
-      Cookies.remove("JSESSIONID");
-      setIsAuth(false);
+      url: "http://localhost:8080/logout",
+      data: { },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      }
+    }).then((res) => {
+      console.log(res);
+      logoutFrontEnd();
+    }).catch((error) => {
+      console.log("after logout");
+      console.error(error);
     });
-  }
+
+  };
+
+  const logoutFrontEnd = () => {
+    Cookies.remove("JSESSIONID");
+    setIsAuth(false);
+    setUser(null);
+  };
 
   const contextValue = {
     isAuth: isAuth,
     login: login,
     logout: logout,
     oldUrl: oldUrl,
-    setOldUrl: setOldUrl
+    setOldUrl: setOldUrl,
+    user: user
   };
 
   return (
     <Context.Provider value={contextValue}>
-    <div className="App">
-      
-    <header className="App-header">
-        <TheNavigation/> 
-        
-    </header>
-    <div>
-      
-        <Switch>
-          <AuthRoute path="/login" guest={true}>
-            <LoginForm/>
-          </AuthRoute>
-          <AuthRoute path="/register" guest={true}>
-            <RegisterForm/>
-          </AuthRoute>
-          <AuthRoute path="/weather">
-            <TheWeather />
-          </AuthRoute>
-          <AuthRoute path="/garden/detail/:id">
-            <PlantDetail />
-          </AuthRoute>
-          <AuthRoute path="/garden" exact>
-            <TheGarden />
-          </AuthRoute>          
-          <AuthRoute path="/profile">
-            <MyProfile/>
-          </AuthRoute>
-          <AuthRoute path="/" exact>
-            <TheHome />
-          </AuthRoute>
-        </Switch>
-      
-    </div>
-    
-    </div>
+      <div className="App">
+        <header className="App-header">
+          <TheNavigation user={user}/>
+        </header>
+        <div>
+          <Switch>
+            <AuthRoute path="/login" guest={true}>
+              <LoginForm />
+            </AuthRoute>
+            <AuthRoute path="/register" guest={true}>
+              <RegisterForm />
+            </AuthRoute>
+            <AuthRoute path="/logout">
+              {() => {
+                logout();
+                return <Redirect to="/login" />;
+              }}
+            </AuthRoute>
+            <AuthRoute path="/weather">
+              <TheWeather />
+            </AuthRoute>
+            <AuthRoute path="/garden/detail/:id">
+              <PlantDetail />
+            </AuthRoute>
+            <AuthRoute path="/garden" exact>
+              <TheGarden />
+            </AuthRoute>
+            <AuthRoute path="/garden/new">
+              <PlantNewForm user={user}/>
+            </AuthRoute>
+            <AuthRoute path="/profile">
+              <MyProfile />
+            </AuthRoute>
+            <AuthRoute path="/" exact>
+              <TheHome />
+            </AuthRoute>
+          </Switch>
+        </div>
+      </div>
     </Context.Provider>
 
     // <div className="App">
-      
+
     //     <Form inline>
     //         <FormControl type="text" placeholder="Search" className="mr-sm-2" />
     //         <Button variant="outline-info">Search</Button>
     //     </Form>
-      
+
     // </div>
   );
 }

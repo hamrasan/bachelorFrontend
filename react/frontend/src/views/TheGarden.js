@@ -3,7 +3,7 @@ import PlantCard from "../components/PlantCard";
 import SearchForm from "../components/SearchForm";
 import DropdownFilter from "../components/DropDownFilter";
 
-import { CardDeck, Container } from "react-bootstrap";
+import { CardDeck, Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function TheGarden() {
@@ -12,22 +12,32 @@ function TheGarden() {
   const [categories, setCategories] = useState([]);
   const [plants, setPlants] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState([]);
+  const [subcategoryFilter, setSubcategoryFilter] = useState([]);
 
   const getPlants = () => {
-    axios.get("http://localhost:8080/plants/all").then((res) => {
-      console.log(res.data);
-      setPlants(res.data);
-    });
+    axios({
+      method: "get",
+      url: "http://localhost:8080/plants",
+      withCredentials: true,
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          console.log(res);
+          setPlants(res.data);
+        } else throw Error(res.status);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleFilter = (id) => {
     console.log(id);
     let newArray = [];
-    if(!categoryFilter.includes(id)){
-      newArray= [...categoryFilter, id];
-    }
-    else{
-      newArray = categoryFilter.filter(oldId => id!==oldId);
+    if (!categoryFilter.includes(id)) {
+      newArray = [...categoryFilter, id];
+    } else {
+      newArray = categoryFilter.filter((oldId) => id !== oldId);
     }
     setCategoryFilter(newArray);
     console.log(newArray);
@@ -45,6 +55,7 @@ function TheGarden() {
     getPlants();
   }, []);
 
+
   // const mappedPlants = plants.map((plant) => {
   //   return (
   //     <Link to={"/garden/detail/" + plant.id}>
@@ -53,18 +64,35 @@ function TheGarden() {
   //   );
   // });
 
-
   return (
     <div>
       <SearchForm />
-      <DropdownFilter categories={categories} categoryFilter={categoryFilter} handleFilter={handleFilter}/>
+      <Container>
+        <Link to={"/garden/new"}>
+          <Button variant="info" >
+            {" "}
+            Pridaj novú rastlinu{" "}
+          </Button>{" "}
+        </Link>
+      </Container>
+      <DropdownFilter
+        categories={categories}
+        categoryFilter={categoryFilter}
+        handleFilter={handleFilter}
+      />
       <Container>
         <CardDeck>
-          {plants.filter(plant => categoryFilter.length > 0 ? categoryFilter.includes(plant.category.id) : plant).map((plant) => (
-            <Link key={plant.id} to={"/garden/detail/" + plant.id}>
-              <PlantCard key={plant.id} plant={plant} />
-            </Link>
-          ))}
+          {plants
+            .filter((plant) =>
+              categoryFilter.length > 0
+                ? categoryFilter.includes(plant.subcategoryDto.category.id)
+                : plant
+            )
+            .map((plant) => (
+              <Link key={plant.id} to={"/garden/detail/" + plant.id}>
+                <PlantCard key={plant.id} plant={plant} />
+              </Link>
+            ))}
         </CardDeck>
       </Container>
     </div>

@@ -18,6 +18,7 @@ function LoginForm() {
       withCredentials: true,
       headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
       },
       data: {
         email: email,

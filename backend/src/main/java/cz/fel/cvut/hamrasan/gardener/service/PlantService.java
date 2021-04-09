@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,10 +24,11 @@ public class PlantService {
     private UserPlantDao userPlantDao;
     private SubcategoryDao subcategoryDao;
     private PlantCategoryDao plantCategoryDao;
+    private GardenDao gardenDao;
 
     @Autowired
     public PlantService(PlantDao plantDao, UserDao userDao, TranslateService translateService, UserPlantDao userPlantDao,
-                        SubcategoryDao subcategoryDao, PlantCategoryDao plantCategoryDao) {
+                        SubcategoryDao subcategoryDao, PlantCategoryDao plantCategoryDao, GardenDao gardenDao) {
 
         this.plantDao = plantDao;
         this.userDao = userDao;
@@ -34,6 +36,7 @@ public class PlantService {
         this.userPlantDao = userPlantDao;
         this.subcategoryDao = subcategoryDao;
         this.plantCategoryDao = plantCategoryDao;
+        this.gardenDao = gardenDao;
     }
 
     @Transactional
@@ -80,9 +83,13 @@ public class PlantService {
     }
 
     @Transactional
-    public void create(Plant plant){
-        Objects.requireNonNull(plant);
-        plantDao.persist(plant);
+    public void create(LocalDate date, Long plantId, Long gardenId){
+        Objects.requireNonNull(plantId);
+        Objects.requireNonNull(date);
+        Objects.requireNonNull(gardenId);
+
+        UserPlant userPlant = new UserPlant(date, plantDao.find(plantId), gardenDao.find(gardenId) );
+        userPlantDao.persist(userPlant);
     }
 
     @Transactional

@@ -37,16 +37,15 @@ public class PlantDto {
 
 //    private List<Long> users;
 
-    private List<Long> gardens;
+    private Long garden;
 
-    public PlantDto() {
-        gardens = new ArrayList<Long>();
+    public PlantDto(){
     }
 
 
 
     public PlantDto(@NotNull(message = "Id cannot be blank") Long id, @Size(max = 30, min = 1, message = "Name is in incorrect format.") @NotNull(message = "Name cannot be blank") String name, String picture, double minTemperature,
-                    double maxTemperature, @PastOrPresent LocalDate dateOfPlant, String season, SubcategoryDto subcategoryDto, List<Long> gardens) {
+                    double maxTemperature, @PastOrPresent LocalDate dateOfPlant, String season, SubcategoryDto subcategoryDto, Long garden) {
 
         this.id = id;
         this.name = name;
@@ -56,7 +55,7 @@ public class PlantDto {
         this.dateOfPlant = dateOfPlant;
         this.season = season;
         this.subcategoryDto = subcategoryDto;
-        this.gardens = gardens;
+        this.garden = garden;
     }
 
 
@@ -168,14 +167,14 @@ public class PlantDto {
 //    }
 
 
-    public List<Long> getGardens() {
+    public Long getGarden() {
 
-        return gardens;
+        return garden;
     }
 
 
-    public void setGardens(List<Long> gardens) {
+    public void setGarden(Long garden) {
 
-        this.gardens = gardens;
+        this.garden = garden;
     }
 }
