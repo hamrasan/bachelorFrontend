@@ -1,15 +1,14 @@
 package cz.fel.cvut.hamrasan.gardener.rest;
 
+import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
 import cz.fel.cvut.hamrasan.gardener.service.ValveService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/valve")
@@ -23,9 +22,17 @@ public class ValveController {
     }
 
     @GetMapping(value = "/config")
-    public void getAll(@RequestHeader("Host") String host) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
-
-        System.out.println(host);
+    public void configApi() throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         valveService.setupApi();
+    }
+
+    @GetMapping(value = "/refresh")
+    public void refreshApi() throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException {
+        valveService.refreshApiToken();
+    }
+
+    @PostMapping(value = "/move")
+    public void moveValve(@RequestBody HashMap<String,String> request) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException {
+        valveService.moveValve(request.get("deviceId"), request.get("onOffValve"));
     }
 }
