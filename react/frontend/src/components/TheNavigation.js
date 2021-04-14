@@ -21,6 +21,9 @@ function TheNavigation(props) {
           <Nav.Link as={Link} to="/garden">
             Moja záhrada
           </Nav.Link>
+          <Nav.Link as={Link} to="/valving">
+            Zalievanie
+          </Nav.Link>
           <Nav.Link as={Link} to="/weather">
             Počasie
           </Nav.Link>

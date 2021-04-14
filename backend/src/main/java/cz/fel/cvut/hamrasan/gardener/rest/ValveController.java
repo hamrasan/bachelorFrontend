@@ -1,7 +1,9 @@
 package cz.fel.cvut.hamrasan.gardener.rest;
 
 import cz.fel.cvut.hamrasan.gardener.dto.ValveDto;
+import cz.fel.cvut.hamrasan.gardener.dto.ValveWithScheduleDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
+import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.ValveService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +28,25 @@ public class ValveController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ValveDto> getAllOfUser() {
+    public List<ValveDto> getAllOfUserRaw() throws NotFoundException {
         if(!SecurityUtils.isAuthenticatedAnonymously()) {
-            return valveService.getAllOfUser();
+            return valveService.getAllOfUserRaw();
         }
         else { return null; }
+    }
+
+    @GetMapping(value = "/allsc", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ValveWithScheduleDto> getAllOfUserFull() throws NotFoundException {
+        if(!SecurityUtils.isAuthenticatedAnonymously()) {
+            return valveService.getAllOfUserFull();
+        }
+        else { return null; }
+    }
+
+    @PostMapping(value = "create/{name}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void createValve(@PathVariable String name, @RequestParam(value = "gardens[]") int[] params){
+
+        valveService.createValve(name, params);
     }
 
     @GetMapping(value = "/config")

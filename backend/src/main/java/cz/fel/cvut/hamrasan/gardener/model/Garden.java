@@ -42,18 +42,6 @@ public class Garden extends AbstractEntity {
     private Valve valve;
 
 
-    public Garden(@Size(max = 100, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name,
-                  String location, List<Pressure> pressures, List<Temperature> temperatures, List<Humidity> humidities,
-                  User user, List<UserPlant> plants) {
-
-        this.name = name;
-        this.location = location;
-        this.pressures = pressures;
-        this.temperatures = temperatures;
-        this.humidities = humidities;
-        this.user = user;
-        this.plants = plants;
-    }
 
     public Garden(@Size(max = 100, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name,
                   String location, List<Pressure> pressures, List<Temperature> temperatures, List<Humidity> humidities,
@@ -70,10 +58,10 @@ public class Garden extends AbstractEntity {
     }
 
     public Garden() {
-        this.humidities = new ArrayList<Humidity>();
-        this.plants = new ArrayList<UserPlant>();
-        this.pressures = new ArrayList<Pressure>();
-        this.temperatures = new ArrayList<Temperature>();
+        this.humidities = new ArrayList<>();
+        this.plants = new ArrayList<>();
+        this.pressures = new ArrayList<>();
+        this.temperatures = new ArrayList<>();
     }
 
 

@@ -1,10 +1,13 @@
 package cz.fel.cvut.hamrasan.gardener.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import cz.fel.cvut.hamrasan.gardener.dao.GardenDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.dao.ValveDao;
 import cz.fel.cvut.hamrasan.gardener.dto.ValveDto;
+import cz.fel.cvut.hamrasan.gardener.dto.ValveWithScheduleDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
+import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.model.*;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import okhttp3.*;
@@ -37,27 +40,52 @@ public class ValveService {
     private ValveDao valveDao;
     private UserDao userDao;
     private TranslateService translateService;
+    private GardenDao gardenDao;
 
     @Autowired
-    public ValveService(ValveDao valveDao, UserDao userDao, TranslateService translateService) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+    public ValveService(ValveDao valveDao, UserDao userDao, TranslateService translateService, GardenDao gardenDao) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
         this.valveDao = valveDao;
         this.userDao = userDao;
         this.translateService = translateService;
+        this.gardenDao = gardenDao;
     }
 
     @Transactional
-    public List<ValveDto> getAllOfUser(){
+    public List<ValveDto> getAllOfUserRaw() throws NotFoundException {
         User user = userDao.find( SecurityUtils.getCurrentUser().getId());
         List<ValveDto> valveDtos = new ArrayList<ValveDto>();
 
         for (Garden garden: user.getGardens()) {
+            if(garden.getValve()== null) throw new NotFoundException("Valve not found");
             valveDtos.add(translateService.translateValve(garden.getValve()));
         }
 
         return valveDtos;
     }
 
-    public String calcSing(String cliendId, String secret, String timestamp) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
+    @Transactional
+    public List<ValveWithScheduleDto> getAllOfUserFull() throws NotFoundException {
+        User user = userDao.find( SecurityUtils.getCurrentUser().getId());
+        List<ValveWithScheduleDto> ValveWithScheduleDto = new ArrayList<ValveWithScheduleDto>();
+
+        for (Garden garden: user.getGardens()) {
+            if(garden.getValve()== null) throw new NotFoundException("Valve not found");
+            ValveWithScheduleDto.add(translateService.translateValveWithSchedule(garden.getValve()));
+        }
+        return ValveWithScheduleDto;
+    }
+
+    @Transactional
+    public void createValve(String name, int[] gardenId){
+        List<Garden> gardens = new ArrayList<Garden>();
+
+        for (int i: gardenId) {
+            gardens.add(gardenDao.find((long) i));
+        }
+        valveDao.persist(new Valve(name, gardens));
+    }
+
+    private String calcSing(String cliendId, String secret, String timestamp) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
         String str = cliendId + timestamp;
         Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
         SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
@@ -70,7 +98,7 @@ public class ValveService {
         return Hex.encodeHexString(sha256_HMAC.doFinal(str.getBytes("UTF-8"))).toUpperCase();
     }
 
-    public String calcSing(String cliendId, String accessToken, String secret, String timestamp) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
+    private String calcSing(String cliendId, String accessToken, String secret, String timestamp) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
         String str = cliendId + accessToken + timestamp;
         Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
         SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(), "HmacSHA256");

@@ -4,6 +4,7 @@ import TheNavigation from "./components/TheNavigation";
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from "./components/LoginForm";
 import TheGarden from "./views/TheGarden";
+import MyValving from "./views/MyValving";
 import PlantNewForm from "./components/PlantNewForm";
 import TheWeather from "./views/TheWeather";
 import TheHome from "./views/TheHome";
@@ -11,7 +12,6 @@ import PlantDetail from "./views/PlantDetail";
 import MyProfile from "./views/MyProfile";
 import Context from "./appContext";
 import AuthRoute from "./AuthRoute";
-import tuyaApi from "./components/sensor/tuyaApi";
 import { useState, useLayoutEffect } from "react";
 import Cookies from "js-cookie";
 import { Redirect, Switch } from "react-router-dom";
@@ -108,6 +108,9 @@ function App() {
             </AuthRoute>
             <AuthRoute path="/weather">
               <TheWeather />
+            </AuthRoute>
+            <AuthRoute path="/valving">
+              <MyValving/>
             </AuthRoute>
             <AuthRoute path="/garden/detail/:id">
               <PlantDetail />

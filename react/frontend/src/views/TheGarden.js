@@ -14,7 +14,7 @@ function TheGarden() {
   const [categoryFilter, setCategoryFilter] = useState([]);
   const [subcategoryFilter, setSubcategoryFilter] = useState([]);
 
-  const getPlants = () => {
+  const fetchPlants = () => {
     axios({
       method: "get",
       url: "http://localhost:8080/plants",
@@ -22,7 +22,6 @@ function TheGarden() {
     })
       .then((res) => {
         if (res.status == 200) {
-          console.log(res);
           setPlants(res.data);
         } else throw Error(res.status);
       })
@@ -43,7 +42,7 @@ function TheGarden() {
     console.log(newArray);
   };
 
-  const getCategories = () => {
+  const fetchCategories = () => {
     axios.get("http://localhost:8080/categories").then((res) => {
       console.log(res.data);
       setCategories(res.data);
@@ -51,8 +50,8 @@ function TheGarden() {
   };
 
   useEffect(() => {
-    getCategories();
-    getPlants();
+    fetchCategories();
+    fetchPlants();
   }, []);
 
 

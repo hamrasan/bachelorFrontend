@@ -29,6 +29,14 @@ public class Valve extends AbstractEntity {
         this.gardens = gardens;
     }
 
+
+    public Valve(String name, List<Garden> gardens) {
+
+        this.name = name;
+        this.gardens = gardens;
+    }
+
+
     public Valve() {
         this.gardens = new ArrayList<Garden>();
         this.valveScheduleList = new ArrayList<ValveSchedule>();

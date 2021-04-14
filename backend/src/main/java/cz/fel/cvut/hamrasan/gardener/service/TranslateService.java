@@ -148,4 +148,28 @@ public class TranslateService {
         }
         return new ValveDto(valve.getId(), valve.getName(), valve.getPicture(), gardensDto);
     }
+
+    @Transactional
+    public ValveWithScheduleDto translateValveWithSchedule(Valve valve) {
+        Objects.requireNonNull(valve);
+        List<GardenDto> gardensDto = new ArrayList<GardenDto>();
+        List<ValveScheduleDto> valveScheduleDtos = new ArrayList<ValveScheduleDto>();
+
+        for (Garden garden : valve.getGardens()) {
+            gardensDto.add(translateGarden(garden));
+        }
+
+        for (ValveSchedule valveSchedule: valve.getValveScheduleList()) {
+            valveScheduleDtos.add(translateValveSchedule(valveSchedule));
+        }
+        return new ValveWithScheduleDto(valve.getId(), valve.getName(), valve.getPicture(), gardensDto, valveScheduleDtos);
+    }
+
+
+    @Transactional
+    public ValveScheduleDto translateValveSchedule(ValveSchedule valveSchedule) {
+        Objects.requireNonNull(valveSchedule);
+
+        return new ValveScheduleDto(valveSchedule.getId(), valveSchedule.getHour(), valveSchedule.getMinutes(), valveSchedule.getLength(), valveSchedule.getDays(), valveSchedule.getValve().getId());
+    }
 }

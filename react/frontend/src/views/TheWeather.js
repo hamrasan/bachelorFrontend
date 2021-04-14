@@ -1,7 +1,6 @@
 function TheWeather(){
     return(
         <div>
-
         </div>
     )
 }
