@@ -37,6 +37,10 @@ public class Garden extends AbstractEntity {
     @OneToMany( mappedBy = "garden")
     private List<UserPlant> plants;
 
+    @ManyToOne
+    @JoinColumn(name = "valve_id")
+    private Valve valve;
+
 
     public Garden(@Size(max = 100, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name,
                   String location, List<Pressure> pressures, List<Temperature> temperatures, List<Humidity> humidities,
@@ -49,6 +53,20 @@ public class Garden extends AbstractEntity {
         this.humidities = humidities;
         this.user = user;
         this.plants = plants;
+    }
+
+    public Garden(@Size(max = 100, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name,
+                  String location, List<Pressure> pressures, List<Temperature> temperatures, List<Humidity> humidities,
+                  User user, List<UserPlant> plants, Valve valve) {
+
+        this.name = name;
+        this.location = location;
+        this.pressures = pressures;
+        this.temperatures = temperatures;
+        this.humidities = humidities;
+        this.user = user;
+        this.plants = plants;
+        this.valve = valve;
     }
 
     public Garden() {
@@ -153,5 +171,17 @@ public class Garden extends AbstractEntity {
     public void setPlants(List<UserPlant> plants) {
 
         this.plants = plants;
+    }
+
+
+    public Valve getValve() {
+
+        return valve;
+    }
+
+
+    public void setValve(Valve valve) {
+
+        this.valve = valve;
     }
 }

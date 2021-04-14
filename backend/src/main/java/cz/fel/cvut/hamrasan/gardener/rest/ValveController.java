@@ -21,6 +21,11 @@ public class ValveController {
         this.valveService = valveService;
     }
 
+    @GetMapping(value = "/all")
+    public void getAll() throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+
+    }
+
     @GetMapping(value = "/config")
     public void configApi() throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         valveService.setupApi();
