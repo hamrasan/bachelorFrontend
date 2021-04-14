@@ -76,7 +76,7 @@ public class ValveService {
     }
 
     @Transactional
-    public void createValve(String name, int[] gardenId){
+    public void createValve(String name, List<Integer> gardenId){
         List<Garden> gardens = new ArrayList<Garden>();
 
         for (int i: gardenId) {

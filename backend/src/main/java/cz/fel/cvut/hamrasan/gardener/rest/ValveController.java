@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/valve")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials="true")
 public class ValveController {
 
     private ValveService valveService;
@@ -43,10 +44,11 @@ public class ValveController {
         else { return null; }
     }
 
-    @PostMapping(value = "create/{name}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void createValve(@PathVariable String name, @RequestParam(value = "gardens[]") int[] params){
+    @PostMapping(value = "/create/{name}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void createValve(@PathVariable String name, @RequestBody HashMap<String,List<Integer>> hashMap){
 
-        valveService.createValve(name, params);
+        List<Integer> ids = hashMap.get("gardens");
+        valveService.createValve(name, ids);
     }
 
     @GetMapping(value = "/config")

@@ -65,8 +65,6 @@ public class PlantController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void createPlant(@RequestBody HashMap<String,String> hashMap)throws MissingVariableException {
 
-//        System.out.println("DEBILNY DATUM " + date);
-//        System.out.println("DEBILNY PLANT " + plant);
         LocalDate date = LocalDate.parse(hashMap.get("date").substring(0,10));
         Long plantId = Long.parseLong(hashMap.get("plant"));
         Long gardenId = Long.parseLong(hashMap.get("garden"));
