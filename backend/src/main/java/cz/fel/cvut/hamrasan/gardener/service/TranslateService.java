@@ -137,4 +137,15 @@ public class TranslateService {
         Objects.requireNonNull(rain);
         return new RainDto(rain.getId(), rain.getDate(), rain.getRaining(), rain.getGarden().getId());
     }
+
+    @Transactional
+    public ValveDto translateValve(Valve valve) {
+        Objects.requireNonNull(valve);
+        List<GardenDto> gardensDto = new ArrayList<GardenDto>();
+
+        for (Garden garden : valve.getGardens()) {
+            gardensDto.add(translateGarden(garden));
+        }
+        return new ValveDto(valve.getId(), valve.getName(), valve.getPicture(), gardensDto);
+    }
 }

@@ -1,14 +1,16 @@
 package cz.fel.cvut.hamrasan.gardener.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
+import cz.fel.cvut.hamrasan.gardener.dao.ValveDao;
+import cz.fel.cvut.hamrasan.gardener.dto.ValveDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
-import cz.fel.cvut.hamrasan.gardener.model.Device;
-import cz.fel.cvut.hamrasan.gardener.model.DeviceStatus;
-import cz.fel.cvut.hamrasan.gardener.model.MapperDevice;
-import cz.fel.cvut.hamrasan.gardener.model.TokenRequestEntity;
+import cz.fel.cvut.hamrasan.gardener.model.*;
+import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import okhttp3.*;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -16,11 +18,14 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ValveService {
@@ -29,9 +34,27 @@ public class ValveService {
     private Device device = null;
     private MapperDevice mapperDevice = null;
 
+    private ValveDao valveDao;
+    private UserDao userDao;
+    private TranslateService translateService;
 
-    public ValveService() throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+    @Autowired
+    public ValveService(ValveDao valveDao, UserDao userDao, TranslateService translateService) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+        this.valveDao = valveDao;
+        this.userDao = userDao;
+        this.translateService = translateService;
+    }
 
+    @Transactional
+    public List<ValveDto> getAllOfUser(){
+        User user = userDao.find( SecurityUtils.getCurrentUser().getId());
+        List<ValveDto> valveDtos = new ArrayList<ValveDto>();
+
+        for (Garden garden: user.getGardens()) {
+            valveDtos.add(translateService.translateValve(garden.getValve()));
+        }
+
+        return valveDtos;
     }
 
     public String calcSing(String cliendId, String secret, String timestamp) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {

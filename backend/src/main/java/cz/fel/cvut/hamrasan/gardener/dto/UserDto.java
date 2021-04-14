@@ -1,12 +1,9 @@
 package cz.fel.cvut.hamrasan.gardener.dto;
 
-import cz.fel.cvut.hamrasan.gardener.model.Plant;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDto {

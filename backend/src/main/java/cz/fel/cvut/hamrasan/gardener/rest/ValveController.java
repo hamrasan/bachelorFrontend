@@ -1,14 +1,18 @@
 package cz.fel.cvut.hamrasan.gardener.rest;
 
+import cz.fel.cvut.hamrasan.gardener.dto.ValveDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
+import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.ValveService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/valve")
@@ -21,9 +25,12 @@ public class ValveController {
         this.valveService = valveService;
     }
 
-    @GetMapping(value = "/all")
-    public void getAll() throws NoSuchAlgorithmException, InvalidKeyException, IOException {
-
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ValveDto> getAllOfUser() {
+        if(!SecurityUtils.isAuthenticatedAnonymously()) {
+            return valveService.getAllOfUser();
+        }
+        else { return null; }
     }
 
     @GetMapping(value = "/config")
