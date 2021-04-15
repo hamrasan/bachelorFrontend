@@ -45,10 +45,22 @@ public class ValveController {
     }
 
     @PostMapping(value = "/create/{name}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void createValve(@PathVariable String name, @RequestBody HashMap<String,List<Integer>> hashMap){
+    public void createValve(@PathVariable String name) throws NotAllowedException, NoSuchAlgorithmException, InvalidKeyException, IOException {
 
-        List<Integer> ids = hashMap.get("gardens");
-        valveService.createValve(name, ids);
+//        @RequestBody HashMap<String,List<Integer>> hashMap
+        if(!SecurityUtils.isAuthenticatedAnonymously()) {
+//            List<Integer> ids = hashMap.get("gardens");
+            valveService.createValve(name);
+        }
+    }
+
+    @PostMapping(value = "add_gardens/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void addGardensToValve(@PathVariable Long id, @RequestBody HashMap<String, List<Long>> hashMap){
+
+        if(!SecurityUtils.isAuthenticatedAnonymously()) {
+            List<Long> gardens = hashMap.get("gardens");
+            valveService.updateGardensToValve(id, gardens);
+        }
     }
 
     @GetMapping(value = "/config")

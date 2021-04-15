@@ -55,9 +55,8 @@ public class ValveService {
         User user = userDao.find( SecurityUtils.getCurrentUser().getId());
         List<ValveDto> valveDtos = new ArrayList<ValveDto>();
 
-        for (Garden garden: user.getGardens()) {
-            if(garden.getValve()== null) throw new NotFoundException("Valve not found");
-            valveDtos.add(translateService.translateValve(garden.getValve()));
+        for (Valve valve: user.getValves()) {
+            valveDtos.add(translateService.translateValve(valve));
         }
 
         return valveDtos;
@@ -68,22 +67,50 @@ public class ValveService {
         User user = userDao.find( SecurityUtils.getCurrentUser().getId());
         List<ValveWithScheduleDto> ValveWithScheduleDto = new ArrayList<ValveWithScheduleDto>();
 
-        for (Garden garden: user.getGardens()) {
-            if(garden.getValve()== null) throw new NotFoundException("Valve not found");
-            ValveWithScheduleDto.add(translateService.translateValveWithSchedule(garden.getValve()));
+        for (Valve valve: user.getValves()) {
+            ValveWithScheduleDto.add(translateService.translateValveWithSchedule(valve));
         }
         return ValveWithScheduleDto;
     }
 
     @Transactional
-    public void createValve(String name, List<Integer> gardenId){
-        List<Garden> gardens = new ArrayList<Garden>();
+    public void createValve(String name) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException {
+//        List<Garden> gardens = new ArrayList<Garden>();
+//
+//        for (int i: gardenId) {
+//            gardens.add(gardenDao.find((long) i));
+//        }
 
-        for (int i: gardenId) {
-            gardens.add(gardenDao.find((long) i));
-        }
-        valveDao.persist(new Valve(name, gardens));
+        if(entity == null) setupApi();
+        if(device == null) getDeviceInfo(name);
+
+        Valve valve = new Valve(name, ("https://images.tuyacn.com/"+device.getIcon()),SecurityUtils.getCurrentUser());
+        valveDao.persist(valve);
     }
+
+    @Transactional
+    public void updateGardensToValve(Long id, List<Long> gardensId){
+        Valve valve = valveDao.find(id);
+        System.out.println("SOM TUUUU");
+        User user = SecurityUtils.getCurrentUser();
+
+        for (int i = 0; i < valve.getGardens().size() ; i++) {
+            if(!gardensId.contains( valve.getGardens().get(i))) {
+                valve.removeGarden( valve.getGardens().get(i));
+            }
+        }
+
+        for (long i : gardensId) {
+            Garden garden = gardenDao.find(i);
+            if(!valve.getGardens().contains(garden)){
+                valve.addGarden(garden);
+            }
+        }
+
+        valveDao.update(valve);
+
+    }
+
 
     private String calcSing(String cliendId, String secret, String timestamp) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
         String str = cliendId + timestamp;
