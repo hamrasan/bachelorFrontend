@@ -13,6 +13,7 @@ function TheGarden() {
   const [plants, setPlants] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState([]);
   const [subcategoryFilter, setSubcategoryFilter] = useState([]);
+  const [searchString, setSearchString] = useState("");
 
   const fetchPlants = () => {
     axios({
@@ -65,7 +66,7 @@ function TheGarden() {
 
   return (
     <div>
-      <SearchForm />
+      <SearchForm onChange={setSearchString} value={searchString}/>
       <Container>
         <Link to={"/garden/new"}>
           <Button variant="info" >
@@ -86,6 +87,11 @@ function TheGarden() {
               categoryFilter.length > 0
                 ? categoryFilter.includes(plant.subcategoryDto.category.id)
                 : plant
+            )
+            .filter((plant) => 
+              searchString.length >=3 
+              ? plant.name.toLowerCase().includes(searchString.toLowerCase()) 
+              : plant
             )
             .map((plant) => (
               <Link key={plant.id} to={"/garden/detail/" + plant.id}>
