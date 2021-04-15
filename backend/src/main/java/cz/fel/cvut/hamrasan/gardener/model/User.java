@@ -52,10 +52,12 @@ public class User extends AbstractEntity {
     @OneToMany(mappedBy = "user")
     private List<Garden> gardens;
 
-    public User() {
+    @OneToMany(mappedBy = "user")
+    private List<Valve> valves;
 
-//        this.plants = new ArrayList<Plant>();
-        this.gardens = new ArrayList<Garden>();
+    public User() {
+        this.gardens = new ArrayList<>();
+        this.valves = new ArrayList<>();
     }
 
 
@@ -67,7 +69,6 @@ public class User extends AbstractEntity {
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-//        this.plants = plants;
         this.gardens = gardens;
     }
 
@@ -79,7 +80,8 @@ public class User extends AbstractEntity {
         this.password = password;
         this.email = email;
 //        this.plants = new ArrayList<Plant>();
-        this.gardens = new ArrayList<Garden>();
+        this.gardens = new ArrayList<>();
+        this.valves = new ArrayList<>();
     }
 
 
@@ -88,7 +90,8 @@ public class User extends AbstractEntity {
         this.email = email;
         this.password = password;
 //        this.plants = new ArrayList<Plant>();
-        this.gardens = new ArrayList<Garden>();
+        this.gardens = new ArrayList<>();
+        this.valves = new ArrayList<>();
     }
 
 
@@ -153,6 +156,18 @@ public class User extends AbstractEntity {
     }
 
 
+    public List<Valve> getValves() {
+
+        return valves;
+    }
+
+
+    public void setValves(List<Valve> valves) {
+
+        this.valves = valves;
+    }
+
+
     @Override
     public String toString() {
 
@@ -161,8 +176,8 @@ public class User extends AbstractEntity {
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-//                ", plants=" + plants +
                 ", gardens=" + gardens +
+                ", valves=" + valves +
                 '}';
     }
 }

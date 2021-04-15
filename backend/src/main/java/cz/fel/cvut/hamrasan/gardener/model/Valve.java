@@ -6,6 +6,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "APP_VALVE")
+@NamedQueries({
+        @NamedQuery(name = "Valve.findByName", query = "SELECT v FROM Valve v WHERE v.name = :name AND v.deleted_at is null")
+})
 public class Valve extends AbstractEntity {
 
     @Basic(optional = false)
@@ -14,26 +17,37 @@ public class Valve extends AbstractEntity {
 
     private String picture;
 
-    @OneToMany
+    @OneToMany(mappedBy = "valve")
     private List<ValveSchedule> valveScheduleList;
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "garden_valve",
+            joinColumns = @JoinColumn(name = "valve_id"),
+            inverseJoinColumns = @JoinColumn(name = "garden_id"))
     private List<Garden> gardens;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    public Valve(String name, String picture, List<ValveSchedule> valveScheduleList, List<Garden> gardens) {
+    public Valve(String name, String picture, List<ValveSchedule> valveScheduleList, List<Garden> gardens, User user) {
 
         this.name = name;
         this.picture = picture;
         this.valveScheduleList = valveScheduleList;
         this.gardens = gardens;
+        this.user = user;
     }
 
 
-    public Valve(String name, List<Garden> gardens) {
+    public Valve(String name, String picture, User user) {
 
         this.name = name;
-        this.gardens = gardens;
+        this.picture = picture;
+        this.gardens = new ArrayList<Garden>();
+        this.user = user;
+        this.valveScheduleList = new ArrayList<ValveSchedule>();
     }
 
 
@@ -41,6 +55,14 @@ public class Valve extends AbstractEntity {
         this.gardens = new ArrayList<Garden>();
         this.valveScheduleList = new ArrayList<ValveSchedule>();
     }
+
+    public void removeGarden(Garden garden){
+        this.gardens.remove(garden);
+    };
+
+    public void addGarden(Garden garden){
+        this.gardens.add(garden);
+    };
 
     public String getName() {
 
@@ -87,5 +109,17 @@ public class Valve extends AbstractEntity {
     public void setGardens(List<Garden> gardens) {
 
         this.gardens = gardens;
+    }
+
+
+    public User getUser() {
+
+        return user;
+    }
+
+
+    public void setUser(User user) {
+
+        this.user = user;
     }
 }
