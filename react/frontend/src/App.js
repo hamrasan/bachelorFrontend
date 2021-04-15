@@ -106,9 +106,6 @@ function App() {
                 return <Redirect to="/login" />;
               }}
             </AuthRoute>
-            <AuthRoute path="/weather">
-              <TheWeather />
-            </AuthRoute>
             <AuthRoute path="/valving">
               <MyValving/>
             </AuthRoute>

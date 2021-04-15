@@ -16,10 +16,6 @@ function DropdownFilter(props) {
     <Container className="pt-3">
       Filtruj podľa:
       <Form>{mappedCategories}
-        <Form.Group>
-            <Form.Check inline label="Dátumu pridania" name="formVerticalRadiosFilter" type="radio" id="0" />
-            <Form.Check inline label="Abecedne" type="radio" name="formVerticalRadiosFilter" id="1" />
-        </Form.Group>
       </Form>
     </Container>
   );

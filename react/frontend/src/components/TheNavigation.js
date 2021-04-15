@@ -24,9 +24,6 @@ function TheNavigation(props) {
           <Nav.Link as={Link} to="/valving">
             Zalievanie
           </Nav.Link>
-          <Nav.Link as={Link} to="/weather">
-            Počasie
-          </Nav.Link>
         </Nav>
         {context.isAuth ? (
           <Nav>
