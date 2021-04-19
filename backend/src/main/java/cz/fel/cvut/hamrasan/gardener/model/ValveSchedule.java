@@ -8,6 +8,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "APP_VALVESCHEDULE")
+@NamedQueries({
+        @NamedQuery(name = "ValveSchedule.findByValve", query = "SELECT v FROM ValveSchedule v WHERE v.valve.id = :valveId AND v.deleted_at is null")
+})
 public class ValveSchedule extends AbstractEntity {
 
     @Basic(optional = false)

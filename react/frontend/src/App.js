@@ -1,4 +1,3 @@
-// import logo from "./logo.svg";
 // import "./App.css";
 import TheNavigation from "./components/TheNavigation";
 import RegisterForm from "./components/RegisterForm";
@@ -6,7 +5,7 @@ import LoginForm from "./components/LoginForm";
 import TheGarden from "./views/TheGarden";
 import MyValving from "./views/MyValving";
 import PlantNewForm from "./components/PlantNewForm";
-import TheWeather from "./views/TheWeather";
+import ValvingSchedule from "./components/ValvingSchedule";
 import TheHome from "./views/TheHome";
 import PlantDetail from "./views/PlantDetail";
 import MyProfile from "./views/MyProfile";
@@ -106,8 +105,11 @@ function App() {
                 return <Redirect to="/login" />;
               }}
             </AuthRoute>
-            <AuthRoute path="/valving">
+            <AuthRoute path="/valving" exact>
               <MyValving/>
+            </AuthRoute>
+            <AuthRoute path="/valving/schedule">
+              <ValvingSchedule/>
             </AuthRoute>
             <AuthRoute path="/garden/detail/:id">
               <PlantDetail />

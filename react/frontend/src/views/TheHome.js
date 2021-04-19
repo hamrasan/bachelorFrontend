@@ -68,13 +68,13 @@ function TheHome() {
 
         </CardDeck>
         <br />
-        <button
+        {/* <button
           type="button"
           class="btn btn-warning"
           onClick={() => refreshData()}
         >
           Aktualizuj
-        </button>
+        </button> */}
       </Container>
       <br />
 

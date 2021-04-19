@@ -167,6 +167,11 @@ public class User extends AbstractEntity {
         this.valves = valves;
     }
 
+    public void addValve(Valve valve) {
+
+        this.valves.add(valve);
+    }
+
 
     @Override
     public String toString() {

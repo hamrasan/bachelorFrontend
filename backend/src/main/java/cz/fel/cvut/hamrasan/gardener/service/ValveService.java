@@ -14,6 +14,8 @@ import okhttp3.*;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -21,6 +23,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,7 +87,7 @@ public class ValveService {
         if(entity == null) setupApi();
         if(device == null) getDeviceInfo(name);
 
-        Valve valve = new Valve(name, ("https://images.tuyacn.com/"+device.getIcon()),SecurityUtils.getCurrentUser());
+        Valve valve = new Valve(name, ("https://images.tuyacn.com/"+device.getIcon()),userDao.find( SecurityUtils.getCurrentUser().getId()));
         valveDao.persist(valve);
     }
 
@@ -205,15 +208,14 @@ public class ValveService {
 
     public void moveValve(String deviceId, String onOffValue) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException {
         String json = "";
-        if(device==null || entity==null){
+        if( entity==null){
             setupApi();
-            getDeviceInfo(deviceId);
         }
         else refreshApiToken();
 
+        getDeviceInfo(deviceId);
+
         if(device.getId().equals(deviceId)) {
-            String timestamp = String.valueOf(new Date().getTime());
-            OkHttpClient client = new OkHttpClient();
 
             if (getValveStatus(deviceId).equals("false")) {
                 if (onOffValue.equals("true")) json = "{\"commands\":[{\"code\":\"switch_1\",\"value\":true}]}";
@@ -223,33 +225,7 @@ public class ValveService {
                 else json = "{\"commands\":[{\"code\":\"switch_1\",\"value\":true}]}";
             }
 
-
-            RequestBody body = RequestBody.create(
-                    MediaType.parse("application/json"), json);
-
-
-            System.out.println(body.toString());
-
-            Request request = new Request.Builder()
-                    .url("https://openapi.tuyaeu.com/v1.0/devices/" + deviceId + "/commands")
-                    .header("client_id", "uhc3xnmragt6r07yrbc4")
-                    .header("access_token", entity.getResult().getAccess_token())
-                    .header("t", timestamp)
-                    .header("sign", calcSing("uhc3xnmragt6r07yrbc4",entity.getResult().getAccess_token(), "33d229ebad1743979ddf6253ce210be1", timestamp))
-                    .header("sign_method", "HMAC-SHA256")
-                    .header("Content-Type", "application/json")
-                    .post(body)
-                    .build();
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            ResponseBody responseBody = client.newCall(request).execute().body();
-
-            TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {
-            };
-            HashMap<String, String> hashMap = objectMapper.readValue(responseBody.string(), typeRef);
-            if (hashMap.get("success").equals("true")) {
-                System.out.println("gut");
-            }
+            sendCommandRequest(deviceId, json);
 
         }else throw new NotAllowedException("Cannot turn on Valve");
     }
@@ -269,5 +245,58 @@ public class ValveService {
         else throw new NotAllowedException("Cannot get status of Valve");
         return "Not Found";
     }
+
+
+    public void setStopValving(String deviceId, Integer length) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException, NotFoundException {
+        String json = "";
+        Integer seconds = length*60;
+
+        if( entity==null){
+            setupApi();
+        }
+        else refreshApiToken();
+
+        getDeviceInfo(deviceId);
+
+        if (device.getId().equals(deviceId)) {
+
+            json = "{\"commands\":[{\"code\":\"countdown_1\",\"value\":"+ seconds +"}]}";
+            sendCommandRequest(deviceId, json);
+        }else throw new NotFoundException("Valve not found");
+
+    }
+
+
+    private void sendCommandRequest(String deviceId, String json) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
+        String timestamp = String.valueOf(new Date().getTime());
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(
+                MediaType.parse("application/json"), json);
+
+        System.out.println(body.toString());
+
+        Request request = new Request.Builder()
+                .url("https://openapi.tuyaeu.com/v1.0/devices/" + deviceId + "/commands")
+                .header("client_id", "uhc3xnmragt6r07yrbc4")
+                .header("access_token", entity.getResult().getAccess_token())
+                .header("t", timestamp)
+                .header("sign", calcSing("uhc3xnmragt6r07yrbc4",entity.getResult().getAccess_token(), "33d229ebad1743979ddf6253ce210be1", timestamp))
+                .header("sign_method", "HMAC-SHA256")
+                .header("Content-Type", "application/json")
+                .post(body)
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ResponseBody responseBody = client.newCall(request).execute().body();
+
+        TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {
+        };
+        HashMap<String, String> hashMap = objectMapper.readValue(responseBody.string(), typeRef);
+        if (hashMap.get("success").equals("true")) {
+            System.out.println("gut");
+        }
+    }
+
 
 }

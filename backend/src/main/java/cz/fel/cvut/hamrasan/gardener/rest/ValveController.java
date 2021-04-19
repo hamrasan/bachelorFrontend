@@ -1,5 +1,6 @@
 package cz.fel.cvut.hamrasan.gardener.rest;
 
+import cz.fel.cvut.hamrasan.gardener.dto.RequestWrapperSchedule;
 import cz.fel.cvut.hamrasan.gardener.dto.ValveDto;
 import cz.fel.cvut.hamrasan.gardener.dto.ValveWithScheduleDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
@@ -77,4 +78,5 @@ public class ValveController {
     public void moveValve(@RequestBody HashMap<String,String> request) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException {
         valveService.moveValve(request.get("deviceId"), request.get("onOffValve"));
     }
+
 }
