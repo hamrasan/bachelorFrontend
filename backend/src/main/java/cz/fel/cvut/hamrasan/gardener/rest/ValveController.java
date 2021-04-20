@@ -3,6 +3,7 @@ package cz.fel.cvut.hamrasan.gardener.rest;
 import cz.fel.cvut.hamrasan.gardener.dto.RequestWrapperSchedule;
 import cz.fel.cvut.hamrasan.gardener.dto.ValveDto;
 import cz.fel.cvut.hamrasan.gardener.dto.ValveWithScheduleDto;
+import cz.fel.cvut.hamrasan.gardener.exceptions.AlreadyExistsException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
@@ -46,7 +47,7 @@ public class ValveController {
     }
 
     @PostMapping(value = "/create/{name}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void createValve(@PathVariable String name) throws NotAllowedException, NoSuchAlgorithmException, InvalidKeyException, IOException {
+    public void createValve(@PathVariable String name) throws NotAllowedException, NoSuchAlgorithmException, InvalidKeyException, IOException, AlreadyExistsException {
 
 //        @RequestBody HashMap<String,List<Integer>> hashMap
         if(!SecurityUtils.isAuthenticatedAnonymously()) {
@@ -62,6 +63,11 @@ public class ValveController {
             List<Long> gardens = hashMap.get("gardens");
             valveService.updateGardensToValve(id, gardens);
         }
+    }
+
+    @PostMapping(value = "/immediately/{valveName}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void valvingImmediately(@PathVariable String valveName, @RequestBody HashMap<String, Integer> hashMap ) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotFoundException, NotAllowedException {
+        valveService.valvingImmediately(valveName, hashMap.get("length"));
     }
 
     @GetMapping(value = "/config")

@@ -6,6 +6,7 @@ import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.dao.ValveDao;
 import cz.fel.cvut.hamrasan.gardener.dto.ValveDto;
 import cz.fel.cvut.hamrasan.gardener.dto.ValveWithScheduleDto;
+import cz.fel.cvut.hamrasan.gardener.exceptions.AlreadyExistsException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.model.*;
@@ -77,24 +78,29 @@ public class ValveService {
     }
 
     @Transactional
-    public void createValve(String name) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException {
-//        List<Garden> gardens = new ArrayList<Garden>();
-//
-//        for (int i: gardenId) {
-//            gardens.add(gardenDao.find((long) i));
-//        }
-
+    public void createValve(String valveName) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException, AlreadyExistsException {
         if(entity == null) setupApi();
-        if(device == null) getDeviceInfo(name);
+        if(device == null) getDeviceInfo(valveName);
 
-        Valve valve = new Valve(name, ("https://images.tuyacn.com/"+device.getIcon()),userDao.find( SecurityUtils.getCurrentUser().getId()));
+        if(valveDao.findByName(valveName) != null) throw new AlreadyExistsException();
+
+        Valve valve = new Valve(valveName, ("https://images.tuyacn.com/"+device.getIcon()),userDao.find( SecurityUtils.getCurrentUser().getId()));
         valveDao.persist(valve);
+    }
+
+    @Transactional
+    public void valvingImmediately(String valveName, Integer length) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException, NotFoundException {
+        if(entity == null) setupApi();
+        else refreshApiToken();
+        if(device == null) getDeviceInfo(valveName);
+
+        moveValve(valveName, "true");
+        setStopValving(valveName, length );
     }
 
     @Transactional
     public void updateGardensToValve(Long id, List<Long> gardensId){
         Valve valve = valveDao.find(id);
-        System.out.println("SOM TUUUU");
         User user = SecurityUtils.getCurrentUser();
 
         for (int i = 0; i < valve.getGardens().size() ; i++) {
@@ -109,9 +115,7 @@ public class ValveService {
                 valve.addGarden(garden);
             }
         }
-
         valveDao.update(valve);
-
     }
 
 

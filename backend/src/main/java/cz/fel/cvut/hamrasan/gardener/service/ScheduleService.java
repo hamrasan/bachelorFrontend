@@ -3,6 +3,7 @@ package cz.fel.cvut.hamrasan.gardener.service;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.dao.ValveDao;
 import cz.fel.cvut.hamrasan.gardener.dao.ValveScheduleDao;
+import cz.fel.cvut.hamrasan.gardener.dto.ValveScheduleDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
 import cz.fel.cvut.hamrasan.gardener.model.User;
 import cz.fel.cvut.hamrasan.gardener.model.Valve;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -32,18 +34,20 @@ public class ScheduleService {
     private ValveService valveService;
     private ValveScheduleDao valveScheduleDao;
     private UserDao userDao;
+    private TranslateService translateService;
 
     @Autowired
-    public ScheduleService(ValveDao valveDao, ValveService valveService, ValveScheduleDao valveScheduleDao, UserDao userDao) {
+    public ScheduleService(ValveDao valveDao, ValveService valveService, ValveScheduleDao valveScheduleDao, UserDao userDao, TranslateService translateService) {
 
         this.valveDao = valveDao;
         this.valveService = valveService;
         this.valveScheduleDao = valveScheduleDao;
         this.userDao = userDao;
+        this.translateService = translateService;
     }
 
 
-    @Scheduled(cron = "0 44 22 * * *", zone = "CET")
+    @Scheduled(cron = "0 0 0 * * *", zone = "CET")
     public void scheduler() {
 
         System.out.println("Hello");
@@ -62,9 +66,9 @@ public class ScheduleService {
                         }
                     }
                 };
-                final ScheduledFuture<?> valveHandle = scheduler.schedule(valving, (valveSchedule.getHour()- LocalDateTime.now().getHour())+ (valveSchedule.getMinutes() - LocalDateTime.now().getMinute()), MINUTES);
+//                final ScheduledFuture<?> valveHandle = scheduler.schedule(valving, (valveSchedule.getHour()- LocalDateTime.now().getHour())+ (valveSchedule.getMinutes() - LocalDateTime.now().getMinute()), MINUTES);
 
-//                final ScheduledFuture<?> valveHandle = scheduler.schedule(valving, (valveSchedule.getHour()*60) + valveSchedule.getMinutes(), MINUTES);
+                final ScheduledFuture<?> valveHandle = scheduler.schedule(valving, (valveSchedule.getHour()*60) + valveSchedule.getMinutes(), MINUTES);
 //
 //                scheduler.schedule(new Runnable() {
 //
@@ -79,8 +83,23 @@ public class ScheduleService {
         User user = userDao.find(SecurityUtils.getCurrentUser().getId());
         System.out.println(user.getValves());
         String[] arrOfStr = time.split(":");
+        System.out.println(user.getValves().contains(valve));
+
         if(!user.getValves().contains(valve)) throw new NotAllowedException("Not allowed operation");
         ValveSchedule valveSchedule = new ValveSchedule(Integer.parseInt(arrOfStr[0]), Integer.parseInt(arrOfStr[1]), valvingLength, valve, days);
         valveScheduleDao.persist(valveSchedule);
+    }
+
+
+    public List<ValveScheduleDto> getUserSchedules(String valveName) throws NotAllowedException {
+        User user = userDao.find(SecurityUtils.getCurrentUser().getId());
+        Valve valve = valveDao.findByName(valveName);
+        List<ValveScheduleDto> valveScheduleDtos = new ArrayList<>();
+        if(!user.getValves().contains(valve)) throw new NotAllowedException("Not yours valve");
+
+        for (ValveSchedule valveSchedule : valveScheduleDao.findByValve(valve.getId())) {
+            valveScheduleDtos.add(translateService.translateValveSchedule(valveSchedule));
+        }
+        return valveScheduleDtos;
     }
 }
