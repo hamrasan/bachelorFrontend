@@ -7,7 +7,7 @@ function PlantDetail(props){
   const [plant, setPlant] = useState(null);
   const params = useParams();
 
-  const getPlant = () => {
+  const fetchPlant = () => {
     axios({
       method: "get",
       url: "http://localhost:8080/plants/" + params.id,
@@ -25,7 +25,7 @@ function PlantDetail(props){
   };
 
   useEffect(() => {
-    getPlant();
+    fetchPlant();
   }, []);
 
     return (

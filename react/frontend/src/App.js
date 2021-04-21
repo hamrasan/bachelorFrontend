@@ -108,7 +108,7 @@ function App() {
             <AuthRoute path="/valving" exact>
               <MyValving/>
             </AuthRoute>
-            <AuthRoute path="/valving/schedule">
+            <AuthRoute path="/valving/schedule/:id">
               <ValvingSchedule/>
             </AuthRoute>
             <AuthRoute path="/garden/detail/:id">
