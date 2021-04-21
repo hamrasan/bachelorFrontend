@@ -12,12 +12,16 @@ import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -67,9 +71,12 @@ public class ScheduleService {
                     }
                 };
 //                final ScheduledFuture<?> valveHandle = scheduler.schedule(valving, (valveSchedule.getHour()- LocalDateTime.now().getHour())+ (valveSchedule.getMinutes() - LocalDateTime.now().getMinute()), MINUTES);
-
-                final ScheduledFuture<?> valveHandle = scheduler.schedule(valving, (valveSchedule.getHour()*60) + valveSchedule.getMinutes(), MINUTES);
-//
+                Date date = new Date(System.currentTimeMillis());
+                Calendar c = Calendar.getInstance();
+                c.setTime(date);
+                if(valveSchedule.getDays().contains(c.get(Calendar.DAY_OF_WEEK))){
+                    final ScheduledFuture<?> valveHandle = scheduler.schedule(valving, (valveSchedule.getHour()*60) + valveSchedule.getMinutes(), MINUTES);
+                }
 //                scheduler.schedule(new Runnable() {
 //
 //                    public void run() { beeperHandle.cancel(true); }
@@ -78,6 +85,7 @@ public class ScheduleService {
         }
     }
 
+    @Transactional
     public void setSchedule(String nameValve, List<Integer> days, String time, Integer valvingLength) throws NotAllowedException {
         Valve valve = valveDao.findByName(nameValve);
         User user = userDao.find(SecurityUtils.getCurrentUser().getId());
@@ -90,7 +98,7 @@ public class ScheduleService {
         valveScheduleDao.persist(valveSchedule);
     }
 
-
+    @Transactional
     public List<ValveScheduleDto> getUserSchedules(String valveName) throws NotAllowedException {
         User user = userDao.find(SecurityUtils.getCurrentUser().getId());
         Valve valve = valveDao.findByName(valveName);
@@ -101,5 +109,12 @@ public class ScheduleService {
             valveScheduleDtos.add(translateService.translateValveSchedule(valveSchedule));
         }
         return valveScheduleDtos;
+    }
+
+    @Transactional
+    public void deleteSchedule(Long id){
+        ValveSchedule valveSchedule = valveScheduleDao.find(id);
+        valveScheduleDao.remove(valveSchedule);
+
     }
 }

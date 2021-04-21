@@ -6,7 +6,9 @@ import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,5 +39,15 @@ public class ScheduleController {
             return scheduleService.getUserSchedules(valveName);
         }
         return null;
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteSchedule(@PathVariable Long id){
+       scheduleService.deleteSchedule(id);
+
+//        if (!isRemoved) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

@@ -93,6 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
         config.addAllowedMethod("PATCH");
+        config.addAllowedMethod("DELETE");
         source.registerCorsConfiguration("/logout",config);
         source.registerCorsConfiguration("/*", config);
         source.registerCorsConfiguration("/*/*", config);
