@@ -6,10 +6,8 @@ import cz.fel.cvut.hamrasan.gardener.dto.HumidityDto;
 import cz.fel.cvut.hamrasan.gardener.dto.PressureDto;
 import cz.fel.cvut.hamrasan.gardener.dto.RainDto;
 import cz.fel.cvut.hamrasan.gardener.dto.TemperatureDto;
-import cz.fel.cvut.hamrasan.gardener.model.Humidity;
-import cz.fel.cvut.hamrasan.gardener.model.Pressure;
-import cz.fel.cvut.hamrasan.gardener.model.Rain;
-import cz.fel.cvut.hamrasan.gardener.model.Temperature;
+import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
+import cz.fel.cvut.hamrasan.gardener.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,12 +24,11 @@ public class RpcService {
     private TranslateService translateService;
     private Tut6Client client;
     private RainDao rainDao;
-
-
+    private NotificationService notificationService;
 
     @Autowired
     public RpcService(PressureDao pressureDao, GardenDao gardenDao, TemperatureDao temperatureDao, HumidityDao humidityDao,
-                      TranslateService translateService, Tut6Client client, RainDao rainDao) {
+                      TranslateService translateService, Tut6Client client, RainDao rainDao, NotificationService notificationService) {
 
         this.pressureDao = pressureDao;
         this.gardenDao = gardenDao;
@@ -40,6 +37,7 @@ public class RpcService {
         this.translateService = translateService;
         this.client = client;
         this.rainDao = rainDao;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -48,8 +46,12 @@ public class RpcService {
     }
 
     @Transactional
-    public void saveTemperatue(String data, String key){
-        temperatureDao.persist(new Temperature(LocalDateTime.now(), Float.parseFloat(data), gardenDao.find(Long.parseLong(key.substring(4))) ));
+    public void saveTemperatue(String data, String key) throws NotFoundException {
+        Garden garden =  gardenDao.find(Long.parseLong(key.substring(4)));
+        temperatureDao.persist(new Temperature(LocalDateTime.now(), Float.parseFloat(data), garden));
+
+        if(Float.parseFloat(data) > 0 ) notificationService.addNotification(garden.getUser().getId(), "Teplota klesla pod 0");
+
     }
 
     @Transactional

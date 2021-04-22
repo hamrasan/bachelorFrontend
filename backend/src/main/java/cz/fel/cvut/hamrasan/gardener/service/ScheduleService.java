@@ -74,7 +74,9 @@ public class ScheduleService {
                 Date date = new Date(System.currentTimeMillis());
                 Calendar c = Calendar.getInstance();
                 c.setTime(date);
-                if(valveSchedule.getDays().contains(c.get(Calendar.DAY_OF_WEEK))){
+                    //DAY must be +1 bcs Sunday is 1 in Calendar
+                if(valveSchedule.getDays().contains(c.get(Calendar.DAY_OF_WEEK)+1)){
+                    System.out.println(c.get(Calendar.DAY_OF_WEEK));
                     final ScheduledFuture<?> valveHandle = scheduler.schedule(valving, (valveSchedule.getHour()*60) + valveSchedule.getMinutes(), MINUTES);
                 }
 //                scheduler.schedule(new Runnable() {

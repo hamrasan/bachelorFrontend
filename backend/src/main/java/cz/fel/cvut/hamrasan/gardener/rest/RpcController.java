@@ -42,6 +42,7 @@ public class RpcController {
     public void requestData() {
          rpcService.requestData();
     }
+
     @GetMapping(value = "/rain", produces = MediaType.APPLICATION_JSON_VALUE )
     public RainDto getRain() {
         return rpcService.getLatestRain();

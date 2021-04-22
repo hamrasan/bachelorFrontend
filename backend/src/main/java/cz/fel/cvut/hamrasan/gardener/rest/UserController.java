@@ -3,6 +3,8 @@ package cz.fel.cvut.hamrasan.gardener.rest;
 import cz.fel.cvut.hamrasan.gardener.dto.RequestWrapper;
 import cz.fel.cvut.hamrasan.gardener.dto.UserDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.BadPassword;
+import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
+import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.UnauthorizedException;
 import cz.fel.cvut.hamrasan.gardener.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
