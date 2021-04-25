@@ -20,6 +20,18 @@ public class UserPlant extends AbstractEntity {
     @PastOrPresent
     private LocalDate dateOfPlant;
 
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private double minTemperature;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private double maxTemperature;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private String season;
+
     @ManyToOne
     @JoinColumn(name = "plant_id", nullable = false)
     private Plant plant;
@@ -30,9 +42,12 @@ public class UserPlant extends AbstractEntity {
     private Garden garden;
 
 
-    public UserPlant(@PastOrPresent LocalDate dateOfPlant, Plant plant, Garden garden) {
+    public UserPlant(@PastOrPresent LocalDate dateOfPlant, double minTemperature, double maxTemperature, String season, Plant plant, Garden garden) {
 
         this.dateOfPlant = dateOfPlant;
+        this.minTemperature = minTemperature;
+        this.maxTemperature = maxTemperature;
+        this.season = season;
         this.plant = plant;
         this.garden = garden;
     }
@@ -78,11 +93,50 @@ public class UserPlant extends AbstractEntity {
     }
 
 
+    public double getMinTemperature() {
+
+        return minTemperature;
+    }
+
+
+    public void setMinTemperature(double minTemperature) {
+
+        this.minTemperature = minTemperature;
+    }
+
+
+    public double getMaxTemperature() {
+
+        return maxTemperature;
+    }
+
+
+    public void setMaxTemperature(double maxTemperature) {
+
+        this.maxTemperature = maxTemperature;
+    }
+
+
+    public String getSeason() {
+
+        return season;
+    }
+
+
+    public void setSeason(String season) {
+
+        this.season = season;
+    }
+
+
     @Override
     public String toString() {
 
         return "UserPlant{" +
                 "dateOfPlant=" + dateOfPlant +
+                ", minTemperature=" + minTemperature +
+                ", maxTemperature=" + maxTemperature +
+                ", season='" + season + '\'' +
                 ", plant=" + plant +
                 ", garden=" + garden +
                 '}';

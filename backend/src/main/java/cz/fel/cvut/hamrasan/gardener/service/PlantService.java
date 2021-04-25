@@ -83,12 +83,12 @@ public class PlantService {
     }
 
     @Transactional
-    public void create(LocalDate date, Long plantId, Long gardenId){
+    public void create(LocalDate date, float minTemperature, float maxTemperature, String season, Long plantId, Long gardenId){
         Objects.requireNonNull(plantId);
         Objects.requireNonNull(date);
         Objects.requireNonNull(gardenId);
 
-        UserPlant userPlant = new UserPlant(date, plantDao.find(plantId), gardenDao.find(gardenId) );
+        UserPlant userPlant = new UserPlant(date, minTemperature, maxTemperature, season, plantDao.find(plantId), gardenDao.find(gardenId) );
         userPlantDao.persist(userPlant);
     }
 
