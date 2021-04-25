@@ -42,9 +42,9 @@ public class Tut6Client {
         //System.out.println(" [.] Got '" + response + "'");
 //    }
 
-    public void getData() {
+    public void setMeassureMinutes(String minutes) {
         System.out.println(" [x] Requesting fib(" + start + ")");
-        String message = "measure";
+        String message = "M" + minutes;
         template.convertAndSend("amq.topic","commands", message );
     }
 

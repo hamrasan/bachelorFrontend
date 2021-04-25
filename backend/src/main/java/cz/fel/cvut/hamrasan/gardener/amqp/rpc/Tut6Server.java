@@ -56,6 +56,19 @@ public class Tut6Server {
         }
     }
 
+    @RabbitListener(queues = "tut.rpc.soil")
+    public void soilMoisture(@Payload String n,
+                         @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String key) {
+        System.out.println(" [x] Received soil is " + n);
+        System.out.println(" [x] Received soil is " + key);
+        try {
+            rpcService.saveSoil(n,key);
+        }
+        catch (Exception e){
+            LOG.error(e.getMessage());
+        }
+    }
+
     @RabbitListener(queues = "tut.rpc.pressure")
     public void pressure(@Payload String n ,@Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String key) {
         System.out.println(" [x] Received pressure in hPa is " + n);

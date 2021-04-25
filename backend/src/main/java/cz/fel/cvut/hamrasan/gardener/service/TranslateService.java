@@ -35,8 +35,8 @@ public class TranslateService {
         Plant plant1 = plant.getPlant();
 
 
-        return new PlantDto(plant.getId(), plant1.getName(), plant1.getPicture(), plant1.getMinTemperature(),
-                plant1.getMaxTemperature(), plant.getDateOfPlant(), plant1.getSeason(), translateSubCategory(plant1.getSubcategory()), gardenDto );
+        return new PlantDto(plant.getId(), plant1.getName(), plant1.getPicture(), plant.getMinTemperature(),
+                plant.getMaxTemperature(), plant.getDateOfPlant(), plant.getSeason(), translateSubCategory(plant1.getSubcategory()), gardenDto );
     }
 
 
@@ -171,5 +171,11 @@ public class TranslateService {
         Objects.requireNonNull(valveSchedule);
 
         return new ValveScheduleDto(valveSchedule.getId(), valveSchedule.getHour(), valveSchedule.getMinutes(), valveSchedule.getLength(), valveSchedule.getDays(), valveSchedule.getValve().getId());
+    }
+
+    @Transactional
+    public SoilDto translateSoil(Soil soil) {
+        Objects.requireNonNull(soil);
+        return new SoilDto(soil.getId(), soil.getDate(), soil.getValue(), soil.getGarden().getId());
     }
 }

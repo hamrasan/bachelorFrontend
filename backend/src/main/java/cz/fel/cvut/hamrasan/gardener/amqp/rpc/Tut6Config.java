@@ -77,6 +77,10 @@ public class Tut6Config {
             return new Queue("tut.rpc.pressure");
         }
 
+        @Bean(name="QueueSoil")
+        public Queue queueSoil() {
+            return new Queue("tut.rpc.soil");
+        }
 
         @Bean
         public Tut6Server server() {

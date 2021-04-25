@@ -1,10 +1,7 @@
 package cz.fel.cvut.hamrasan.gardener.rest;
 
 import cz.fel.cvut.hamrasan.gardener.amqp.rpc.Tut6Client;
-import cz.fel.cvut.hamrasan.gardener.dto.HumidityDto;
-import cz.fel.cvut.hamrasan.gardener.dto.PressureDto;
-import cz.fel.cvut.hamrasan.gardener.dto.RainDto;
-import cz.fel.cvut.hamrasan.gardener.dto.TemperatureDto;
+import cz.fel.cvut.hamrasan.gardener.dto.*;
 import cz.fel.cvut.hamrasan.gardener.service.RpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -38,13 +35,18 @@ public class RpcController {
         return rpcService.getLatestPressure();
     }
 
-    @GetMapping(value = "/request", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void requestData() {
-         rpcService.requestData();
+    @GetMapping(value = "/request/{minutes}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void requestData(@PathVariable String minutes) {
+         rpcService.setMeassureMinutes(minutes);
     }
 
     @GetMapping(value = "/rain", produces = MediaType.APPLICATION_JSON_VALUE )
     public RainDto getRain() {
         return rpcService.getLatestRain();
+    }
+
+    @GetMapping(value = "/soil", produces = MediaType.APPLICATION_JSON_VALUE )
+    public SoilDto getSoil() {
+        return rpcService.getLatestSoil();
     }
 }

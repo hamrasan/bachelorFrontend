@@ -30,6 +30,9 @@ public class Garden extends AbstractEntity {
     @OneToMany(mappedBy = "garden")
     private List<Humidity> humidities;
 
+    @OneToMany(mappedBy = "garden")
+    private List<Soil> soils;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -43,7 +46,7 @@ public class Garden extends AbstractEntity {
 
     public Garden(@Size(max = 100, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name,
                   String location, List<Pressure> pressures, List<Temperature> temperatures, List<Humidity> humidities,
-                  User user, List<UserPlant> plants, List<Valve> valves) {
+                  User user, List<UserPlant> plants, List<Valve> valves, List<Soil> soils) {
 
         this.name = name;
         this.location = location;
@@ -53,6 +56,7 @@ public class Garden extends AbstractEntity {
         this.user = user;
         this.plants = plants;
         this.valves = valves;
+        this.soils = soils;
     }
 
     public Garden() {
@@ -61,6 +65,7 @@ public class Garden extends AbstractEntity {
         this.pressures = new ArrayList<>();
         this.temperatures = new ArrayList<>();
         this.valves = new ArrayList<>();
+        this.soils = new ArrayList<>();
     }
 
 
@@ -74,6 +79,7 @@ public class Garden extends AbstractEntity {
         this.pressures = new ArrayList<Pressure>();
         this.temperatures = new ArrayList<Temperature>();
         this.valves = new ArrayList<>();
+        this.soils = new ArrayList<>();
     }
 
 
@@ -172,4 +178,15 @@ public class Garden extends AbstractEntity {
         this.valves = valves;
     }
 
+
+    public List<Soil> getSoils() {
+
+        return soils;
+    }
+
+
+    public void setSoils(List<Soil> soils) {
+
+        this.soils = soils;
+    }
 }

@@ -98,7 +98,8 @@ public class DbSeeder implements
     void createUserPlant(){
         List<Plant> plants = plantDao.findAll();
 
-        UserPlant userPlant = new UserPlant(LocalDate.now(), plants.get(0), gardenDao.findAll().get(0));
+        UserPlant userPlant = new UserPlant(LocalDate.now(),plants.get(0).getMinTemperature(), plants.get(0).getMaxTemperature(), plants.get(0).getSeason()
+                ,plants.get(0), gardenDao.findAll().get(0));
         userPlantDao.persist(userPlant);
 
     }

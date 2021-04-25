@@ -68,9 +68,11 @@ public class PlantController {
         LocalDate date = LocalDate.parse(hashMap.get("date").substring(0,10));
         Long plantId = Long.parseLong(hashMap.get("plant"));
         Long gardenId = Long.parseLong(hashMap.get("garden"));
+        float minTemperature = Float.parseFloat(hashMap.get("minTemperature"));
+        float maxTemperature = Float.parseFloat(hashMap.get("maxTemperature"));
+        String season = hashMap.get("season");
 
-
-        plantService.create(date,plantId,gardenId);
+        plantService.create(date, minTemperature, maxTemperature, season, plantId,gardenId);
     }
 
     @GetMapping(value = "/{category}/{subcategory}", produces = MediaType.APPLICATION_JSON_VALUE )

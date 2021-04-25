@@ -2,10 +2,7 @@ package cz.fel.cvut.hamrasan.gardener.service;
 
 import cz.fel.cvut.hamrasan.gardener.amqp.rpc.Tut6Client;
 import cz.fel.cvut.hamrasan.gardener.dao.*;
-import cz.fel.cvut.hamrasan.gardener.dto.HumidityDto;
-import cz.fel.cvut.hamrasan.gardener.dto.PressureDto;
-import cz.fel.cvut.hamrasan.gardener.dto.RainDto;
-import cz.fel.cvut.hamrasan.gardener.dto.TemperatureDto;
+import cz.fel.cvut.hamrasan.gardener.dto.*;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +22,11 @@ public class RpcService {
     private Tut6Client client;
     private RainDao rainDao;
     private NotificationService notificationService;
+    private SoilDao soilDao;
 
     @Autowired
     public RpcService(PressureDao pressureDao, GardenDao gardenDao, TemperatureDao temperatureDao, HumidityDao humidityDao,
-                      TranslateService translateService, Tut6Client client, RainDao rainDao, NotificationService notificationService) {
+                      TranslateService translateService, Tut6Client client, RainDao rainDao, NotificationService notificationService, SoilDao soilDao) {
 
         this.pressureDao = pressureDao;
         this.gardenDao = gardenDao;
@@ -38,6 +36,7 @@ public class RpcService {
         this.client = client;
         this.rainDao = rainDao;
         this.notificationService = notificationService;
+        this.soilDao = soilDao;
     }
 
     @Transactional
@@ -87,9 +86,17 @@ public class RpcService {
     }
 
     @Transactional
-    public void requestData(){
-        client.getData();
+    public void setMeassureMinutes(String minutes){
+        client.setMeassureMinutes(minutes);
     }
 
+    @Transactional
+    public void saveSoil(String data, String key) throws NotFoundException {
+        soilDao.persist(new Soil(LocalDateTime.now(), Float.parseFloat(data), gardenDao.find(Long.parseLong(key.substring(4))) ));
+    }
 
+    @Transactional
+    public SoilDto getLatestSoil() {
+        return translateService.translateSoil(soilDao.findLatest());
+    }
 }
