@@ -25,17 +25,12 @@
 #include <Adafruit_BME280.h>
 
 #define SEALEVELPRESSURE_HPA (1013.25)
-#define SensorPin A0 
 
 Adafruit_BME280 bme; // I2C
 
 // Update these with values suitable for your network.
 const char* ssid = "AndroidM";
 const char* password = "C++jesmrt";
-
-//const char* mqtt_server = "localhost";
-//const char* mqtt_user = "guest";
-//const char* mqtt_password = "guest";
 
 // Update these with values suitable for your network.
 const char* mqtt_server = "80.211.215.27"; 
@@ -47,7 +42,6 @@ PubSubClient client(espClient);
 long lastMsg = 0;
 char msg[256];
 int value = 0;
-//const int mq2pin = A0; //the MQ2 analog input pin
 
 const byte interruptPin = 13; //D7
 int val = 0;
@@ -55,9 +49,14 @@ volatile boolean checkInterrupt = false;
 boolean rain = false;
 int numberOfRain = 0;
 int numberOfNoRain = 0;
+int timer = 300000; //5 minutes
 unsigned long debounceTime = 60000; //1000
 unsigned long lastDebounce = 0;
 unsigned long lastTime = 0;
+boolean firstMeasure = true;
+
+const int AirValue = 330;   //you need to replace this value with Value_1
+const int WaterValue = 600;  //you need to replace this value with Value_2
 
 void ICACHE_RAM_ATTR handleInterrupt(){
   Serial.print("som tu");
@@ -149,21 +148,52 @@ void measureHumidity(){
     client.publish("humidity1", msg);
 }
 
+
+void measureSoilMoisture(){
+  int soilMoistureValue = analogRead(A0);  //put Sensor insert into soil
+  int soilmoisturepercent = map(soilMoistureValue, AirValue, WaterValue, 0, 100);
+  if(soilmoisturepercent > 100)
+  {
+    Serial.println("100 %");
+    snprintf(msg, sizeof(msg), "%d", 100);
+    }
+    else if(soilmoisturepercent < 0)
+  {
+    Serial.println("0 %");
+    snprintf(msg, sizeof(msg), "%d", 0);
+  }
+  else{
+  Serial.print(soilmoisturepercent);
+  Serial.println(" %");
+  snprintf(msg, sizeof(msg), "%d", soilmoisturepercent);
+  }
+  client.publish("soil1", msg);
+}
+
+
 void callback(char* topic, byte* payload, unsigned int length){
       Serial.print("Prijate spravy: ");
       Serial.println(topic);
       String message="";
+      String timeStr="";
       for (int i=0; i<length; i++){
 //        Serial.print((char) payload[i]);
-        message = message + (char) payload[i];
+        if( ((char) payload[0] == 'M') && (i>0)) {
+            timeStr = timeStr + (char) payload[i];
+          }
+          else {
+            message = message + (char) payload[i];
+          }
         } 
-        Serial.println(message);
-        if(message=="measure") {
-          measureTemp();
-          measureHumidity();
-          measurePressure();
+
+        if(timeStr.length() > 0) {
+           timer = timeStr.toInt();
         }
-        Serial.println();
+//        if(message=="measure") {
+//          measureTemp();
+//          measureHumidity();
+//          measurePressure();
+//        }
   }
 
 void loop() {
@@ -171,37 +201,27 @@ void loop() {
     reconnect();
   }
     client.loop();
+    
+    long now = millis();
+    
+    if(firstMeasure == true){
+       lastMsg = now;
+    measureHumidity();
+    measureTemp();
+    measurePressure();
+    measureSoilMoisture();
+    firstMeasure = false;
+      }
 // client.println(1.8 * bme.readTemperature() + 32); FAHRENHEIT
 // client.println(bme.readAltitude(SEALEVELPRESSURE_HPA));
 
-
-long now = millis();
-  if (now - lastMsg > 60000) { //every 1 minute
+  if (now - lastMsg > timer) { //every 5 minutes
     lastMsg = now;
     measureHumidity();
     measureTemp();
     measurePressure();
-
+    measureSoilMoisture();
   }
-
-//  if (checkInterrupt == true && ( (now - lastDebounce)  > debounceTime )) {
-//    lastDebounce = now;
-//    checkInterrupt = false;
-//    //ak prsi
-//    if(digitalRead(interruptPin) == 0) {
-////      rain = true;
-//      numRain++;
-//      }
-//      else{
-//        if(rain == true) 
-//        rain = false;
-//        
-//      }
-// 
-//    client.publish("rain1", "1");
-//    
-//    Serial.print("Rain detected ");
-//  } else checkInterrupt = false;
 
 if( (now - lastTime)  > debounceTime ) {
   lastTime = now;
@@ -232,9 +252,4 @@ if( (now - lastTime)  > debounceTime ) {
     }
     }
   }
-
-
-  float sensorValue = analogRead(SensorPin);
-  Serial.println(sensorValue);
-
 }
