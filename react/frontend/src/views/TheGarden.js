@@ -14,6 +14,8 @@ function TheGarden() {
   const [categoryFilter, setCategoryFilter] = useState([]);
   const [subcategoryFilter, setSubcategoryFilter] = useState([]);
   const [searchString, setSearchString] = useState("");
+  const [modalShow, setModalShow] = useState(false);
+
 
   const fetchPlants = () => {
     axios({
@@ -55,7 +57,6 @@ function TheGarden() {
     fetchPlants();
   }, []);
 
-
   // const mappedPlants = plants.map((plant) => {
   //   return (
   //     <Link to={"/garden/detail/" + plant.id}>
@@ -66,13 +67,28 @@ function TheGarden() {
 
   return (
     <div>
-      <SearchForm onChange={setSearchString} value={searchString}/>
+      <Button
+        variant="info"
+        className="mb-4 ml-2"
+        onClick={() => setModalShow(true)}
+      >
+        Pridať záhradu
+      </Button>
+      {/* <ModalSetSensorsTime
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          title={"Zmeň časový interval merania senzorov"}
+          bodyTitle={"Vyber časový interval v min:"}
+          bodyText={"interval"}
+          setMinutes={setMinutes}
+          minutes={minutes}
+          onSubmit={handleSubmit}
+        /> */}
+
+      <SearchForm onChange={setSearchString} value={searchString} />
       <Container>
         <Link to={"/garden/new"}>
-          <Button variant="info" >
-            {" "}
-            Pridaj novú rastlinu{" "}
-          </Button>{" "}
+          <Button variant="info"> Pridaj novú rastlinu </Button>{" "}
         </Link>
       </Container>
       <DropdownFilter
@@ -88,10 +104,10 @@ function TheGarden() {
                 ? categoryFilter.includes(plant.subcategoryDto.category.id)
                 : plant
             )
-            .filter((plant) => 
-              searchString.length >=3 
-              ? plant.name.toLowerCase().includes(searchString.toLowerCase()) 
-              : plant
+            .filter((plant) =>
+              searchString.length >= 3
+                ? plant.name.toLowerCase().includes(searchString.toLowerCase())
+                : plant
             )
             .map((plant) => (
               <Link key={plant.id} to={"/garden/detail/" + plant.id}>

@@ -1,86 +1,99 @@
-import {Container, CardDeck } from "react-bootstrap";
+import { Container, CardDeck, Card, Button, Accordion } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import TheSpinner from "../components/TheSpinner";
 import SensorCard from "../components/SensorCard";
+import ModalSetSensorsTime from "../components/ModalSetSensorsTime";
+import SensorsGarden from "./SensorsGarden";
 
 function TheHome() {
   const axios = require("axios");
-  const [temperature, setTemperature] = useState(null);
-  const [humidity, setHumidity] = useState(null);
-  const [pressure, setPressure] = useState(null);
-  const [soil, setSoil] = useState(null);
-  const [rain, setRain] = useState(null);
+  const [userTemp, setUserTemp] = useState(15);
+  const [minutes, setMinutes] = useState(15);
+  const [modalShow, setModalShow] = useState(false);
+  const [gardenId, setGardenId] = useState(null);
+  const [gardens, setGardens] = useState([]);
 
-  const fetchTemperature = () => {
-    axios.get("http://localhost:8080/sensors/temperature").then((res) => {
-      console.log(res.data);
-      setTemperature(res.data);
-    });
+   const fetchGardens = () => {
+      axios({
+        method: "get",
+        withCredentials: true,
+        url: "http://localhost:8080/garden/all",
+      })
+        .then((res) => {
+          if ((res.status = 200)) {
+            setGardens(res.data);
+            console.log(res);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
+  const setRefreshData = () => {
+    axios.get("http://localhost:8080/sensors/request/" + minutes);
   };
 
-  const fetchSoil = () => {
-    axios.get("http://localhost:8080/sensors/soil").then((res) => {
-      console.log(res.data);
-      setSoil(res.data);
-    });
+  const handleSubmit = (minutes) => {
+    setRefreshData(minutes);
+    setModalShow(false);
   };
 
-  const fetchPressure = () => {
-    axios.get("http://localhost:8080/sensors/pressure").then((res) => {
-      console.log(res.data);
-      setPressure(res.data);
-    });
-  };
-
-  const fetchHumidity = () => {
-    axios.get("http://localhost:8080/sensors/humidity").then((res) => {
-      console.log(res.data);
-      setHumidity(res.data);
-    });
-  };
-
-  const refreshData = () => {
-    axios.get("http://localhost:8080/sensors/request").then((res) => {
-      fetchHumidity();
-      fetchPressure();
-      fetchTemperature();
-    });
-  };
-
-  const fetchRain = () => {
-    axios.get("http://localhost:8080/sensors/rain").then((res) => {
-      console.log(res.data);
-      setRain(res.data);
-    });
-  };
-  
   useEffect(() => {
-    fetchTemperature();
-    fetchHumidity();
-    fetchPressure();
-    fetchRain();
-    fetchSoil();
+    fetchGardens();
   }, []);
-
-  if (temperature == null || humidity == null || pressure == null || soil==null) {
-    return <TheSpinner></TheSpinner>;
-  }
 
   return (
     <div>
-      <Container className="pt-5">
+      <Container fluid className="pt-3 w-75">
+        <div className="d-flex justify-content-between">
+          <div className="d-flex align-items-baseline">
+            <h6>
+              Interval merania je {minutes} min
+            </h6>
+            <Button
+              variant="info"
+              className="mb-4 ml-2"
+              onClick={() => setModalShow(true)}
+            >
+              Zmeniť
+            </Button>
+          </div>
+          {/* <div className="d-flex align-items-baseline">
+            <Button
+              variant="info"
+              className="mb-4 ml-2"
+              onClick={() => setModalShow(true)}
+            >
+              Nastaviť požadovanú teplotu
+            </Button>
+          </div> */}
+        </div>
+        <ModalSetSensorsTime
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          title={"Zmeň časový interval merania senzorov"}
+          bodyTitle={"Vyber časový interval v min:"}
+          bodyText={"interval"}
+          setMinutes={setMinutes}
+          minutes={minutes}
+          onSubmit={handleSubmit}
+        />
 
-        <CardDeck className="d-xl-flex justify-content-lg-center">
-          <SensorCard key="temperature" sensor={temperature} name="Teplota" text={temperature.value + " °C"} picture="assets/sensors/teplomer.png" ></SensorCard>
-          <SensorCard key="pressure" sensor={pressure} name="Tlak vzduchu" text={pressure.value + " hPa"} picture="assets/sensors/pressure.png" ></SensorCard>
-          <SensorCard key="humidity" sensor={humidity} name="Vlhkosť vzduchu" text={humidity.value + " %"}  picture="assets/sensors/humiditySmaller.png" ></SensorCard>
-          <SensorCard key="soil" sensor={soil} name="Vlhkosť pôdy" text={soil.value + " %"}  picture="assets/sensors/humiditySmaller.png" ></SensorCard>
-      {rain != null ? (
-            <SensorCard key="rain" sensor={rain} name="Zrážky" text={rain.raining ? "Prší" : "V tomto okamžiku neprší"}  picture={ rain.raining ? "assets/sensors/rain.jpg" : "assets/sensors/sun.jpg"} ></SensorCard>
-      ) : (
-       null
-      )}
-      </CardDeck>
+        {gardens.map(garden =>(
+          <Accordion defaultActiveKey="0">
+          <Card>
+            <Accordion.Toggle as={Card.Header} eventKey="0">
+              {garden.name}
+            </Accordion.Toggle>
+            <Accordion.Collapse eventKey="0">
+              <Card.Body>
+              {<SensorsGarden gardenId={garden.id}></SensorsGarden>}
+              </Card.Body>
+            </Accordion.Collapse>
+          </Card>
+        </Accordion>
+        ))}
       </Container>
     </div>
   );
