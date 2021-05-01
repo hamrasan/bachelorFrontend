@@ -49,7 +49,7 @@ volatile boolean checkInterrupt = false;
 boolean rain = false;
 int numberOfRain = 0;
 int numberOfNoRain = 0;
-int timer = 300000; //5 minutes
+int timer = 900000; //15 minutes
 unsigned long debounceTime = 60000; //1000
 unsigned long lastDebounce = 0;
 unsigned long lastTime = 0;
@@ -186,9 +186,16 @@ void callback(char* topic, byte* payload, unsigned int length){
           }
         } 
 
+        Serial.print("message: ");
+        Serial.println(message);
+         Serial.print("timeStr: ");
+        Serial.println(timeStr);
+
         if(timeStr.length() > 0) {
-           timer = timeStr.toInt();
+           timer = (timeStr.toInt()) * 60000; //to miliseconds
         }
+        Serial.print("timer: ");
+        Serial.println(timer);
 //        if(message=="measure") {
 //          measureTemp();
 //          measureHumidity();
