@@ -3,13 +3,17 @@ package cz.fel.cvut.hamrasan.gardener.service;
 import cz.fel.cvut.hamrasan.gardener.amqp.rpc.Tut6Client;
 import cz.fel.cvut.hamrasan.gardener.dao.*;
 import cz.fel.cvut.hamrasan.gardener.dto.*;
+import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.model.*;
+import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class RpcService {
@@ -23,10 +27,12 @@ public class RpcService {
     private RainDao rainDao;
     private NotificationService notificationService;
     private SoilDao soilDao;
+    private UserDao userDao;
 
     @Autowired
     public RpcService(PressureDao pressureDao, GardenDao gardenDao, TemperatureDao temperatureDao, HumidityDao humidityDao,
-                      TranslateService translateService, Tut6Client client, RainDao rainDao, NotificationService notificationService, SoilDao soilDao) {
+                      TranslateService translateService, Tut6Client client, RainDao rainDao, NotificationService notificationService, SoilDao soilDao,
+                      UserDao userDao) {
 
         this.pressureDao = pressureDao;
         this.gardenDao = gardenDao;
@@ -37,6 +43,7 @@ public class RpcService {
         this.rainDao = rainDao;
         this.notificationService = notificationService;
         this.soilDao = soilDao;
+        this.userDao = userDao;
     }
 
     @Transactional
@@ -49,7 +56,7 @@ public class RpcService {
         Garden garden =  gardenDao.find(Long.parseLong(key.substring(4)));
         temperatureDao.persist(new Temperature(LocalDateTime.now(), Float.parseFloat(data), garden));
 
-        if(Float.parseFloat(data) > 0 ) notificationService.addNotification(garden.getUser().getId(), "Teplota klesla pod 0");
+//        if(Float.parseFloat(data) > 0 ) notificationService.addNotification(garden.getUser().getId(), "Teplota klesla pod 0");
 
     }
 
@@ -66,23 +73,39 @@ public class RpcService {
     }
 
     @Transactional
-    public TemperatureDto getLatestTemperature(){
-        return translateService.translateTemp(temperatureDao.findLatest());
+    public TemperatureDto getLatestTemperature(Long gardenId) throws NotAllowedException {
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId())  throw new NotAllowedException("Not your garden");
+
+        return translateService.translateTemp(temperatureDao.findLatest(garden ));
     }
 
     @Transactional
-    public HumidityDto getLatestHumidity(){
-        return translateService.translateHumidity(humidityDao.findLatest());
+    public HumidityDto getLatestHumidity(Long gardenId) throws NotAllowedException {
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId())  throw new NotAllowedException("Not your garden");
+
+        return translateService.translateHumidity(humidityDao.findLatest(garden));
     }
 
     @Transactional
-    public PressureDto getLatestPressure(){
-        return translateService.translatePressure(pressureDao.findLatest());
+    public PressureDto getLatestPressure(Long gardenId) throws NotAllowedException {
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId())  throw new NotAllowedException("Not your garden");
+
+        return translateService.translatePressure(pressureDao.findLatest(garden));
     }
 
     @Transactional
-    public RainDto getLatestRain(){
-        return translateService.translateRain(rainDao.findLatest());
+    public RainDto getLatestRain(Long gardenId) throws NotAllowedException {
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId())  throw new NotAllowedException("Not your garden");
+
+        return translateService.translateRain(rainDao.findLatest(garden));
     }
 
     @Transactional
@@ -96,7 +119,80 @@ public class RpcService {
     }
 
     @Transactional
-    public SoilDto getLatestSoil() {
-        return translateService.translateSoil(soilDao.findLatest());
+    public SoilDto getLatestSoil(Long gardenId) throws NotAllowedException {
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
+
+        return translateService.translateSoil(soilDao.findLatest(garden));
+    }
+
+    @Transactional
+    public List<SoilDto> getHistorySoil(Long gardenId) throws NotAllowedException {
+        List<SoilDto> soilDtos = new ArrayList<>();
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
+
+        for (Soil soil: soilDao.findHistoryOfGarden(garden) ) {
+            soilDtos.add(translateService.translateSoil(soil));
+        }
+
+        return soilDtos;
+    }
+
+    @Transactional
+    public List<RainDto> getHistoryRain(Long gardenId) throws NotAllowedException {
+        List<RainDto> rainDtos = new ArrayList<>();
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
+
+        for (Rain rain: rainDao.findHistoryOfGarden(garden) ) {
+            rainDtos.add(translateService.translateRain(rain));
+        }
+
+        return rainDtos;
+    }
+
+    @Transactional
+    public List<HumidityDto> getHistoryHumidity(Long gardenId) throws NotAllowedException {
+        List<HumidityDto> humidityDtos = new ArrayList<>();
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
+
+        for (Humidity humidity: humidityDao.findHistoryOfGarden(garden) ) {
+            humidityDtos.add(translateService.translateHumidity(humidity));
+        }
+        return humidityDtos;
+    }
+
+    @Transactional
+    public List<PressureDto> getHistoryPressure(Long gardenId) throws NotAllowedException {
+        List<PressureDto> pressureDtos = new ArrayList<>();
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
+
+        for (Pressure pressure: pressureDao.findHistoryOfGarden(garden) ) {
+            pressureDtos.add(translateService.translatePressure(pressure));
+        }
+
+        return pressureDtos;
+    }
+
+    @Transactional
+    public List<TemperatureDto> getHistoryTemperature(Long gardenId) throws NotAllowedException {
+        List<TemperatureDto> temperatureDtos = new ArrayList<>();
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
+
+        for (Temperature temperature: temperatureDao.findHistoryOfGarden(garden) ) {
+            temperatureDtos.add(translateService.translateTemp(temperature));
+        }
+
+        return temperatureDtos;
     }
 }

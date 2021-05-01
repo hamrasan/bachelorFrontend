@@ -13,24 +13,12 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "UserPlant.findByName", query = "SELECT p FROM UserPlant p WHERE p.plant.name = :name AND p.deleted_at is null")
 })
-public class UserPlant extends AbstractEntity {
+public class UserPlant extends AbstractPlant {
 
     @Basic(optional = false)
     @Column(nullable = false)
     @PastOrPresent
     private LocalDate dateOfPlant;
-
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private double minTemperature;
-
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private double maxTemperature;
-
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private String season;
 
     @ManyToOne
     @JoinColumn(name = "plant_id", nullable = false)

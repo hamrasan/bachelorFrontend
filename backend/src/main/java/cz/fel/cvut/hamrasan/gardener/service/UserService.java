@@ -58,7 +58,7 @@ public class UserService {
         user.encodePassword();
 
         userDao.persist(user);
-        notificationService.createListNotifications(user.getId());
+//        notificationService.createListNotifications(user.getId());
     }
 
     @Transactional(readOnly = true)

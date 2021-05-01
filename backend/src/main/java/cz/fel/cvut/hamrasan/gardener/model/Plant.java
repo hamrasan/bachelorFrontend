@@ -1,10 +1,7 @@
 package cz.fel.cvut.hamrasan.gardener.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +12,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "Plant.findByName", query = "SELECT p FROM Plant p WHERE p.name = :name AND p.deleted_at is null")
 })
-public class Plant extends AbstractEntity{
+public class Plant extends AbstractPlant{
 
     @Basic(optional = false)
     @Column(nullable = false, length = 30)
@@ -25,28 +22,12 @@ public class Plant extends AbstractEntity{
 
     private String picture;
 
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private double minTemperature;
-
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private double maxTemperature;
-
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private String season;
-
     @ManyToOne
     @JoinColumn(name = "subcategory_id", nullable = false)
     private Subcategory subcategory;
 
-//    @ManyToMany
-//    private List<User> users;
-
     @OneToMany
     private List<UserPlant> userPlants;
-
 
 
     public Plant(@Size(max = 30, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name, String picture, double minTemperature,
@@ -151,18 +132,6 @@ public class Plant extends AbstractEntity{
 
         this.subcategory = subcategory;
     }
-
-
-//    public List<User> getUsers() {
-//
-//        return users;
-//    }
-//
-//
-//    public void setUsers(List<User> users) {
-//
-//        this.users = users;
-//    }
 
 
     public List<UserPlant> getUserPlants() {

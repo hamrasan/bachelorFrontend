@@ -14,11 +14,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,7 +49,6 @@ public class ScheduleService {
     @Scheduled(cron = "0 0 0 * * *", zone = "CET")
     public void scheduler() {
 
-        System.out.println("Hello");
         for (Valve valve : valveDao.findAll()) {
             System.out.println(valve.getName());
 
@@ -62,11 +56,13 @@ public class ScheduleService {
                 final Runnable valving = new Runnable() {
                     public void run() {
                         System.out.println(valveSchedule.getHour());
-                        try {
-                            valveService.moveValve(valve.getName(), "true");
-                            valveService.setStopValving(valve.getName(), valveSchedule.getLength());
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        if(valveScheduleDao.find(valveSchedule.getId()) != null) {
+                            try {
+                                valveService.moveValve(valve.getName(), "true");
+                                valveService.setStopValving(valve.getName(), valveSchedule.getLength());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 };

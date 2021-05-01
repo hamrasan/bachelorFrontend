@@ -181,7 +181,6 @@ public class User extends AbstractEntity {
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", gardens=" + gardens +
                 ", valves=" + valves +
                 '}';
     }

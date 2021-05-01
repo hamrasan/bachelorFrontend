@@ -7,17 +7,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "APP_TEMPERATURE")
 @NamedQueries({
-        @NamedQuery(name = "Temperature.findLatest", query = "SELECT t FROM Temperature t WHERE t.deleted_at is null ORDER BY t.date DESC ")
+        @NamedQuery(name = "Temperature.findLatest", query = "SELECT t FROM Temperature t WHERE t.garden = :garden AND t.deleted_at is null ORDER BY t.date DESC ")
 })
-public class Temperature extends AbstractEntity {
-
-    @Basic(optional = false)
-    @Column(nullable = false)
-   private LocalDateTime date;
-
-    @Basic(optional = false)
-    @Column(nullable = false)
-   private float value;
+public class Temperature extends AbstractSensor<Float>{
 
     @ManyToOne
     @JoinColumn(name = "garden_id", nullable = false)

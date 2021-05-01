@@ -1,23 +1,14 @@
 package cz.fel.cvut.hamrasan.gardener.model;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "APP_HUMIDITY")
 @NamedQueries({
-        @NamedQuery(name = "Humidity.findLatest", query = "SELECT h FROM Humidity h WHERE h.deleted_at is null ORDER BY h.date DESC ")
+        @NamedQuery(name = "Humidity.findLatest", query = "SELECT h FROM Humidity h WHERE h.garden = :garden AND h.deleted_at is null ORDER BY h.date DESC ")
 })
-public class Humidity extends AbstractEntity {
-
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private LocalDateTime date;
-
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private float value;
+public class Humidity extends AbstractSensor<Float> {
 
     @ManyToOne
     @JoinColumn(name = "garden_id", nullable = false)

@@ -33,6 +33,9 @@ public class Garden extends AbstractEntity {
     @OneToMany(mappedBy = "garden")
     private List<Soil> soils;
 
+    @OneToMany(mappedBy = "garden")
+    private List<Rain> rains;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -46,7 +49,7 @@ public class Garden extends AbstractEntity {
 
     public Garden(@Size(max = 100, min = 1, message = "Name is in incorrect format.") @NotBlank(message = "Name cannot be blank") String name,
                   String location, List<Pressure> pressures, List<Temperature> temperatures, List<Humidity> humidities,
-                  User user, List<UserPlant> plants, List<Valve> valves, List<Soil> soils) {
+                  User user, List<UserPlant> plants, List<Valve> valves, List<Soil> soils, List<Rain> rain) {
 
         this.name = name;
         this.location = location;
@@ -57,6 +60,7 @@ public class Garden extends AbstractEntity {
         this.plants = plants;
         this.valves = valves;
         this.soils = soils;
+        this.rains = rain;
     }
 
     public Garden() {
@@ -66,6 +70,7 @@ public class Garden extends AbstractEntity {
         this.temperatures = new ArrayList<>();
         this.valves = new ArrayList<>();
         this.soils = new ArrayList<>();
+        this.rains = new ArrayList<>();
     }
 
 
@@ -80,6 +85,7 @@ public class Garden extends AbstractEntity {
         this.temperatures = new ArrayList<Temperature>();
         this.valves = new ArrayList<>();
         this.soils = new ArrayList<>();
+        this.rains = new ArrayList<>();
     }
 
 
@@ -188,5 +194,32 @@ public class Garden extends AbstractEntity {
     public void setSoils(List<Soil> soils) {
 
         this.soils = soils;
+    }
+
+
+    public List<Rain> getRains() {
+
+        return rains;
+    }
+
+
+    public void setRains(List<Rain> rains) {
+
+        this.rains = rains;
+    }
+
+
+    @Override
+    public String toString() {
+
+        return "Garden{" +
+                "name='" + name + '\'' +
+                ", location='" + location + '\'' +
+                ", pressures=" + pressures +
+                ", temperatures=" + temperatures +
+                ", humidities=" + humidities +
+                ", soils=" + soils +
+                ", valves=" + valves +
+                '}';
     }
 }

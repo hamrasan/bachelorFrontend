@@ -6,18 +6,10 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "APP_RAIN")
 @NamedQueries({
-        @NamedQuery(name = "Rain.findLatest", query = "SELECT r FROM Rain r WHERE r.deleted_at is null ORDER BY r.date DESC ")
+        @NamedQuery(name = "Rain.findLatest", query = "SELECT r FROM Rain r WHERE r.garden = :garden AND r.deleted_at is null ORDER BY r.date DESC ")
 })
-public class Rain extends AbstractEntity{
+public class Rain extends AbstractSensor<Boolean>{
 
-
-        @Basic(optional = false)
-        @Column(nullable = false)
-        private LocalDateTime date;
-
-        @Basic(optional = false)
-        @Column(nullable = false)
-        private boolean raining;
 
         @ManyToOne
         @JoinColumn(name = "garden_id", nullable = false)
@@ -27,15 +19,13 @@ public class Rain extends AbstractEntity{
         public Rain(LocalDateTime date, boolean raining, Garden garden) {
 
             this.date = date;
-            this.raining = raining;
+            this.value = raining;
             this.garden = garden;
         }
-
 
         public Rain() {
 
         }
-
 
         public LocalDateTime getDate() {
 
@@ -51,13 +41,13 @@ public class Rain extends AbstractEntity{
 
         public boolean getRaining() {
 
-            return raining;
+            return value;
         }
 
 
         public void setRaining(boolean raining) {
 
-            this.raining = raining;
+            this.value = raining;
         }
 
 

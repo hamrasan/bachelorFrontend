@@ -1,23 +1,14 @@
 package cz.fel.cvut.hamrasan.gardener.model;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "APP_PRESSURE")
 @NamedQueries({
-        @NamedQuery(name = "Pressure.findLatest", query = "SELECT p FROM Pressure p WHERE p.deleted_at is null ORDER BY p.date DESC ")
+        @NamedQuery(name = "Pressure.findLatest", query = "SELECT p FROM Pressure p WHERE p.garden = :garden AND p.deleted_at is null ORDER BY p.date DESC ")
 })
-public class Pressure extends AbstractEntity {
-
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private LocalDateTime date;
-
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private float value;
+public class Pressure extends AbstractSensor<Float> {
 
     @ManyToOne
     @JoinColumn(name = "garden_id", nullable = false)

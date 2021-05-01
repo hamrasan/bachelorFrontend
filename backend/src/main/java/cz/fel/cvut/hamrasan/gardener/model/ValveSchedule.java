@@ -17,19 +17,19 @@ public class ValveSchedule extends AbstractEntity {
     @Column(nullable = false)
     @Max(24)
     @Min(0)
-    private Integer hour;
+    private int hour;
 
     @Basic(optional = false)
     @Column(nullable = false)
     @Max(60)
     @Min(0)
-    private Integer minutes;
+    private int minutes;
 
     @Basic(optional = false)
     @Column(nullable = false)
     @Min(0)
     @Max(1380)
-    private Integer length;
+    private int length;
 
     @ManyToOne
     @JoinColumn(name = "valve_id", nullable = false)
@@ -69,25 +69,25 @@ public class ValveSchedule extends AbstractEntity {
     }
 
 
-    public Integer getHour() {
+    public int getHour() {
 
         return hour;
     }
 
 
-    public void setHour(Integer hour) {
+    public void setHour(int hour) {
 
         this.hour = hour;
     }
 
 
-    public Integer getMinutes() {
+    public int getMinutes() {
 
         return minutes;
     }
 
 
-    public void setMinutes(Integer minutes) {
+    public void setMinutes(int minutes) {
 
         this.minutes = minutes;
     }
@@ -105,13 +105,13 @@ public class ValveSchedule extends AbstractEntity {
     }
 
 
-    public Integer getLength() {
+    public int getLength() {
 
         return length;
     }
 
 
-    public void setLength(Integer length) {
+    public void setLength(int length) {
 
         this.length = length;
     }

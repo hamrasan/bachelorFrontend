@@ -16,45 +16,47 @@ import java.util.*;
 public class NotificationService {
 
     private UserDao userDao;
-    private final HazelcastInstance cacheInstance;
-    private Map<Long, List<String>> cache;
+//    private final HazelcastInstance cacheInstance;
+//    private Map<Long, List<String>> cache;
 
     @Autowired
-    public NotificationService(UserDao userDao, HazelcastInstance hazelcastInstance) {
+    public NotificationService(UserDao userDao) {
 
         this.userDao = userDao;
-        this.cacheInstance = hazelcastInstance;
-        this.cache = cacheInstance.getMap("notifications");
+//        this.cacheInstance = hazelcastInstance;
+//        this.cache = cacheInstance.getMap("notifications");
 
     }
 
-    @Transactional
-    public List<String> getNotifications() throws NotAllowedException {
-        if(SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
+//    @Transactional
+//    public List<String> getNotifications() throws NotAllowedException {
+//        if(SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
+//
+//        User user = userDao.find(SecurityUtils.getCurrentUser().getId());
+//        List<String> notifcations = cache.get(user.getId());
+//        return notifcations;
+//        return null;
+//    }
 
-        User user = userDao.find(SecurityUtils.getCurrentUser().getId());
-        List<String> notifcations = cache.get(user.getId());
-        return notifcations;
-    }
+//    private List<String> getNotifications(Long id) throws NotFoundException {
+//        User user = userDao.find(id);
+//        if (user == null) throw new NotFoundException("User not found");
+//        return cache.get(user.getId());
+//        return null;
+//    }
 
-    private List<String> getNotifications(Long id) throws NotFoundException {
-        User user = userDao.find(id);
-        if (user == null) throw new NotFoundException("User not found");
-        return cache.get(user.getId());
-    }
+//    @Transactional
+//    public void createListNotifications(Long id) {
+//        cache.put(id, new ArrayList<>());
+//    }
 
-    @Transactional
-    public void createListNotifications(Long id) {
-        cache.put(id, new ArrayList<>());
-    }
-
-    @Transactional
-    public void addNotification(Long id, String message) throws NotFoundException {
-        User user = userDao.find(id);
-        if (user == null) throw new NotFoundException("User not found");
-        if(!cache.containsKey(user.getId())) throw new NotFoundException("User in cache not found");
-        List<String> nofications = getNotifications(user.getId());
-        nofications.add(message);
+//    @Transactional
+//    public void addNotification(Long id, String message) throws NotFoundException {
+//        User user = userDao.find(id);
+//        if (user == null) throw new NotFoundException("User not found");
+//        if(!cache.containsKey(user.getId())) throw new NotFoundException("User in cache not found");
+//        List<String> nofications = getNotifications(user.getId());
+//        nofications.add(message);
 //        cache.replace(user.getId(), nofications);
-    }
+//    }
 }
