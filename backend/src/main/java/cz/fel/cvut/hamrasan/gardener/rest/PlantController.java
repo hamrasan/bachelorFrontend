@@ -3,6 +3,7 @@ package cz.fel.cvut.hamrasan.gardener.rest;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantDto;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantWithoutDateDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.MissingVariableException;
+import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.model.Garden;
 import cz.fel.cvut.hamrasan.gardener.model.Plant;
@@ -46,6 +47,14 @@ public class PlantController {
             return plantService.getUserPlants();
         }
         else { return null; }
+    }
+
+    @GetMapping(value = "/garden/{gardenId}", produces =  MediaType.APPLICATION_JSON_VALUE )
+    public List<PlantDto> getAllOfGarden(@PathVariable Long gardenId) throws NotAllowedException, NotFoundException {
+        if(!SecurityUtils.isAuthenticatedAnonymously()) {
+            return plantService.getGardenPlants(gardenId);
+        }
+        else throw new NotAllowedException("Not allowed access");
     }
 
     @GetMapping(value = "/all/{id}", produces = MediaType.APPLICATION_JSON_VALUE )

@@ -4,6 +4,7 @@ import cz.fel.cvut.hamrasan.gardener.dao.GardenDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.dto.GardenDto;
 import cz.fel.cvut.hamrasan.gardener.model.Garden;
+import cz.fel.cvut.hamrasan.gardener.model.User;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,11 +32,21 @@ public class GardenService {
     @Transactional
     public List<GardenDto> findAllOfUser(){
         List<GardenDto> gardenDtos = new ArrayList<>();
+        User user = userDao.find(SecurityUtils.getCurrentUser().getId());
 
-        for (Garden garden : SecurityUtils.getCurrentUser().getGardens()) {
+        for (Garden garden : user.getGardens()) {
             gardenDtos.add(translateService.translateGarden(garden));
         }
 
         return gardenDtos;
+    }
+
+    @Transactional
+    public void create(String name, String location) {
+        User user = SecurityUtils.getCurrentUser();
+        if(user != null) {
+            Garden garden = new Garden(name, location, user);
+            gardenDao.persist(garden);
+        }
     }
 }

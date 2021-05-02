@@ -3,6 +3,7 @@ package cz.fel.cvut.hamrasan.gardener.service;
 import cz.fel.cvut.hamrasan.gardener.dao.*;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantDto;
 import cz.fel.cvut.hamrasan.gardener.dto.PlantWithoutDateDto;
+import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.model.*;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
@@ -112,5 +113,21 @@ public class PlantService {
             plantsDtos.add(translateService.translatePlant(plant));
         }
         return plantsDtos;
+    }
+
+    @Transactional
+    public List<PlantDto> getGardenPlants(Long gardenId) throws NotFoundException, NotAllowedException {
+        List<PlantDto> plantDtos = new ArrayList<>();
+        Garden garden = gardenDao.find(gardenId);
+        User user = userDao.find(SecurityUtils.getCurrentUser().getId());
+
+        if(garden == null) throw new NotFoundException("Garden not found");
+        if(!user.getGardens().contains(garden)) throw new NotAllowedException("Not allowed access");
+
+        for (UserPlant userPlant: garden.getPlants()) {
+            plantDtos.add(translateService.translateUserPlant(userPlant));
+        }
+
+        return plantDtos;
     }
 }

@@ -104,7 +104,10 @@ public class ValveService {
         User user = SecurityUtils.getCurrentUser();
 
         for (int i = 0; i < valve.getGardens().size() ; i++) {
-            if(!gardensId.contains( valve.getGardens().get(i))) {
+            if(!gardensId.contains( valve.getGardens().get(i).getId())) {
+                valve.removeGarden( valve.getGardens().get(i));
+            }
+            if(gardensId.size()<=0){
                 valve.removeGarden( valve.getGardens().get(i));
             }
         }

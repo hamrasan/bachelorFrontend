@@ -12,7 +12,7 @@ import java.util.List;
 public class Valve extends AbstractEntity {
 
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String name;
 
     private String picture;

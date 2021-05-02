@@ -5,12 +5,10 @@ import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.GardenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -32,5 +30,13 @@ public class GardenController {
             return gardenService.findAllOfUser();
         }
         return new ArrayList<>();
+    }
+
+    @PostMapping(consumes= MediaType.APPLICATION_JSON_VALUE )
+    public void create(@RequestBody HashMap<String, String> hashMap) {
+
+        if(!SecurityUtils.isAuthenticatedAnonymously()) {
+            gardenService.create(hashMap.get("name"), hashMap.get("location"));
+        }
     }
 }

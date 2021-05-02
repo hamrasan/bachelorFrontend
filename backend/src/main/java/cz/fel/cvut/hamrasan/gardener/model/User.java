@@ -41,14 +41,6 @@ public class User extends AbstractEntity {
     @NotBlank(message = "Email cannot be blank")
     private String email;
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(
-//            name = "plants_user",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "plant_id"))
-//    private List<Plant> plants;
-
-
     @OneToMany(mappedBy = "user")
     private List<Garden> gardens;
 
@@ -134,14 +126,6 @@ public class User extends AbstractEntity {
     public void encodePassword() {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
-
-//    public List<Plant> getPlants() {
-//        return plants;
-//    }
-//
-//    public void setPlants(List<Plant> plants) {
-//        this.plants = plants;
-//    }
 
 
     public List<Garden> getGardens() {

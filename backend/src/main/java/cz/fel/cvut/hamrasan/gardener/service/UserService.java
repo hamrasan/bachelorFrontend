@@ -52,9 +52,10 @@ public class UserService {
     }
 
     @Transactional
-    public void createUser(User user, String passwordAgain) throws BadPassword {
+    public void createUser(User user, String passwordAgain) throws BadPassword, NotAllowedException {
         Objects.requireNonNull(user);
         if (!user.getPassword().equals(passwordAgain)) throw new BadPassword();
+        if(userDao.findByEmail(user.getEmail()) != null) throw new NotAllowedException("Email already exists!");
         user.encodePassword();
 
         userDao.persist(user);
