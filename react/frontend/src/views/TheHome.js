@@ -81,7 +81,7 @@ function TheHome() {
         />
 
         {gardens.map(garden =>(
-          <Accordion defaultActiveKey="0">
+          <Accordion defaultActiveKey="1">
           <Card>
             <Accordion.Toggle as={Card.Header} eventKey="0">
               {garden.name}

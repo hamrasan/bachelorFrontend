@@ -10,8 +10,7 @@ function SearchForm(props) {
   const searchImg = "../assets/magnifying-glass-1976105.svg";
   return (
     <div>
-      <Container className="pt-3">
-        <InputGroup className="mb-3">
+        <InputGroup>
           <InputGroup.Prepend>
             <InputGroup.Text>
               <Image src={searchImg} alt="search" width="20" />
@@ -25,7 +24,6 @@ function SearchForm(props) {
             }}
           />
         </InputGroup>
-      </Container>
     </div>
   );
 }

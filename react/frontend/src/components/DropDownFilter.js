@@ -13,11 +13,11 @@ function DropdownFilter(props) {
   });
 
   return (
-    <Container className="pt-3">
+    <div>
       Filtruj podľa:
       <Form>{mappedCategories}
       </Form>
-    </Container>
+    </div>
   );
 }
 
