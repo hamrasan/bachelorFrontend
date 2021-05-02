@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Component
 public class DbSeeder implements
@@ -45,6 +46,7 @@ public class DbSeeder implements
         System.out.println("Vypis po stupusteni aplikacie.");
         createUsers();
         createCategories();
+        createSubcategories();
         createPlants();
         createGarden();
         createUserPlant();
@@ -59,20 +61,39 @@ public class DbSeeder implements
         Subcategory subcategory = new Subcategory("Rajčiny", plantCategoryDao.find((long) 1), plants);
         subcategoryDao.persist(subcategory);
 
-        Subcategory subcategory3 = new Subcategory("None", plantCategoryDao.find((long) 1), plants);
-        subcategoryDao.persist(subcategory3);
+//        Subcategory subcategory3 = new Subcategory("None", plantCategoryDao.find((long) 1), plants);
+//        subcategoryDao.persist(subcategory3);
 
         Plant plant = new Plant("Rajčina veľká", "paradajka-lycopersicum-rajciak-semena.jpg", 12, 35,  "Marec", subcategory);
         plantDao.persist(plant);
 
-        Subcategory subcategory2 = new Subcategory("None", plantCategoryDao.find((long) 2), plants);
-        subcategoryDao.persist(subcategory2);
+//        Subcategory subcategory2 = new Subcategory("None", plantCategoryDao.find((long) 2), plants);
+//        subcategoryDao.persist(subcategory2);
 
-        Plant plant2 = new Plant("Jahoda celoročná", "jahoda.jpg", 12, 40,  "Celoročne", subcategory2);
-        plantDao.persist(plant2);
+        for (Subcategory sub : subcategoryDao.findAll()) {
+            if(sub.getName().equals("Jahody") && sub.getCategory().getName().equals("ovocie")) {
+                Plant plant2 = new Plant("Jahoda celoročná", "jahody.jpg", 12, 40,  "Celoročne", sub );
+                plantDao.persist(plant2);
+            }
+            if(sub.getName().equals("None") && sub.getCategory().getName().equals("ovocie")){
+                Plant plant5 = new Plant("Banánovník", "banany.jpg", 20, 30,  "Leto", sub);
+                plantDao.persist(plant5);
+            }
+            if(sub.getName().equals("Citrusy") && sub.getCategory().getName().equals("ovocie")){
+                Plant plant5 = new Plant("Pomarančovník čínsky", "pomaranc.jpg", 5, 35,  "Júl", sub);
+                plantDao.persist(plant5);
+            }
 
-        Plant plant3 = new Plant("Reďkev siata pravá", "redkvicka.jpg", 12, 35,  "Marec", subcategory3);
-        plantDao.persist(plant3);
+            if(sub.getName().equals("None") && sub.getCategory().getName().equals("zelenina")) {
+                Plant plant3 = new Plant("Reďkev siata pravá", "redkvicka.jpg", 12, 35,  "Apríl", sub);
+                plantDao.persist(plant3);
+            }
+
+            if(sub.getName().equals("None") && sub.getCategory().getName().equals("bylinky")) {
+                Plant plant4 = new Plant("Bazalka pravá", "bazalka.jpg", 13, 35,  "Leto", sub);
+                plantDao.persist(plant4);
+            }
+        }
     }
 
     @Transactional
@@ -112,6 +133,25 @@ public class DbSeeder implements
 
         PlantCategory category2 = new PlantCategory("ovocie", new ArrayList<>() );
         plantCategoryDao.persist(category2);
+
+        PlantCategory category3 = new PlantCategory("bylinky", new ArrayList<>() );
+        plantCategoryDao.persist(category3);
+    }
+
+    @Transactional
+    void createSubcategories(){
+
+        for (PlantCategory category: plantCategoryDao.findAll()) {
+            Subcategory subcategory = new Subcategory("None", category, new ArrayList<>());
+            subcategoryDao.persist(subcategory);
+
+            if(category.getName().equals("ovocie")){
+                Subcategory subcategory1 = new Subcategory("Jahody", category, new ArrayList<>());
+                Subcategory subcategory2 = new Subcategory("Citrusy", category, new ArrayList<>());
+                subcategoryDao.persist(subcategory1);
+                subcategoryDao.persist(subcategory2);
+            }
+        }
     }
 
     @Transactional
