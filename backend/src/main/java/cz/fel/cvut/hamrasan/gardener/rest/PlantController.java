@@ -72,20 +72,28 @@ public class PlantController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void createPlant(@RequestBody HashMap<String,String> hashMap)throws MissingVariableException {
+    public void createPlant(@RequestBody HashMap<String,String> hashMap) throws MissingVariableException, NotAllowedException {
 
         LocalDate date = LocalDate.parse(hashMap.get("date").substring(0,10));
         Long plantId = Long.parseLong(hashMap.get("plant"));
-        Long gardenId = Long.parseLong(hashMap.get("garden"));
+        String gardenName = hashMap.get("garden");
         float minTemperature = Float.parseFloat(hashMap.get("minTemperature"));
         float maxTemperature = Float.parseFloat(hashMap.get("maxTemperature"));
         String season = hashMap.get("season");
 
-        plantService.create(date, minTemperature, maxTemperature, season, plantId,gardenId);
+        plantService.create(date, minTemperature, maxTemperature, season, plantId, gardenName);
     }
 
     @GetMapping(value = "/{category}/{subcategory}", produces = MediaType.APPLICATION_JSON_VALUE )
     public List<PlantWithoutDateDto> getAllOfSubcategory(@PathVariable String category, @PathVariable String subcategory) throws NotFoundException {
         return plantService.findAllOfSubcategory(category, subcategory);
+    }
+
+    @PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void updatePlant(@RequestBody HashMap<String,String> hashMap) throws NotAllowedException {
+        if(SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
+
+        plantService.updatePlant(Long.parseLong(hashMap.get("id")), Double.parseDouble(hashMap.get("minTemperature")),
+                Double.parseDouble(hashMap.get("maxTemperature")), hashMap.get("season"));
     }
 }

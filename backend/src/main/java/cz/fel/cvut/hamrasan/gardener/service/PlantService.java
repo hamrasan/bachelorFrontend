@@ -84,12 +84,16 @@ public class PlantService {
     }
 
     @Transactional
-    public void create(LocalDate date, float minTemperature, float maxTemperature, String season, Long plantId, Long gardenId){
+    public void create(LocalDate date, float minTemperature, float maxTemperature, String season, Long plantId, String gardenName) throws NotAllowedException {
         Objects.requireNonNull(plantId);
         Objects.requireNonNull(date);
-        Objects.requireNonNull(gardenId);
+        Objects.requireNonNull(gardenName);
+        Garden garden = gardenDao.findByName(gardenName);
 
-        UserPlant userPlant = new UserPlant(date, minTemperature, maxTemperature, season, plantDao.find(plantId), gardenDao.find(gardenId) );
+        User user = userDao.find(SecurityUtils.getCurrentUser().getId());
+        if(!user.getGardens().contains(garden)) throw new NotAllowedException("Not allowed operation");
+
+        UserPlant userPlant = new UserPlant(date, minTemperature, maxTemperature, season, plantDao.find(plantId), garden );
         userPlantDao.persist(userPlant);
     }
 
@@ -129,5 +133,15 @@ public class PlantService {
         }
 
         return plantDtos;
+    }
+
+    @Transactional
+    public void updatePlant(long id, double minTemperature, double maxTemperature, String season) {
+        UserPlant plant = userPlantDao.find(id);
+        plant.setMaxTemperature(maxTemperature);
+        plant.setMinTemperature(minTemperature);
+        plant.setSeason(season);
+        userPlantDao.update(plant);
+        System.out.println(plant.getMinTemperature());
     }
 }
