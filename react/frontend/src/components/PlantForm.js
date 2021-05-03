@@ -1,10 +1,12 @@
 import { Form, Row, Col, Container, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import TheSpinner from "../components/TheSpinner";
+import ModalConfirm from "../components/ModalConfirm";
 
 function PlantForm(props) {
   let plant = props.plant;
   console.log(plant);
+  const [modal, setModal] = useState(false);
 
   if (plant == null) {
     return <TheSpinner></TheSpinner>;
@@ -20,18 +22,13 @@ function PlantForm(props) {
         </Row>
 
         <Row>
-          <Col className="d-flex flex-row-reverse">
+          <Col className="d-flex flex-row-reverse mb-3">
             <img
               src={"http://localhost:8080/gallery/" + plant.picture}
               class="img-fluid rounded mx-auto"
               alt={plant.name}
+              style={{ maxWidth: "400px", maxHeight: "400px" }}
             />
-          </Col>
-        </Row>
-
-        <Row className="mb-3">
-          <Col className="d-flex flex-row-reverse">
-            <Button variant="outline-success">Upraviť</Button>{" "}
           </Col>
         </Row>
 
@@ -40,10 +37,12 @@ function PlantForm(props) {
             <Form>
               <Form.Group as={Row} controlId="formPlaintextPassword">
                 <Form.Label column sm="2">
-                  Najnižsia možná teplota:
+                  Najnižšia možná teplota:
                 </Form.Label>
                 <Col sm="10">
-                  <Form.Control defaultValue={plant.minTemperature} />
+                  <Form.Control defaultValue={plant.minTemperature} onChange={(e) => {
+                  props.setMinTemperature(e.target.value);
+                }}/>
                 </Col>
               </Form.Group>
 
@@ -52,7 +51,9 @@ function PlantForm(props) {
                   Najvyššia možná teplota:
                 </Form.Label>
                 <Col sm="10">
-                  <Form.Control defaultValue={plant.maxTemperature} />
+                  <Form.Control defaultValue={plant.maxTemperature} onChange={(e) => {
+                  props.setMaxTemperature(e.target.value);
+                }}/>
                 </Col>
               </Form.Group>
 
@@ -70,10 +71,30 @@ function PlantForm(props) {
                   Obdobie dozrievania:
                 </Form.Label>
                 <Col sm="10">
-                  <Form.Control defaultValue={plant.season} />
+                  <Form.Control defaultValue={plant.season} onChange={(e) => {
+                  props.setSeason(e.target.value);
+                }}/>
                 </Col>
               </Form.Group>
             </Form>
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
+          <Col className="d-flex justify-content-center">
+            <Button
+              variant="outline-success"
+              onClick={() => props.setModalShow(true)}
+            >
+              Upraviť
+            </Button>
+            <ModalConfirm
+              show={props.modalShow}
+              title={"Upraviť dáta rastliny"}
+              body={"Naozaj chceš upraviť dáta rastliny " + plant.name + "?"}
+              onSubmit={() => props.handleConfirm(plant.id)}
+              onHide={() => props.setModalShow(false)}
+            />
           </Col>
         </Row>
       </Container>

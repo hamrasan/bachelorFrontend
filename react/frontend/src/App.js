@@ -1,5 +1,6 @@
 // import "./App.css";
 import TheNavigation from "./components/TheNavigation";
+import TheNotification from "./views/TheNotification";
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from "./components/LoginForm";
 import TheGarden from "./views/TheGarden";
@@ -117,11 +118,14 @@ function App() {
             <AuthRoute path="/garden" exact>
               <TheGarden />
             </AuthRoute>
-            <AuthRoute path="/garden/new">
+            <AuthRoute path="/garden/new/:name">
               <PlantNewForm user={user}/>
             </AuthRoute>
             <AuthRoute path="/profile">
               <MyProfile />
+            </AuthRoute>
+            <AuthRoute path="/notifications" exact>
+              <TheNotification/>
             </AuthRoute>
             <AuthRoute path="/" exact>
               <TheHome />
@@ -130,15 +134,6 @@ function App() {
         </div>
       </div>
     </Context.Provider>
-
-    // <div className="App">
-
-    //     <Form inline>
-    //         <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-    //         <Button variant="outline-info">Search</Button>
-    //     </Form>
-
-    // </div>
   );
 }
 

@@ -9,6 +9,7 @@ function TheHome() {
   const axios = require("axios");
   const [userTemp, setUserTemp] = useState(15);
   const [minutes, setMinutes] = useState(15);
+  const [modalShowTemp, setModalShowTemp] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [gardenId, setGardenId] = useState(null);
   const [gardens, setGardens] = useState([]);
@@ -59,26 +60,7 @@ function TheHome() {
               Zmeniť
             </Button>
           </div>
-          {/* <div className="d-flex align-items-baseline">
-            <Button
-              variant="info"
-              className="mb-4 ml-2"
-              onClick={() => setModalShow(true)}
-            >
-              Nastaviť požadovanú teplotu
-            </Button>
-          </div> */}
         </div>
-        <ModalSetSensorsTime
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-          title={"Zmeň časový interval merania senzorov"}
-          bodyTitle={"Vyber časový interval v min:"}
-          bodyText={"interval"}
-          setMinutes={setMinutes}
-          minutes={minutes}
-          onSubmit={handleSubmit}
-        />
 
         {gardens.map(garden =>(
           <Accordion defaultActiveKey="1">

@@ -17,10 +17,10 @@ function TheGarden() {
   const [searchString, setSearchString] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [gardens, setGardens] = useState([]);
-  const [actualGardenId, setActualGardenId] = useState(null);
+  const [actualGardenName, setActualGardenName] = useState("");
 
-  const fetchPlants = (id) => {
-    setActualGardenId(id);
+  const fetchPlants = (id, name) => {
+    setActualGardenName(name);
     axios({
       method: "get",
       url: "http://localhost:8080/plants/garden/" +id,
@@ -47,8 +47,8 @@ function TheGarden() {
           setGardens(res.data);
           console.log(res.data);
           if(res.data.length>0){
-            setActualGardenId(res.data[0].id);
-            fetchPlants(res.data[0].id);
+            setActualGardenName(res.data[0].name);
+            fetchPlants(res.data[0].id, res.data[0].name);
           }
         }
       })
@@ -162,7 +162,7 @@ function TheGarden() {
             />
           </Col>
           <Col className="d-flex flex-row-reverse">
-            <Link to={"/garden/new"}>
+            <Link to={"/garden/new/" + actualGardenName}>
               <Button variant="info"> Pridaj novú rastlinu </Button>{" "}
             </Link>
           </Col>
