@@ -68,5 +68,24 @@ public class UserService {
         else return translateService.translateUser(SecurityUtils.getCurrentUser());
     }
 
+    @Transactional
+    public void setupTempValues(Double lowTemp, Double highTemp) {
+        User user = userDao.find(SecurityUtils.getCurrentUser().getId());
+        user.setHighTemperature(highTemp);
+        user.setLowTemperature(lowTemp);
+        userDao.update(user);
+    }
+
+    @Transactional
+    public double getUserHighTemperature() {
+        User user = userDao.find(SecurityUtils.getCurrentUser().getId());
+        return user.getHighTemperature();
+    }
+
+    @Transactional
+    public double getUserLowTemperature() {
+        User user = userDao.find(SecurityUtils.getCurrentUser().getId());
+        return user.getLowTemperature();
+    }
 
 }

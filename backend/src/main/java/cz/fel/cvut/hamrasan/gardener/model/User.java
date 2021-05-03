@@ -3,9 +3,7 @@ package cz.fel.cvut.hamrasan.gardener.model;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +39,18 @@ public class User extends AbstractEntity {
     @NotBlank(message = "Email cannot be blank")
     private String email;
 
+    @Basic(optional = false)
+    @Column(nullable = false)
+    @Max(60)
+    @Min(-50)
+    private double lowTemperature;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
+    @Max(60)
+    @Min(-50)
+    private double highTemperature;
+
     @OneToMany(mappedBy = "user")
     private List<Garden> gardens;
 
@@ -50,8 +60,9 @@ public class User extends AbstractEntity {
     public User() {
         this.gardens = new ArrayList<>();
         this.valves = new ArrayList<>();
+        this.lowTemperature = 0;
+        this.highTemperature = 15;
     }
-
 
     public User(@Size(max = 30, min = 1, message = "First name is in incorrect format.") @NotBlank(message = "First name cannot be blank") String firstName, @Size(max = 30, min = 1, message = "Last name is in incorrect format.") @NotBlank(message = "Last name cannot be blank") String lastName,
                 @Size(max = 255, min = 6, message = "Password is in incorrect format.") @NotBlank(message = "Password cannot be blank") String password,
@@ -62,8 +73,9 @@ public class User extends AbstractEntity {
         this.password = password;
         this.email = email;
         this.gardens = gardens;
+        this.lowTemperature = 0;
+        this.highTemperature = 15;
     }
-
 
     public User(@Size(max = 30, min = 1, message = "First name is in incorrect format.") @NotBlank(message = "First name cannot be blank") String firstName, @Size(max = 30, min = 1, message = "Last name is in incorrect format.") @NotBlank(message = "Last name cannot be blank") String lastName, @Size(max = 255, min = 6, message = "Password is in incorrect format.") @NotBlank(message = "Password cannot be blank") String password, @Email(message = "Email should be valid") @NotBlank(message = "Email cannot be blank") String email) {
 
@@ -71,9 +83,10 @@ public class User extends AbstractEntity {
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-//        this.plants = new ArrayList<Plant>();
         this.gardens = new ArrayList<>();
         this.valves = new ArrayList<>();
+        this.lowTemperature = 0;
+        this.highTemperature = 15;
     }
 
 
@@ -81,9 +94,10 @@ public class User extends AbstractEntity {
                 @Size(max = 255, min = 6, message = "Password is in incorrect format.") String password) {
         this.email = email;
         this.password = password;
-//        this.plants = new ArrayList<Plant>();
         this.gardens = new ArrayList<>();
         this.valves = new ArrayList<>();
+        this.lowTemperature = 0;
+        this.highTemperature = 15;
     }
 
 
@@ -154,6 +168,30 @@ public class User extends AbstractEntity {
     public void addValve(Valve valve) {
 
         this.valves.add(valve);
+    }
+
+
+    public double getLowTemperature() {
+
+        return lowTemperature;
+    }
+
+
+    public void setLowTemperature(double lowTemperature) {
+
+        this.lowTemperature = lowTemperature;
+    }
+
+
+    public double getHighTemperature() {
+
+        return highTemperature;
+    }
+
+
+    public void setHighTemperature(double highTemperature) {
+
+        this.highTemperature = highTemperature;
     }
 
 
