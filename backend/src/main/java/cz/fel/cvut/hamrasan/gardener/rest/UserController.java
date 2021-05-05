@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/notifications", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void setupTempValues(@RequestBody HashMap<String, Double> hashMap) throws NotAllowedException {
+    public void setupTempValues(@RequestBody HashMap<String, Float> hashMap) throws NotAllowedException {
         if(SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
         else userService.setupTempValues(hashMap.get("lowTemp"), hashMap.get("highTemp"));
     }

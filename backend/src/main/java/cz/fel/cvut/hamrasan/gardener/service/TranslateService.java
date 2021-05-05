@@ -178,4 +178,10 @@ public class TranslateService {
         Objects.requireNonNull(soil);
         return new SoilDto(soil.getId(), soil.getDate(), soil.getValue(), soil.getGarden().getId());
     }
+
+    @Transactional
+    public NotificationDto translateNotification(Notification notification) {
+        Objects.requireNonNull(notification);
+        return new NotificationDto(notification.getId(), notification.getDate(), notification.getMessage(), notification.getType(), notification.isSeen(), notification.getUser().getId());
+    }
 }

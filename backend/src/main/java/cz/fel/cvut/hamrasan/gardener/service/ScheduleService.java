@@ -1,19 +1,19 @@
 package cz.fel.cvut.hamrasan.gardener.service;
 
+import cz.fel.cvut.hamrasan.gardener.dao.NotificationDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.dao.ValveDao;
 import cz.fel.cvut.hamrasan.gardener.dao.ValveScheduleDao;
 import cz.fel.cvut.hamrasan.gardener.dto.ValveScheduleDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
-import cz.fel.cvut.hamrasan.gardener.model.User;
-import cz.fel.cvut.hamrasan.gardener.model.Valve;
-import cz.fel.cvut.hamrasan.gardener.model.ValveSchedule;
+import cz.fel.cvut.hamrasan.gardener.model.*;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,15 +34,18 @@ public class ScheduleService {
     private ValveScheduleDao valveScheduleDao;
     private UserDao userDao;
     private TranslateService translateService;
+    private NotificationDao notificationDao;
 
     @Autowired
-    public ScheduleService(ValveDao valveDao, ValveService valveService, ValveScheduleDao valveScheduleDao, UserDao userDao, TranslateService translateService) {
+    public ScheduleService(ValveDao valveDao, ValveService valveService, ValveScheduleDao valveScheduleDao, UserDao userDao,
+                           TranslateService translateService, NotificationDao notificationDao) {
 
         this.valveDao = valveDao;
         this.valveService = valveService;
         this.valveScheduleDao = valveScheduleDao;
         this.userDao = userDao;
         this.translateService = translateService;
+        this.notificationDao = notificationDao;
     }
 
 
@@ -60,6 +63,8 @@ public class ScheduleService {
                             try {
                                 valveService.moveValve(valve.getName(), "true");
                                 valveService.setStopValving(valve.getName(), valveSchedule.getLength());
+                                Notification notification = new Notification(LocalDate.now(), "Polievam polievačom " + valve.getName(), NotificationType.VALVING, valve.getUser());
+                                notificationDao.persist(notification);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

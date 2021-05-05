@@ -69,7 +69,7 @@ public class UserService {
     }
 
     @Transactional
-    public void setupTempValues(Double lowTemp, Double highTemp) {
+    public void setupTempValues(float lowTemp, float highTemp) {
         User user = userDao.find(SecurityUtils.getCurrentUser().getId());
         user.setHighTemperature(highTemp);
         user.setLowTemperature(lowTemp);
@@ -77,13 +77,13 @@ public class UserService {
     }
 
     @Transactional
-    public double getUserHighTemperature() {
+    public float getUserHighTemperature() {
         User user = userDao.find(SecurityUtils.getCurrentUser().getId());
         return user.getHighTemperature();
     }
 
     @Transactional
-    public double getUserLowTemperature() {
+    public float getUserLowTemperature() {
         User user = userDao.find(SecurityUtils.getCurrentUser().getId());
         return user.getLowTemperature();
     }

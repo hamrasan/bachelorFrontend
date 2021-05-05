@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "APP_USER")
 @NamedQueries({
-        @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email AND u.deleted_at is null")
+        @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
 })
 public class User extends AbstractEntity {
 
@@ -43,19 +43,22 @@ public class User extends AbstractEntity {
     @Column(nullable = false)
     @Max(60)
     @Min(-50)
-    private double lowTemperature;
+    private float lowTemperature;
 
     @Basic(optional = false)
     @Column(nullable = false)
     @Max(60)
     @Min(-50)
-    private double highTemperature;
+    private float highTemperature;
 
     @OneToMany(mappedBy = "user")
     private List<Garden> gardens;
 
     @OneToMany(mappedBy = "user")
     private List<Valve> valves;
+
+    @OneToMany(mappedBy = "user")
+    private List<Notification> notifications;
 
     public User() {
         this.gardens = new ArrayList<>();
@@ -75,6 +78,7 @@ public class User extends AbstractEntity {
         this.gardens = gardens;
         this.lowTemperature = 0;
         this.highTemperature = 15;
+        this.notifications = new ArrayList<>();
     }
 
     public User(@Size(max = 30, min = 1, message = "First name is in incorrect format.") @NotBlank(message = "First name cannot be blank") String firstName, @Size(max = 30, min = 1, message = "Last name is in incorrect format.") @NotBlank(message = "Last name cannot be blank") String lastName, @Size(max = 255, min = 6, message = "Password is in incorrect format.") @NotBlank(message = "Password cannot be blank") String password, @Email(message = "Email should be valid") @NotBlank(message = "Email cannot be blank") String email) {
@@ -87,6 +91,7 @@ public class User extends AbstractEntity {
         this.valves = new ArrayList<>();
         this.lowTemperature = 0;
         this.highTemperature = 15;
+        this.notifications = new ArrayList<>();
     }
 
 
@@ -98,6 +103,7 @@ public class User extends AbstractEntity {
         this.valves = new ArrayList<>();
         this.lowTemperature = 0;
         this.highTemperature = 15;
+        this.notifications = new ArrayList<>();
     }
 
 
@@ -171,27 +177,39 @@ public class User extends AbstractEntity {
     }
 
 
-    public double getLowTemperature() {
+    public float getLowTemperature() {
 
         return lowTemperature;
     }
 
 
-    public void setLowTemperature(double lowTemperature) {
+    public void setLowTemperature(float lowTemperature) {
 
         this.lowTemperature = lowTemperature;
     }
 
 
-    public double getHighTemperature() {
+    public float getHighTemperature() {
 
         return highTemperature;
     }
 
 
-    public void setHighTemperature(double highTemperature) {
+    public void setHighTemperature(float highTemperature) {
 
         this.highTemperature = highTemperature;
+    }
+
+
+    public List<Notification> getNotifications() {
+
+        return notifications;
+    }
+
+
+    public void setNotifications(List<Notification> notifications) {
+
+        this.notifications = notifications;
     }
 
 

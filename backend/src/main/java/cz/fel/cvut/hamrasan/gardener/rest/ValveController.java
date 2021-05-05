@@ -67,7 +67,9 @@ public class ValveController {
 
     @PostMapping(value = "/immediately/{valveName}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void valvingImmediately(@PathVariable String valveName, @RequestBody HashMap<String, Integer> hashMap ) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotFoundException, NotAllowedException {
-        valveService.valvingImmediately(valveName, hashMap.get("length"));
+        if(!SecurityUtils.isAuthenticatedAnonymously()) {
+            valveService.valvingImmediately(valveName, hashMap.get("length"));
+        }
     }
 
     @GetMapping(value = "/config")

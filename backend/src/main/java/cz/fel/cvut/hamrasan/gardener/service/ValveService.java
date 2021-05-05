@@ -2,6 +2,7 @@ package cz.fel.cvut.hamrasan.gardener.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import cz.fel.cvut.hamrasan.gardener.dao.GardenDao;
+import cz.fel.cvut.hamrasan.gardener.dao.NotificationDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.dao.ValveDao;
 import cz.fel.cvut.hamrasan.gardener.dto.ValveDto;
@@ -25,6 +26,8 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,13 +48,15 @@ public class ValveService {
     private UserDao userDao;
     private TranslateService translateService;
     private GardenDao gardenDao;
+    private NotificationService notificationService;
 
     @Autowired
-    public ValveService(ValveDao valveDao, UserDao userDao, TranslateService translateService, GardenDao gardenDao) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+    public ValveService(ValveDao valveDao, UserDao userDao, TranslateService translateService, GardenDao gardenDao, NotificationService notificationService) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
         this.valveDao = valveDao;
         this.userDao = userDao;
         this.translateService = translateService;
         this.gardenDao = gardenDao;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -93,9 +98,15 @@ public class ValveService {
         if(entity == null) setupApi();
         else refreshApiToken();
         if(device == null) getDeviceInfo(valveName);
+        Valve valve = valveDao.findByName(valveName);
+        int minutes = LocalDateTime.now().getMinute();
+        String minutesString = String.valueOf(minutes);
+        if(minutes<10) minutesString = "0"+minutesString;
 
         moveValve(valveName, "true");
         setStopValving(valveName, length );
+        notificationService.addNotification(LocalDate.now(), (LocalDateTime.now().toLocalDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) +
+                " " +LocalDateTime.now().getHour() + ":" + minutesString + " - Polievam polievačom " + valveName), NotificationType.VALVING, valve.getUser());
     }
 
     @Transactional

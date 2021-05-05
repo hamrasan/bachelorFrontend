@@ -1,42 +1,67 @@
 package cz.fel.cvut.hamrasan.gardener.service;
 
 import com.hazelcast.core.HazelcastInstance;
+import cz.fel.cvut.hamrasan.gardener.dao.NotificationDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
+import cz.fel.cvut.hamrasan.gardener.dto.NotificationDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
+import cz.fel.cvut.hamrasan.gardener.model.Notification;
+import cz.fel.cvut.hamrasan.gardener.model.NotificationType;
 import cz.fel.cvut.hamrasan.gardener.model.User;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
 public class NotificationService {
 
     private UserDao userDao;
-//    private final HazelcastInstance cacheInstance;
-//    private Map<Long, List<String>> cache;
+    private NotificationDao notificationDao;
+    private TranslateService translateService;
 
     @Autowired
-    public NotificationService(UserDao userDao) {
+    public NotificationService(UserDao userDao, NotificationDao notificationDao, TranslateService translateService) {
 
         this.userDao = userDao;
+        this.notificationDao = notificationDao;
+        this.translateService = translateService;
 //        this.cacheInstance = hazelcastInstance;
 //        this.cache = cacheInstance.getMap("notifications");
 
     }
 
-//    @Transactional
-//    public List<String> getNotifications() throws NotAllowedException {
-//        if(SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
-//
-//        User user = userDao.find(SecurityUtils.getCurrentUser().getId());
-//        List<String> notifcations = cache.get(user.getId());
-//        return notifcations;
-//        return null;
-//    }
+    @Transactional
+    public List<NotificationDto> getNotifications() throws NotAllowedException {
+        if(SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
+
+        User user = userDao.find(SecurityUtils.getCurrentUser().getId());
+        List<Notification> notifications = notificationDao.notSeenOfUser(user);
+        List<NotificationDto> notificationDtos = new ArrayList<>();
+
+        for (Notification notification: notifications) {
+            notificationDtos.add(translateService.translateNotification(notification));
+        }
+        return notificationDtos;
+    }
+
+    @Transactional
+    public void addNotification(LocalDate date, String message, NotificationType type, User user){
+        Notification notification = new Notification(date, message, type, user);
+        notificationDao.persist(notification);
+    }
+
+    @Transactional
+    public void setSeenNotification(Long id) throws NotFoundException {
+        Notification notification = notificationDao.find(id);
+        if(notification==null) throw new NotFoundException("Notification not found");
+        notification.setSeen(true);
+        notificationDao.update(notification);
+    }
 
 //    private List<String> getNotifications(Long id) throws NotFoundException {
 //        User user = userDao.find(id);
