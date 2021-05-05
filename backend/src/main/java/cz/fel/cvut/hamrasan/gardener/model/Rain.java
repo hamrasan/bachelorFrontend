@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "APP_RAIN")
 @NamedQueries({
-        @NamedQuery(name = "Rain.findLatest", query = "SELECT r FROM Rain r WHERE r.garden = :garden AND r.deleted_at is null ORDER BY r.date DESC ")
+        @NamedQuery(name = "Rain.findLatest", query = "SELECT r FROM Rain r WHERE r.garden = :garden ORDER BY r.date DESC ")
 })
 public class Rain extends AbstractSensor<Boolean>{
 

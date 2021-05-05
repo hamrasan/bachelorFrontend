@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "APP_GARDEN")
 @NamedQueries({
-        @NamedQuery(name = "Garden.findByName", query = "SELECT g FROM Garden g WHERE g.name = :name AND g.deleted_at is null")
+        @NamedQuery(name = "Garden.findByName", query = "SELECT g FROM Garden g WHERE g.name = :name")
 })
 public class Garden extends AbstractEntity {
 

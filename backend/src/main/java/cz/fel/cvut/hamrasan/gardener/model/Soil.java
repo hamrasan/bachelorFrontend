@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "APP_SOIL")
 @NamedQueries({
-        @NamedQuery(name = "Soil.findLatest", query = "SELECT s FROM Soil s WHERE s.garden = :garden AND s.deleted_at is null ORDER BY s.date DESC ")
+        @NamedQuery(name = "Soil.findLatest", query = "SELECT s FROM Soil s WHERE s.garden = :garden ORDER BY s.date DESC ")
 })
 public class Soil extends AbstractSensor<Float> {
 

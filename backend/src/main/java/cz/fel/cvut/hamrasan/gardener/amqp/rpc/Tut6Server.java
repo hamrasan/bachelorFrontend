@@ -1,7 +1,7 @@
 package cz.fel.cvut.hamrasan.gardener.amqp.rpc;
 
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
-import cz.fel.cvut.hamrasan.gardener.service.RpcService;
+import cz.fel.cvut.hamrasan.gardener.service.SensorsService;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 public class Tut6Server {
 
     @Autowired
-    private RpcService rpcService;
+    private SensorsService sensorsService;
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(Tut6Server.class);
 
@@ -36,7 +36,7 @@ public class Tut6Server {
         System.out.println(" [x] Received temperature is " + key);
 //        String result = fib(n);
         try {
-            rpcService.saveTemperatue(n,key);
+            sensorsService.saveTemperatue(n,key);
         }
         catch (Exception e){
             LOG.error(e.getMessage());
@@ -49,7 +49,7 @@ public class Tut6Server {
         System.out.println(" [x] Received humidity is " + n);
         System.out.println(" [x] Received humidity is " + key);
         try {
-            rpcService.saveHumidity(n,key);
+            sensorsService.saveHumidity(n,key);
         }
         catch (Exception e){
             LOG.error(e.getMessage());
@@ -62,7 +62,7 @@ public class Tut6Server {
         System.out.println(" [x] Received soil is " + n);
         System.out.println(" [x] Received soil is " + key);
         try {
-            rpcService.saveSoil(n,key);
+            sensorsService.saveSoil(n,key);
         }
         catch (Exception e){
             LOG.error(e.getMessage());
@@ -74,7 +74,7 @@ public class Tut6Server {
         System.out.println(" [x] Received pressure in hPa is " + n);
         System.out.println(" [x] Received pressure is in" + key);
         try {
-            rpcService.savePress(n,key);
+            sensorsService.savePress(n,key);
         }
         catch (Exception e){
             LOG.error(e.getMessage());
@@ -85,7 +85,7 @@ public class Tut6Server {
     public void raining(@Payload String n ,@Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String key) {
         System.out.println(" [x] It is " + n + " raining in " + key);
         try {
-            rpcService.saveRain(n,key);
+            sensorsService.saveRain(n,key);
         }
         catch (Exception e){
             LOG.error(e.getMessage());

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "APP_PRESSURE")
 @NamedQueries({
-        @NamedQuery(name = "Pressure.findLatest", query = "SELECT p FROM Pressure p WHERE p.garden = :garden AND p.deleted_at is null ORDER BY p.date DESC ")
+        @NamedQuery(name = "Pressure.findLatest", query = "SELECT p FROM Pressure p WHERE p.garden = :garden ORDER BY p.date DESC ")
 })
 public class Pressure extends AbstractSensor<Float> {
 

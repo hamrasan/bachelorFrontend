@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "APP_HUMIDITY")
 @NamedQueries({
-        @NamedQuery(name = "Humidity.findLatest", query = "SELECT h FROM Humidity h WHERE h.garden = :garden AND h.deleted_at is null ORDER BY h.date DESC ")
+        @NamedQuery(name = "Humidity.findLatest", query = "SELECT h FROM Humidity h WHERE h.garden = :garden ORDER BY h.date DESC ")
 })
 public class Humidity extends AbstractSensor<Float> {
 

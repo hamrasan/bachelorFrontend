@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "APP_VALVE")
 @NamedQueries({
-        @NamedQuery(name = "Valve.findByName", query = "SELECT v FROM Valve v WHERE v.name = :name AND v.deleted_at is null")
+        @NamedQuery(name = "Valve.findByName", query = "SELECT v FROM Valve v WHERE v.name = :name")
 })
 public class Valve extends AbstractEntity {
 

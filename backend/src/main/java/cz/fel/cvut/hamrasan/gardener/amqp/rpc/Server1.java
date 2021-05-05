@@ -1,6 +1,6 @@
 package cz.fel.cvut.hamrasan.gardener.amqp.rpc;
 
-import cz.fel.cvut.hamrasan.gardener.service.RpcService;
+import cz.fel.cvut.hamrasan.gardener.service.SensorsService;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -12,7 +12,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 public class Server1 {
 
     @Autowired
-    private RpcService rpcService;
+    private SensorsService sensorsService;
 
     @RabbitHandler
     public void pressure(String n ) {

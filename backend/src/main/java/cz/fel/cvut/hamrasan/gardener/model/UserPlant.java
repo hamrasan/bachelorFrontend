@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "APP_USER_PLANT")
 @NamedQueries({
-        @NamedQuery(name = "UserPlant.findByName", query = "SELECT p FROM UserPlant p WHERE p.plant.name = :name AND p.deleted_at is null")
+        @NamedQuery(name = "UserPlant.findByName", query = "SELECT p FROM UserPlant p WHERE p.plant.name = :name")
 })
 public class UserPlant extends AbstractPlant {
 

@@ -14,10 +14,6 @@ public abstract class AbstractEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Basic(optional = true)
-    @Column(nullable = true)
-    private LocalDate deleted_at;
-
     public Long getId() {
         return id;
     }
@@ -25,15 +21,6 @@ public abstract class AbstractEntity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void softDelete(){
-        deleted_at = LocalDate.now();
-    }
-
-    @JsonIgnore
-    public boolean isNotDeleted(){
-        return deleted_at == null;
     }
 
 }

@@ -11,12 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class RpcService {
+public class SensorsService {
 
     private PressureDao pressureDao;
     private GardenDao gardenDao;
@@ -30,7 +31,7 @@ public class RpcService {
     private UserDao userDao;
 
     @Autowired
-    public RpcService(PressureDao pressureDao, GardenDao gardenDao, TemperatureDao temperatureDao, HumidityDao humidityDao,
+    public SensorsService(PressureDao pressureDao, GardenDao gardenDao, TemperatureDao temperatureDao, HumidityDao humidityDao,
                       TranslateService translateService, Tut6Client client, RainDao rainDao, NotificationService notificationService, SoilDao soilDao,
                       UserDao userDao) {
 
@@ -54,10 +55,53 @@ public class RpcService {
     @Transactional
     public void saveTemperatue(String data, String key) throws NotFoundException {
         Garden garden =  gardenDao.find(Long.parseLong(key.substring(4)));
+        User user = userDao.find(garden.getUser().getId());
+
+        if(temperatureDao.findLatest(garden) != null){
+            if((Float.parseFloat(data) > user.getHighTemperature()) && (temperatureDao.findLatest(garden).getValue() <= user.getHighTemperature())){
+                String message = "Teplota stúpla nad požadovanú teplotu " + user.getHighTemperature() + " °C.";
+
+                notificationService.addNotification(LocalDate.now(), message, NotificationType.HIGHTEMPERATURE, user);
+            }
+
+            if((Float.parseFloat(data) < user.getLowTemperature()) && (temperatureDao.findLatest(garden).getValue() >= user.getLowTemperature())){
+                String message = "Teplota klesla pod požadovanú teplotu " + user.getLowTemperature() + " °C.";
+
+                notificationService.addNotification(LocalDate.now(), message, NotificationType.LOWTEMPERATURE, user);
+            }
+
+            if(temperatureDao.findLatest(garden).getValue() > (Float.parseFloat(data)) ){
+                for (UserPlant userPlant: garden.getPlants()) {
+                    if(userPlant.getMinTemperature() < temperatureDao.findLatest(garden).getValue() && userPlant.getMinTemperature() > (Float.parseFloat(data))){
+                        String message = "Teplota klesla na " + Float.parseFloat(data) + " °C, " + "pod najnižšiu možnú teplotu na rastline " + userPlant.getPlant().getName();
+                        notificationService.addNotification(LocalDate.now(), message, NotificationType.LOWTEMPERATURE, user);
+                    }
+                }
+            }
+
+            if(temperatureDao.findLatest(garden).getValue() < (Float.parseFloat(data)) ){
+                for (UserPlant userPlant: garden.getPlants()) {
+                    if(userPlant.getMaxTemperature() > temperatureDao.findLatest(garden).getValue() && userPlant.getMaxTemperature() < (Float.parseFloat(data)) ){
+                        String message = "Teplota stúpla na " + Float.parseFloat(data) + " °C, " + "nad najvyššiu možnú teplotu na rastline " + userPlant.getPlant().getName();
+                        notificationService.addNotification(LocalDate.now(), message, NotificationType.HIGHTEMPERATURE, user);
+                    }
+                }
+            }
+        }
+        else {
+            for (UserPlant userPlant: garden.getPlants()) {
+                if(Float.parseFloat(data) > userPlant.getMaxTemperature()){
+                    String message = "Teplota stúpla na " + Float.parseFloat(data) + " °C, " + "nad najvyššiu možnú teplotu na rastline " + userPlant.getPlant().getName();
+                    notificationService.addNotification(LocalDate.now(), message, NotificationType.HIGHTEMPERATURE, user);
+                }
+                else if(Float.parseFloat(data) < userPlant.getMinTemperature()){
+                    String message = "Teplota klesla na " + Float.parseFloat(data) + " °C, " + "pod najnižšiu možnú teplotu na rastline " + userPlant.getPlant().getName();
+                    notificationService.addNotification(LocalDate.now(), message, NotificationType.LOWTEMPERATURE, user);
+                }
+            }
+        }
+
         temperatureDao.persist(new Temperature(LocalDateTime.now(), Float.parseFloat(data), garden));
-
-//        if(Float.parseFloat(data) > 0 ) notificationService.addNotification(garden.getUser().getId(), "Teplota klesla pod 0");
-
     }
 
     @Transactional

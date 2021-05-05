@@ -25,7 +25,7 @@ public abstract class BaseDao<T extends AbstractEntity> implements GenericDao<T>
     public T find(Long id) {
         Objects.requireNonNull(id);
         T object = em.find(type, id);
-        if (object !=   null && object.isNotDeleted()) return object;
+        if (object !=   null) return object;
         return null;
     }
 
@@ -38,15 +38,10 @@ public abstract class BaseDao<T extends AbstractEntity> implements GenericDao<T>
     @Override
     public List<T> findAll() {
         try {
-            return em.createQuery("SELECT e FROM " + type.getSimpleName() + " e WHERE e.deleted_at is null", type).getResultList();
+            return em.createQuery("SELECT e FROM " + type.getSimpleName() + " e", type).getResultList();
         } catch (RuntimeException e) {
             throw new PersistenceException(e);
         }
-    }
-
-
-    public List<T> findAll(boolean deleted) {
-        return em.createQuery("SELECT e FROM " + type.getSimpleName() + " e", type).getResultList();
     }
 
     @Override
