@@ -14,15 +14,24 @@ public class RequestWrapper {
     @NotBlank(message = "Password control cannot be blank")
     private String password_control;
 
+    private int gender;
 
-    public RequestWrapper(User user, String password_control) {
+
+    public RequestWrapper(User user, String password_control, int gender) {
         this.user = user;
         this.password_control = password_control;
+        this.gender = gender;
     }
 
 
     public RequestWrapper() {
 
+    }
+
+
+    public int getGender() {
+
+        return gender;
     }
 
 

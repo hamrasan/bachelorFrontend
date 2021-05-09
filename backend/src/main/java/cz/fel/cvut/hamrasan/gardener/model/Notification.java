@@ -23,6 +23,7 @@ public class Notification extends AbstractEntity {
 
     @Basic(optional = false)
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private NotificationType type;
 
     @Basic(optional = false)

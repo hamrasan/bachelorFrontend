@@ -88,9 +88,9 @@ public class PlantService {
         Objects.requireNonNull(plantId);
         Objects.requireNonNull(date);
         Objects.requireNonNull(gardenName);
-        Garden garden = gardenDao.findByName(gardenName);
-
         User user = userDao.find(SecurityUtils.getCurrentUser().getId());
+
+        Garden garden = gardenDao.findByName(gardenName,user );
         if(!user.getGardens().contains(garden)) throw new NotAllowedException("Not allowed operation");
 
         UserPlant userPlant = new UserPlant(date, minTemperature, maxTemperature, season, plantDao.find(plantId), garden );

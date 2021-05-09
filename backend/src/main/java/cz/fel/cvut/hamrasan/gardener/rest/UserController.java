@@ -51,7 +51,7 @@ public class UserController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void createUser(@RequestBody RequestWrapper requestWrapper) throws BadPassword, NotAllowedException {
-        userService.createUser(requestWrapper.getUser(), requestWrapper.getPassword_control());
+        userService.createUser(requestWrapper.getUser(), requestWrapper.getPassword_control(), requestWrapper.getGender());
     }
 
     @PostMapping(value = "/notifications", consumes = MediaType.APPLICATION_JSON_VALUE)

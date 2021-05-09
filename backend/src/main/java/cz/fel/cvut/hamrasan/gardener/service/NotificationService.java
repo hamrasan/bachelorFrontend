@@ -1,6 +1,5 @@
 package cz.fel.cvut.hamrasan.gardener.service;
 
-import com.hazelcast.core.HazelcastInstance;
 import cz.fel.cvut.hamrasan.gardener.dao.NotificationDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.dto.NotificationDto;
@@ -30,8 +29,6 @@ public class NotificationService {
         this.userDao = userDao;
         this.notificationDao = notificationDao;
         this.translateService = translateService;
-//        this.cacheInstance = hazelcastInstance;
-//        this.cache = cacheInstance.getMap("notifications");
 
     }
 

@@ -25,7 +25,7 @@ public class TranslateService {
             gardens.forEach(garden-> gardenDtos.add(translateGarden(garden)));
         }
 
-        return new UserDto(user.getId(),user.getFirstName(),user.getLastName(),user.getEmail(), gardenDtos);
+        return new UserDto(user.getId(),user.getFirstName(),user.getLastName(),user.getEmail(), gardenDtos, user.getGender());
     }
 
     @Transactional
@@ -103,16 +103,19 @@ public class TranslateService {
 
     @Transactional
     public TemperatureDto translateTemp(Temperature temperature){
+        Objects.requireNonNull(temperature);
         return new TemperatureDto(temperature.getId(),temperature.getDate(), temperature.getValue(), temperature.getGarden().getId());
     }
 
     @Transactional
     public PressureDto translatePressure(Pressure pressure){
+        Objects.requireNonNull(pressure);
         return new PressureDto(pressure.getId(),pressure.getDate(), pressure.getValue(), pressure.getGarden().getId());
     }
 
     @Transactional
     public HumidityDto translateHumidity(Humidity humidity){
+        Objects.requireNonNull(humidity);
         return new HumidityDto(humidity.getId(),humidity.getDate(), humidity.getValue(), humidity.getGarden().getId());
     }
 

@@ -119,7 +119,7 @@ public class ValveService {
                 valve.removeGarden( valve.getGardens().get(i));
             }
             if(gardensId.size()<=0){
-                valve.removeGarden( valve.getGardens().get(i));
+                valve.removeGarden( gardenDao.find((long) i));
             }
         }
 

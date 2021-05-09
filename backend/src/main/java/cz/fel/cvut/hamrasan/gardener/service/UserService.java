@@ -6,6 +6,7 @@ import cz.fel.cvut.hamrasan.gardener.exceptions.BadPassword;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.UnauthorizedException;
+import cz.fel.cvut.hamrasan.gardener.model.Gender;
 import cz.fel.cvut.hamrasan.gardener.model.User;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,12 +53,15 @@ public class UserService {
     }
 
     @Transactional
-    public void createUser(User user, String passwordAgain) throws BadPassword, NotAllowedException {
+    public void createUser(User user, String passwordAgain, int gender) throws BadPassword, NotAllowedException {
         Objects.requireNonNull(user);
+        Gender userGender = Gender.MAN;
         if (!user.getPassword().equals(passwordAgain)) throw new BadPassword();
         if(userDao.findByEmail(user.getEmail()) != null) throw new NotAllowedException("Email already exists!");
         user.encodePassword();
 
+        if(gender == 2) userGender = Gender.WOMAN;
+        user.setGender(userGender);
         userDao.persist(user);
 //        notificationService.createListNotifications(user.getId());
     }

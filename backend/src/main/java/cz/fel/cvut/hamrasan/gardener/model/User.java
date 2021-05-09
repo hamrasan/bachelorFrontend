@@ -29,6 +29,12 @@ public class User extends AbstractEntity {
 
     @Basic(optional = false)
     @Column(nullable = false)
+    @NotNull(message = "Gender cannot be blank")
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
     @Size(max = 255, min = 6, message = "Password is in incorrect format.")
     @NotBlank(message = "Password cannot be blank")
     private String password;
@@ -65,11 +71,12 @@ public class User extends AbstractEntity {
         this.valves = new ArrayList<>();
         this.lowTemperature = 0;
         this.highTemperature = 15;
+        this.gender = Gender.MAN;
     }
 
     public User(@Size(max = 30, min = 1, message = "First name is in incorrect format.") @NotBlank(message = "First name cannot be blank") String firstName, @Size(max = 30, min = 1, message = "Last name is in incorrect format.") @NotBlank(message = "Last name cannot be blank") String lastName,
                 @Size(max = 255, min = 6, message = "Password is in incorrect format.") @NotBlank(message = "Password cannot be blank") String password,
-                @Email(message = "Email should be valid") @NotBlank(message = "Email cannot be blank") String email, List<Garden> gardens) {
+                @Email(message = "Email should be valid") @NotBlank(message = "Email cannot be blank") String email, List<Garden> gardens, @NotNull(message = "Gender cannot be blank") Gender gender) {
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -79,9 +86,12 @@ public class User extends AbstractEntity {
         this.lowTemperature = 0;
         this.highTemperature = 15;
         this.notifications = new ArrayList<>();
+        this.gender = gender;
     }
 
-    public User(@Size(max = 30, min = 1, message = "First name is in incorrect format.") @NotBlank(message = "First name cannot be blank") String firstName, @Size(max = 30, min = 1, message = "Last name is in incorrect format.") @NotBlank(message = "Last name cannot be blank") String lastName, @Size(max = 255, min = 6, message = "Password is in incorrect format.") @NotBlank(message = "Password cannot be blank") String password, @Email(message = "Email should be valid") @NotBlank(message = "Email cannot be blank") String email) {
+
+    public User(@Size(max = 30, min = 1, message = "First name is in incorrect format.") @NotBlank(message = "First name cannot be blank") String firstName, @Size(max = 30, min = 1, message = "Last name is in incorrect format.") @NotBlank(message = "Last name cannot be blank") String lastName,
+                @Size(max = 255, min = 6, message = "Password is in incorrect format.") @NotBlank(message = "Password cannot be blank") String password, @Email(message = "Email should be valid") @NotBlank(message = "Email cannot be blank") String email,@NotNull(message = "Gender cannot be blank") Gender gender) {
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -92,6 +102,23 @@ public class User extends AbstractEntity {
         this.lowTemperature = 0;
         this.highTemperature = 15;
         this.notifications = new ArrayList<>();
+        this.gender = gender;
+    }
+
+
+    public User(@Size(max = 30, min = 1, message = "First name is in incorrect format.") @NotBlank(message = "First name cannot be blank") String firstName, @Size(max = 30, min = 1, message = "Last name is in incorrect format.") @NotBlank(message = "Last name cannot be blank") String lastName, @Size(max = 255, min = 6, message = "Password is in incorrect format.") @NotBlank(message = "Password cannot be blank") String password,
+                @Email(message = "Email should be valid") @NotBlank(message = "Email cannot be blank") String email) {
+
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.email = email;
+        this.gardens = new ArrayList<>();
+        this.valves = new ArrayList<>();
+        this.lowTemperature = 0;
+        this.highTemperature = 15;
+        this.notifications = new ArrayList<>();
+        this.gender = Gender.MAN;
     }
 
 
@@ -104,6 +131,7 @@ public class User extends AbstractEntity {
         this.lowTemperature = 0;
         this.highTemperature = 15;
         this.notifications = new ArrayList<>();
+        this.gender = Gender.MAN;
     }
 
 
@@ -213,6 +241,18 @@ public class User extends AbstractEntity {
     }
 
 
+    public Gender getGender() {
+
+        return gender;
+    }
+
+
+    public void setGender(Gender gender) {
+
+        this.gender = gender;
+    }
+
+
     @Override
     public String toString() {
 
@@ -221,6 +261,7 @@ public class User extends AbstractEntity {
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", gender='" + gender + '\'' +
                 ", valves=" + valves +
                 '}';
     }

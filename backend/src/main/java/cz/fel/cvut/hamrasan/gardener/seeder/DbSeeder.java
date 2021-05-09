@@ -64,7 +64,7 @@ public class DbSeeder implements
 //        Subcategory subcategory3 = new Subcategory("None", plantCategoryDao.find((long) 1), plants);
 //        subcategoryDao.persist(subcategory3);
 
-        Plant plant = new Plant("Rajčina veľká", "paradajka-lycopersicum-rajciak-semena.jpg", 12, 35,  "Marec", subcategory);
+        Plant plant = new Plant("Rajčina veľká", "rajciny.jpg", 12, 35,  "Marec", subcategory);
         plantDao.persist(plant);
 
 //        Subcategory subcategory2 = new Subcategory("None", plantCategoryDao.find((long) 2), plants);
@@ -98,8 +98,10 @@ public class DbSeeder implements
 
     @Transactional
     void createUsers(){
-        User user = new User("Jozef", "Pročko", BCrypt.hashpw("hesloo",BCrypt.gensalt()), "jozef@gmail.com");
+        User user = new User("Jozef", "Pročko", BCrypt.hashpw("hesloo",BCrypt.gensalt()), "jozef@gmail.com", Gender.MAN);
         userDao.persist(user);
+        User user1 = new User("Polina", "Nazarenko", BCrypt.hashpw("hesloo",BCrypt.gensalt()), "polina@gmail.com", Gender.WOMAN);
+        userDao.persist(user1);
     }
 
     @Transactional
