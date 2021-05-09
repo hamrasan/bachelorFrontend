@@ -8,6 +8,7 @@ function RegisterForm() {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [gender, setGender] = useState(1);
   const [passwordAgain, setPasswordAgain] = useState("");
   let history = useHistory();
 
@@ -29,15 +30,16 @@ function RegisterForm() {
           password: password,
           email: email,
         },
-        password_control: passwordAgain
+        password_control: passwordAgain,
+        gender: gender,
       },
     })
       .then((res) => {
         console.log("daaata");
         console.log(res);
-        if(res.status = 200){
+        if (res.status == 200) {
           history.push("/");
-        }
+        } else throw Error(res.status);
       })
       .catch((error) => {
         console.log("after register");
@@ -76,6 +78,23 @@ function RegisterForm() {
                   setLastName(e.target.value);
                 }}
               />
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row} controlId="formHorizontalLastName">
+            <Form.Label column sm={2}>
+              Pohlavie
+            </Form.Label>
+            <Col sm={10}>
+              <Form.Control
+                as="select"
+                onChange={(e) => {
+                  setGender(e.target.value);
+                }}
+              >
+                <option value="1">muž</option>
+                <option value="2">žena</option>
+              </Form.Control>
             </Col>
           </Form.Group>
 

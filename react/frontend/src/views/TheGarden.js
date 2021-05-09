@@ -6,6 +6,8 @@ import DropdownFilter from "../components/DropDownFilter";
 import { CardDeck, Container, Button, Nav, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import MyVerticallyCenteredModal from "../components/MyVerticallyCenteredModal";
+import ErrorComponent from "../components/ErrorComponent";
+import { useErrorHandler } from "react-error-boundary";
 
 function TheGarden() {
   const axios = require("axios");
@@ -18,6 +20,9 @@ function TheGarden() {
   const [modalShow, setModalShow] = useState(false);
   const [gardens, setGardens] = useState([]);
   const [actualGardenName, setActualGardenName] = useState("");
+  const [error, setError] = useState(false);
+  const handleError = useErrorHandler();
+
 
   const fetchPlants = (id, name) => {
     setActualGardenName(name);
@@ -32,6 +37,7 @@ function TheGarden() {
         } else throw Error(res.status);
       })
       .catch((error) => {
+        handleError(error);
         console.error(error);
       });
   };
@@ -43,17 +49,18 @@ function TheGarden() {
       url: "http://localhost:8080/garden/all",
     })
       .then((res) => {
-        if ((res.status = 200)) {
+        if ((res.status == 200)) {
           setGardens(res.data);
           console.log(res.data);
           if(res.data.length>0){
             setActualGardenName(res.data[0].name);
             fetchPlants(res.data[0].id, res.data[0].name);
           }
-        }
+        }else throw Error(res.status);
       })
       .catch((error) => {
         console.error(error);
+        handleError(error);
       });
   };
 
@@ -74,10 +81,11 @@ function TheGarden() {
       .then((res) => {
         if (res.status == 200) {
           fetchGardens();
-        }
+        }else throw Error(res.status);
       })
       .catch((error) => {
         console.error(error);
+        handleError(error);
       });
   };
 
@@ -108,7 +116,7 @@ function TheGarden() {
   useEffect(() => {
     fetchCategories();
     fetchGardens();
-  }, []);
+  }, [error]);
 
   // const mappedPlants = plants.map((plant) => {
   //   return (
@@ -119,6 +127,7 @@ function TheGarden() {
   // });
 
   return (
+    <ErrorComponent onReset={() => setError(true)}>
     <div>
       <Container className="pt-3">
         <Button
@@ -150,23 +159,25 @@ function TheGarden() {
           </Nav>
         ) : null}
 
-        <Row>
-          <Col className="d-flex flex-column justify-content-center">
-            <SearchForm onChange={setSearchString} value={searchString} />
-          </Col>
-          <Col>
-            <DropdownFilter
-              categories={categories}
-              categoryFilter={categoryFilter}
-              handleFilter={handleFilter}
-            />
-          </Col>
-          <Col className="d-flex flex-row-reverse">
-            <Link to={"/garden/new/" + actualGardenName}>
-              <Button variant="info"> Pridaj novú rastlinu </Button>{" "}
-            </Link>
-          </Col>
-        </Row>
+        {gardens.length>0 ? 
+             (<Row>
+             <Col className="d-flex flex-column justify-content-center">
+               <SearchForm onChange={setSearchString} value={searchString} />
+             </Col>
+             <Col>
+               <DropdownFilter
+                 categories={categories}
+                 categoryFilter={categoryFilter}
+                 handleFilter={handleFilter}
+               />
+             </Col>
+             <Col className="d-flex flex-row-reverse">
+               <Link to={"/garden/new/" + actualGardenName}>
+                 <Button variant="info"> Pridaj novú rastlinu </Button>{" "}
+               </Link>
+             </Col>
+           </Row>)
+        :null}
 
         <CardDeck>
           {plants
@@ -188,6 +199,7 @@ function TheGarden() {
         </CardDeck>
       </Container>
     </div>
+    </ErrorComponent>
   );
 }
 

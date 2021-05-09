@@ -2,12 +2,15 @@ import { Form, Col, Button, Row, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import appContext from "../appContext";
+import { useErrorHandler } from "react-error-boundary";
+
 
 function LoginForm() {
   const axios = require("axios");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   let context = useContext(appContext);
+  const handleError = useErrorHandler();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,11 +28,12 @@ function LoginForm() {
         password: password,
       }
     }).then(res => {
-      if(res.status==200){
+      if(res.status == 200){
         context.login();
       } else throw Error(res.status);
     })
     .catch((error) => {
+      handleError(error);
       context.logout();
       console.log("after logout");
       console.error(error);

@@ -1,8 +1,9 @@
-import {useHistory, useParams} from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import PlantForm from '../components/PlantForm';
+import PlantForm from "../components/PlantForm";
+import ErrorComponent from "../components/ErrorComponent";
 
-function PlantDetail(props){
+function PlantDetail(props) {
   const axios = require("axios");
   const [plant, setPlant] = useState(null);
   const params = useParams();
@@ -10,8 +11,8 @@ function PlantDetail(props){
   const [minTemperature, setMinTemperature] = useState(null);
   const [maxTemperature, setMaxTemperature] = useState(null);
   const [season, setSeason] = useState("");
+  const [error, setError] = useState(false);
   let history = useHistory();
-
 
   const fetchPlant = () => {
     axios({
@@ -43,7 +44,7 @@ function PlantDetail(props){
         minTemperature: minTemperature,
         maxTemperature: maxTemperature,
         season: season,
-      }
+      },
     })
       .then((res) => {
         if (res.status == 200) {
@@ -60,18 +61,27 @@ function PlantDetail(props){
   const handleConfirm = (id) => {
     updatePlant(id);
     setModalShow(false);
-  }
+  };
 
   useEffect(() => {
     fetchPlant();
-  }, []);
+  }, [error]);
 
-    return (
-        <div>
-          <PlantForm plant={plant} handleConfirm={handleConfirm} modalShow={modalShow} setModalShow={setModalShow}
-           setMinTemperature={setMinTemperature} setMaxTemperature={setMaxTemperature} setSeason={setSeason}/>
-        </div>
-      );
+  return (
+    <ErrorComponent onReset={() => setError(true)}>
+      <div>
+        <PlantForm
+          plant={plant}
+          handleConfirm={handleConfirm}
+          modalShow={modalShow}
+          setModalShow={setModalShow}
+          setMinTemperature={setMinTemperature}
+          setMaxTemperature={setMaxTemperature}
+          setSeason={setSeason}
+        />
+      </div>
+    </ErrorComponent>
+  );
 }
 
 export default PlantDetail;

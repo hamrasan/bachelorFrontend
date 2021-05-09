@@ -6,7 +6,8 @@ import { Container, Row, Form, Col, Button } from "react-bootstrap";
 
 function MyProfile() {
   let context = useContext(contextValue);
-  const picture = "assets/profilovka.jpg";
+  console.log(context.user);
+  const picture = context.user.gender=="WOMAN" ? "assets/gardenwoman.png" : "assets/gardener.png";
 
   return (
     <div>
