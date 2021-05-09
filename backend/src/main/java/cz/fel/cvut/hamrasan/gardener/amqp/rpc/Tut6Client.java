@@ -27,8 +27,6 @@ public class Tut6Client {
 //    @Qualifier("ExchangeCommmand")
 //    private TopicExchange exchange;
 
-    int start = 0;
-
 
 //    @Scheduled(fixedDelay = 1000, initialDelay = 500)
 //    public void send() {
@@ -43,7 +41,7 @@ public class Tut6Client {
 //    }
 
     public void setMeassureMinutes(String minutes) {
-        System.out.println(" [x] Requesting fib(" + start + ")");
+        System.out.println(" [x] Requesting to rabbit minutes(" + minutes + ")");
         String message = "M" + minutes;
         template.convertAndSend("amq.topic","commands", message );
     }
