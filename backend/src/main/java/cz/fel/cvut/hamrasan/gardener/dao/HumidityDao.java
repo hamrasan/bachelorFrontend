@@ -21,7 +21,7 @@ public class HumidityDao extends BaseDao<Humidity> {
 
     public List<Humidity> findHistoryOfGarden (Garden garden) {
         try {
-            return em.createNamedQuery("Humidity.findLatest", Humidity.class).setParameter("garden", garden).setMaxResults(5).getResultList();
+            return em.createNamedQuery("Humidity.findLatest", Humidity.class).setParameter("garden", garden).setMaxResults(6).getResultList();
         } catch (NoResultException e) {
             return null;
         }

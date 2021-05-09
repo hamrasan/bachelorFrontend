@@ -23,7 +23,7 @@ public class SoilDao extends BaseDao<Soil> {
 
     public List<Soil> findHistoryOfGarden (Garden garden) {
         try {
-            return em.createNamedQuery("Soil.findLatest", Soil.class).setParameter("garden", garden).setMaxResults(5).getResultList();
+            return em.createNamedQuery("Soil.findLatest", Soil.class).setParameter("garden", garden).setMaxResults(6).getResultList();
         } catch (NoResultException e) {
             return null;
         }

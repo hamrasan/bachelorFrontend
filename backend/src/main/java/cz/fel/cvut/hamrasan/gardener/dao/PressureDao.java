@@ -21,7 +21,7 @@ public class PressureDao extends BaseDao<Pressure> {
 
     public List<Pressure> findHistoryOfGarden (Garden garden) {
         try {
-            return em.createNamedQuery("Pressure.findLatest", Pressure.class).setParameter("garden", garden).setMaxResults(5).getResultList();
+            return em.createNamedQuery("Pressure.findLatest", Pressure.class).setParameter("garden", garden).setMaxResults(6).getResultList();
         } catch (NoResultException e) {
             return null;
         }

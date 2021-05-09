@@ -21,7 +21,7 @@ public class TemperatureDao extends BaseDao<Temperature> {
 
     public List<Temperature> findHistoryOfGarden (Garden garden) {
         try {
-            return em.createNamedQuery("Temperature.findLatest", Temperature.class).setParameter("garden", garden).setMaxResults(5).getResultList();
+            return em.createNamedQuery("Temperature.findLatest", Temperature.class).setParameter("garden", garden).setMaxResults(6).getResultList();
         } catch (NoResultException e) {
             return null;
         }

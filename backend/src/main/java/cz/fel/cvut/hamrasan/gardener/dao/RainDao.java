@@ -22,7 +22,7 @@ public class RainDao extends BaseDao<Rain> {
 
     public List<Rain> findHistoryOfGarden (Garden garden) {
         try {
-            return em.createNamedQuery("Rain.findLatest", Rain.class).setParameter("garden", garden).setMaxResults(5).getResultList();
+            return em.createNamedQuery("Rain.findLatest", Rain.class).setParameter("garden", garden).setMaxResults(6).getResultList();
         } catch (NoResultException e) {
             return null;
         }
