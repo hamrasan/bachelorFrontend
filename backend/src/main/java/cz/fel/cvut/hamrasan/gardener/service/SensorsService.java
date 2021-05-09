@@ -89,6 +89,18 @@ public class SensorsService {
             }
         }
         else {
+            if(Float.parseFloat(data) > user.getHighTemperature() ){
+                String message = "Teplota stúpla na "+ Float.parseFloat(data) + " požadovanú teplotu " + user.getHighTemperature() + " °C.";
+
+                notificationService.addNotification(LocalDate.now(), message, NotificationType.HIGHTEMPERATURE, user);
+            }
+
+            if(Float.parseFloat(data) < user.getLowTemperature() ){
+                String message = "Teplota klesla na " + Float.parseFloat(data) + " pod požadovanú teplotu " + user.getLowTemperature() + " °C.";
+
+                notificationService.addNotification(LocalDate.now(), message, NotificationType.LOWTEMPERATURE, user);
+            }
+
             for (UserPlant userPlant: garden.getPlants()) {
                 if(Float.parseFloat(data) > userPlant.getMaxTemperature()){
                     String message = "Teplota stúpla na " + Float.parseFloat(data) + " °C, " + "nad najvyššiu možnú teplotu na rastline " + userPlant.getPlant().getName();
@@ -172,10 +184,84 @@ public class SensorsService {
     }
 
     @Transactional
-    public List<SoilDto> getHistorySoil(Long gardenId) throws NotAllowedException {
+    public List<SoilDto> getShortHistorySoil(Long gardenId) throws NotAllowedException {
         List<SoilDto> soilDtos = new ArrayList<>();
         Garden garden = gardenDao.find(gardenId);
         User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
+
+        for (Soil soil: soilDao.findHistoryOfGarden(garden) ) {
+            soilDtos.add(translateService.translateSoil(soil));
+        }
+
+        if(soilDtos.size()>1) return soilDtos.subList(1,soilDtos.size());
+        else return new ArrayList<>();
+    }
+
+    @Transactional
+    public List<RainDto> getShortHistoryRain(Long gardenId) throws NotAllowedException {
+        List<RainDto> rainDtos = new ArrayList<>();
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
+
+        for (Rain rain: rainDao.findHistoryOfGarden(garden) ) {
+           rainDtos.add(translateService.translateRain(rain));
+        }
+
+        if(rainDtos.size()>1) return rainDtos.subList(1,rainDtos.size());
+        else return new ArrayList<>();
+    }
+
+    @Transactional
+    public List<HumidityDto> getShortHistoryHumidity(Long gardenId) throws NotAllowedException {
+        List<HumidityDto> humidityDtos = new ArrayList<>();
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
+
+        for (Humidity humidity: humidityDao.findHistoryOfGarden(garden) ) {
+            humidityDtos.add(translateService.translateHumidity(humidity));
+        }
+        if(humidityDtos.size()>1) return humidityDtos.subList(1,humidityDtos.size());
+        else return new ArrayList<>();
+    }
+
+    @Transactional
+    public List<PressureDto> getShortHistoryPressure(Long gardenId) throws NotAllowedException {
+        List<PressureDto> pressureDtos = new ArrayList<>();
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
+
+        for (Pressure pressure: pressureDao.findHistoryOfGarden(garden) ) {
+             pressureDtos.add(translateService.translatePressure(pressure));
+        }
+
+        if(pressureDtos.size()>1) return pressureDtos.subList(1,pressureDtos.size());
+        else return new ArrayList<>();
+    }
+
+    @Transactional
+    public List<TemperatureDto> getShortHistoryTemperature(Long gardenId) throws NotAllowedException {
+        List<TemperatureDto> temperatureDtos = new ArrayList<>();
+        Garden garden = gardenDao.find(gardenId);
+        User user = SecurityUtils.getCurrentUser();
+        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
+
+        for (Temperature temperature: temperatureDao.findHistoryOfGarden(garden) ) {
+            temperatureDtos.add(translateService.translateTemp(temperature));
+        }
+
+        if(temperatureDtos.size()>1) return temperatureDtos.subList(1,temperatureDtos.size());
+        else return new ArrayList<>();
+    }
+
+    @Transactional
+    public List<SoilDto> getHistorySoil(String gardenName) throws NotAllowedException {
+        List<SoilDto> soilDtos = new ArrayList<>();
+        User user = SecurityUtils.getCurrentUser();
+        Garden garden = gardenDao.findByName(gardenName, user);
         if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
 
         for (Soil soil: soilDao.findHistoryOfGarden(garden) ) {
@@ -186,37 +272,24 @@ public class SensorsService {
     }
 
     @Transactional
-    public List<RainDto> getHistoryRain(Long gardenId) throws NotAllowedException {
-        List<RainDto> rainDtos = new ArrayList<>();
-        Garden garden = gardenDao.find(gardenId);
-        User user = SecurityUtils.getCurrentUser();
-        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
-
-        for (Rain rain: rainDao.findHistoryOfGarden(garden) ) {
-            rainDtos.add(translateService.translateRain(rain));
-        }
-
-        return rainDtos;
-    }
-
-    @Transactional
-    public List<HumidityDto> getHistoryHumidity(Long gardenId) throws NotAllowedException {
+    public List<HumidityDto> getHistoryHumidity(String gardenName) throws NotAllowedException {
         List<HumidityDto> humidityDtos = new ArrayList<>();
-        Garden garden = gardenDao.find(gardenId);
         User user = SecurityUtils.getCurrentUser();
+        Garden garden = gardenDao.findByName(gardenName, user);
         if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
 
         for (Humidity humidity: humidityDao.findHistoryOfGarden(garden) ) {
             humidityDtos.add(translateService.translateHumidity(humidity));
         }
+
         return humidityDtos;
     }
 
     @Transactional
-    public List<PressureDto> getHistoryPressure(Long gardenId) throws NotAllowedException {
+    public List<PressureDto> getHistoryPressure(String gardenName) throws NotAllowedException {
         List<PressureDto> pressureDtos = new ArrayList<>();
-        Garden garden = gardenDao.find(gardenId);
         User user = SecurityUtils.getCurrentUser();
+        Garden garden = gardenDao.findByName(gardenName, user);
         if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
 
         for (Pressure pressure: pressureDao.findHistoryOfGarden(garden) ) {
@@ -227,16 +300,28 @@ public class SensorsService {
     }
 
     @Transactional
-    public List<TemperatureDto> getHistoryTemperature(Long gardenId) throws NotAllowedException {
+    public List<TemperatureDto> getHistoryTemperature(String gardenName) throws NotAllowedException {
         List<TemperatureDto> temperatureDtos = new ArrayList<>();
-        Garden garden = gardenDao.find(gardenId);
         User user = SecurityUtils.getCurrentUser();
+        Garden garden = gardenDao.findByName(gardenName, user);
         if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
 
         for (Temperature temperature: temperatureDao.findHistoryOfGarden(garden) ) {
             temperatureDtos.add(translateService.translateTemp(temperature));
         }
-
         return temperatureDtos;
+    }
+
+    @Transactional
+    public List<RainDto> getHistoryRain(String gardenName) throws NotAllowedException {
+        List<RainDto> rainDtos = new ArrayList<>();
+        User user = SecurityUtils.getCurrentUser();
+        Garden garden = gardenDao.findByName(gardenName, user);
+        if(garden.getUser().getId() != user.getId()) throw new NotAllowedException("Not your garden");
+
+        for (Rain rain: rainDao.findHistoryOfGarden(garden) ) {
+            rainDtos.add(translateService.translateRain(rain));
+        }
+        return rainDtos;
     }
 }

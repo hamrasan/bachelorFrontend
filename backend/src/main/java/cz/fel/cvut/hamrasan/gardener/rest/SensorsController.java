@@ -65,37 +65,73 @@ public class SensorsController {
     }
 
     @GetMapping(value = "/history/rain/{gardenId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<RainDto> getHistoryRain(@PathVariable Long gardenId) throws NotAllowedException {
+    public List<RainDto> getShortHistoryRain(@PathVariable Long gardenId) throws NotAllowedException {
         if (SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
 
-        return sensorsService.getHistoryRain(gardenId);
+        return sensorsService.getShortHistoryRain(gardenId);
+    }
+
+    @GetMapping(value = "/history_all/rain/{gardenName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<RainDto> getHistoryRain(@PathVariable String gardenName) throws NotAllowedException {
+        if (SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
+
+        return sensorsService.getHistoryRain(gardenName);
     }
 
     @GetMapping(value = "/history/temperature/{gardenId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<TemperatureDto> getHistoryTemperature(@PathVariable Long gardenId) throws NotAllowedException {
+    public List<TemperatureDto> getShortHistoryTemperature(@PathVariable Long gardenId) throws NotAllowedException {
         if (SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
 
-        return sensorsService.getHistoryTemperature(gardenId);
+        return sensorsService.getShortHistoryTemperature(gardenId);
+    }
+
+    @GetMapping(value = "/history_all/temperature/{gardenName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<TemperatureDto> getHistoryTemperature(@PathVariable String gardenName) throws NotAllowedException {
+        if (SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
+        System.out.println("hello");
+        return sensorsService.getHistoryTemperature(gardenName);
     }
 
     @GetMapping(value = "/history/pressure/{gardenId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<PressureDto> getHistoryPressure(@PathVariable Long gardenId) throws NotAllowedException {
+    public List<PressureDto> getShortHistoryPressure(@PathVariable Long gardenId) throws NotAllowedException {
         if (SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
 
-        return sensorsService.getHistoryPressure(gardenId);
+        return sensorsService.getShortHistoryPressure(gardenId);
     }
 
-    @GetMapping(value = "/history/humidity/{gardenId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<HumidityDto> getHistoryHumidity(@PathVariable Long gardenId) throws NotAllowedException {
+    @GetMapping(value = "/history_all/pressure/{gardenName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PressureDto> getHistoryPressure(@PathVariable String gardenName) throws NotAllowedException {
         if (SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
 
-        return sensorsService.getHistoryHumidity(gardenId);
+        return sensorsService.getHistoryPressure(gardenName);
+    }
+
+
+    @GetMapping(value = "/history/humidity/{gardenId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<HumidityDto> getShortHistoryHumidity(@PathVariable Long gardenId) throws NotAllowedException {
+        if (SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
+
+        return sensorsService.getShortHistoryHumidity(gardenId);
+    }
+
+    @GetMapping(value = "/history_all/humidity/{gardenName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<HumidityDto> getHistoryHumidity(@PathVariable String gardenName) throws NotAllowedException {
+        if (SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
+
+        return sensorsService.getHistoryHumidity(gardenName);
     }
 
     @GetMapping(value = "/history/soil/{gardenId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<SoilDto> getHistorySoil(@PathVariable Long gardenId) throws NotAllowedException {
+    public List<SoilDto> getShortHistorySoil(@PathVariable Long gardenId) throws NotAllowedException {
         if (SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
 
-        return sensorsService.getHistorySoil(gardenId);
+        return sensorsService.getShortHistorySoil(gardenId);
+    }
+
+    @GetMapping(value = "/history_all/soil/{gardenName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<SoilDto> getHistorySoil(@PathVariable String gardenName) throws NotAllowedException {
+        if (SecurityUtils.isAuthenticatedAnonymously()) throw new NotAllowedException("Login first");
+
+        return sensorsService.getHistorySoil(gardenName);
     }
 }
