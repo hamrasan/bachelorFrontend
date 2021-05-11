@@ -58,10 +58,39 @@ function PlantDetail(props) {
       });
   };
 
-  const handleConfirm = (id) => {
+  const handleConfirmUpdate= (id) => {
     updatePlant(id);
     setModalShow(false);
   };
+
+  const handleConfirmDelete= (id) => {
+    deletePlant(id);
+    setModalShow(false);
+  };
+
+  const deletePlant = (id) => {
+    console.log(id);
+    axios({
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      withCredentials: true,
+      data: {},
+      url: "http://localhost:8080/plants/" + id,
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.status == 200) {
+          history.push("/garden");
+        } else throw Error(res.status);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
 
   useEffect(() => {
     fetchPlant();
@@ -72,7 +101,8 @@ function PlantDetail(props) {
       <div>
         <PlantForm
           plant={plant}
-          handleConfirm={handleConfirm}
+          handleConfirmUpdate={handleConfirmUpdate}
+          handleConfirmDelete={handleConfirmDelete}
           modalShow={modalShow}
           setModalShow={setModalShow}
           setMinTemperature={setMinTemperature}

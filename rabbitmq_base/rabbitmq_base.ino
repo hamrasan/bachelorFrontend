@@ -55,8 +55,8 @@ unsigned long lastDebounce = 0;
 unsigned long lastTime = 0;
 boolean firstMeasure = true;
 
-const int AirValue = 330;   //you need to replace this value with Value_1
-const int WaterValue = 600;  //you need to replace this value with Value_2
+const int AirValue = 330;  
+const int WaterValue = 600;  
 
 void ICACHE_RAM_ATTR handleInterrupt(){
   Serial.print("som tu");
@@ -105,7 +105,6 @@ void setup() {
   
    // default settings
   // (you can also pass in a Wire library object like &Wire2)
-  //status = bme.begin();  
   if (!bme.begin(0x76)) {
     Serial.println("Could not find a valid BME280 sensor, check wiring!");
     while (1);
@@ -177,7 +176,6 @@ void callback(char* topic, byte* payload, unsigned int length){
       String message="";
       String timeStr="";
       for (int i=0; i<length; i++){
-//        Serial.print((char) payload[i]);
         if( ((char) payload[0] == 'M') && (i>0)) {
             timeStr = timeStr + (char) payload[i];
           }

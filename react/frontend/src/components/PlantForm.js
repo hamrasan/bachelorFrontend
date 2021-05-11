@@ -92,7 +92,22 @@ function PlantForm(props) {
               show={props.modalShow}
               title={"Upraviť dáta rastliny"}
               body={"Naozaj chceš upraviť dáta rastliny " + plant.name + "?"}
-              onSubmit={() => props.handleConfirm(plant.id)}
+              onSubmit={() => props.handleConfirmUpdate(plant.id)}
+              onHide={() => props.setModalShow(false)}
+            />
+          </Col>
+          <Col className="d-flex justify-content-center">
+            <Button
+              variant="outline-danger"
+              onClick={() => props.setModalShow(true)}
+            >
+              Vymazať rastlinu
+            </Button>
+            <ModalConfirm
+              show={props.modalShow}
+              title={"Vymazať vybranú rastlinu"}
+              body={"Naozaj chceš vymazať rastlinu " + plant.name + "?"}
+              onSubmit={() => props.handleConfirmDelete(plant.id)}
               onHide={() => props.setModalShow(false)}
             />
           </Col>

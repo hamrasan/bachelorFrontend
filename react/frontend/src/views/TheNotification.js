@@ -130,7 +130,7 @@ function TheNotification() {
     <ErrorComponent onReset={() => setError(true)}>
       <div>
         <Container fluid className="pt-3 w-75">
-          <Accordion defaultActiveKey="1">
+          <Accordion defaultActiveKey="0">
             <Card>
               <Accordion.Toggle
                 as={Card.Header}
