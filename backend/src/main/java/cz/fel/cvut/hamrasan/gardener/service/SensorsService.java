@@ -90,7 +90,7 @@ public class SensorsService {
         }
         else {
             if(Float.parseFloat(data) > user.getHighTemperature() ){
-                String message = "Teplota stúpla na "+ Float.parseFloat(data) + " požadovanú teplotu " + user.getHighTemperature() + " °C.";
+                String message = "Teplota stúpla na "+ Float.parseFloat(data) + " nad požadovanú teplotu " + user.getHighTemperature() + " °C.";
 
                 notificationService.addNotification(LocalDate.now(), message, NotificationType.HIGHTEMPERATURE, user);
             }

@@ -144,4 +144,11 @@ public class PlantService {
         userPlantDao.update(plant);
         System.out.println(plant.getMinTemperature());
     }
+
+    @Transactional
+    public void deletePlant(Long id) {
+        UserPlant userPlant = userPlantDao.find(id);
+        userPlantDao.remove(userPlant);
+    }
+
 }

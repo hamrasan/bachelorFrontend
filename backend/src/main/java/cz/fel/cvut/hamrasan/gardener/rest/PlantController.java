@@ -96,4 +96,14 @@ public class PlantController {
         plantService.updatePlant(Long.parseLong(hashMap.get("id")), Double.parseDouble(hashMap.get("minTemperature")),
                 Double.parseDouble(hashMap.get("maxTemperature")), hashMap.get("season"));
     }
+
+    @DeleteMapping(value = "/{id}")
+    public void deletePlant(@PathVariable Long id){
+        plantService.deletePlant(id);
+
+//        if (!isRemoved) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
 }
