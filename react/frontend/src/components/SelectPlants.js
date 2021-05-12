@@ -9,7 +9,7 @@ function SelectPlants(props) {
 
   useEffect(() => {
     getSubcategoryPlants();
-  }, [props]);
+  }, [props, props.plant]);
 
   const getSubcategoryPlants = () => {
     if (
@@ -43,15 +43,19 @@ function SelectPlants(props) {
   return (
     <ErrorComponent onReset={() => setError(true)}>
       <Col style={{ overflow: "scroll", minWidth: "50%", height: "500px" }}>
-        Rastlina
+        Vyber rastlinu
         {props.subcategory !== "" && props.subcategory !== "default"
           ? plants.map((plant) => (
               <CardGroup
+                className={props.plant !== null && props.plant.id == plant.id  ? "mt-2 block-example border border-success" : "mt-2"}
                 onClick={() => {
                   props.setActualPlantInfo(plant);
                 }}
               >
-                <Card className="mt-2 mr-0">
+                <Card
+                  className="mr-0"
+                  style={{ maxWidth: "200px", maxHeight: "200px" }}
+                >
                   <div className="d-flex justify-content-center bg-light">
                     <Card.Img
                       variant="top"
@@ -60,7 +64,7 @@ function SelectPlants(props) {
                     />
                   </div>
                 </Card>
-                <Card className="mt-2 mr-0">
+                <Card className="mr-0">
                   <Card.Body>
                     <Card.Title style={{ color: "green" }}>
                       {plant.name}

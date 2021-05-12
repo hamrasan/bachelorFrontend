@@ -171,6 +171,7 @@ function PlantNewForm(props) {
                         subcategory={subcategoryName}
                         category={categoryName}
                         setActualPlantInfo={setActualPlantInfo}
+                        plant={plant}
                       ></SelectPlants>
 
                       <Col>
