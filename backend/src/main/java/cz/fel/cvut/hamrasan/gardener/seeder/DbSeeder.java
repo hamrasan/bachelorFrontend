@@ -55,22 +55,18 @@ public class DbSeeder implements
 
     @Transactional
     void createPlants(){
-        List<Plant> plants = new ArrayList<Plant>();
-        List<Subcategory> subcategories = new ArrayList<Subcategory>();
-
-        Subcategory subcategory = new Subcategory("Rajčiny", plantCategoryDao.find((long) 1), plants);
-        subcategoryDao.persist(subcategory);
-
-//        Subcategory subcategory3 = new Subcategory("None", plantCategoryDao.find((long) 1), plants);
-//        subcategoryDao.persist(subcategory3);
-
-        Plant plant = new Plant("Rajčina veľká", "rajciny.jpg", 12, 35,  "Marec", subcategory);
-        plantDao.persist(plant);
 
 //        Subcategory subcategory2 = new Subcategory("None", plantCategoryDao.find((long) 2), plants);
 //        subcategoryDao.persist(subcategory2);
 
         for (Subcategory sub : subcategoryDao.findAll()) {
+            if(sub.getName().equals("Rajčiny") && sub.getCategory().getName().equals("zelenina")) {
+                Plant plant = new Plant("Rajčina veľká", "rajciny.jpg", 12, 35,  "Leto", sub);
+                plantDao.persist(plant);
+                Plant plant2 = new Plant("Rajčina cherry", "cherry.jpg", 10, 35,  "Leto", sub);
+                plantDao.persist(plant2);
+            }
+
             if(sub.getName().equals("Jahody") && sub.getCategory().getName().equals("ovocie")) {
                 Plant plant2 = new Plant("Jahoda celoročná", "jahody.jpg", 12, 40,  "Celoročne", sub );
                 plantDao.persist(plant2);
@@ -105,10 +101,19 @@ public class DbSeeder implements
             if(sub.getName().equals("None") && sub.getCategory().getName().equals("zelenina")) {
                 Plant plant7 = new Plant("Uhorka šalátová", "uhorkaSalat.jpg", 15, 30,  "Jún", sub);
                 plantDao.persist(plant7);
+                Plant plant8 = new Plant("Paprika červená", "paprikaCervenaSiroka.jpg", 21, 35,  "Júl/August", sub);
+                plantDao.persist(plant8);
+                Plant plant9 = new Plant("Ľuľok zemiakový", "zemiak.jpg", 7, 25,  "Jún-September", sub);
+                plantDao.persist(plant9);
             }
 
             if(sub.getName().equals("None") && sub.getCategory().getName().equals("bylinky")) {
                 Plant plant4 = new Plant("Bazalka pravá", "bazalka.jpg", 13, 35,  "Leto", sub);
+                plantDao.persist(plant4);
+            }
+
+            if(sub.getName().equals("None") && sub.getCategory().getName().equals("kvety")) {
+                Plant plant4 = new Plant("Krokus", "crocus.jpg", -5, 15,  "Jar/Jeseň", sub);
                 plantDao.persist(plant4);
             }
 
@@ -180,6 +185,8 @@ public class DbSeeder implements
             else if(category.getName().equals("zelenina")){
                 Subcategory subcategory1 = new Subcategory("Koreňová zelenina", category, new ArrayList<>());
                 subcategoryDao.persist(subcategory1);
+                Subcategory subcategory2 = new Subcategory("Rajčiny", category, new ArrayList<>());
+                subcategoryDao.persist(subcategory2);
             }
         }
     }

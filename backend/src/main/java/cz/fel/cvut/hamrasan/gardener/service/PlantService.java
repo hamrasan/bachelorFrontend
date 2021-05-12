@@ -75,7 +75,6 @@ public class PlantService {
         List<PlantDto> dtos = new ArrayList<PlantDto>();
 
         for (Garden garden:userDao.find(SecurityUtils.getCurrentUser().getId()).getGardens()) {
-            System.out.println(garden);
             for (UserPlant userPlant: garden.getPlants()) {
                 dtos.add(translateService.translateUserPlant(userPlant));
             }
@@ -142,7 +141,6 @@ public class PlantService {
         plant.setMinTemperature(minTemperature);
         plant.setSeason(season);
         userPlantDao.update(plant);
-        System.out.println(plant.getMinTemperature());
     }
 
     @Transactional

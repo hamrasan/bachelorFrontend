@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ConfigurableApplicationContext;
 
 
-public class RabbitAmqpTutorialsRunner implements CommandLineRunner {
+public class GardenerRunner implements CommandLineRunner {
 
 //    @Value("${tutorial.client.duration:0}")
 //    private int duration;

@@ -43,7 +43,6 @@ public class TranslateService {
     @Transactional
     public PlantWithoutDateDto translatePlant(Plant plant){
         Objects.requireNonNull(plant);
-        System.out.println(plant.getSubcategory().getName());
 
         return new PlantWithoutDateDto(plant.getId(), plant.getName(), plant.getPicture(), plant.getMinTemperature(),
                 plant.getMaxTemperature(), plant.getSeason(), translateSubCategory(plant.getSubcategory()) );
