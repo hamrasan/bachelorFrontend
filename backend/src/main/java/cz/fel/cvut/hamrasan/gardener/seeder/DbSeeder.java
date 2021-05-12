@@ -133,6 +133,14 @@ public class DbSeeder implements
             if(sub.getName().equals("None") && sub.getCategory().getName().equals("kvety")) {
                 Plant plant4 = new Plant("Krokus", "crocus.jpg", -5, 15,  "Jar/Jeseň", sub);
                 plantDao.persist(plant4);
+                Plant plant5 = new Plant("Tulipán", "tulipany.jpg", -5, 22,  "Apríl-Máj", sub);
+                plantDao.persist(plant5);
+                Plant plant15 = new Plant("Levanduľa úzkolistá", "levandula.jpg", -20, 32,  "Jún-Júl", sub);
+                plantDao.persist(plant15);
+                Plant plant16 = new Plant("Ľalia ázijská", "lalia.jpg", 10, 18,  "Máj-September", sub);
+                plantDao.persist(plant16);
+                Plant plant17 = new Plant("Hortenzia kalinolistá", "hortenzia.jpg", -5, 30,  "Leto", sub);
+                plantDao.persist(plant17);
             }
 
         }
