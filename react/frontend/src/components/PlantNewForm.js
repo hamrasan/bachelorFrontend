@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
-import { Form, Row, Col, Container, Button } from "react-bootstrap";
+import {
+  Form,
+  Row,
+  Col,
+  Container,
+  Button,
+  Card,
+  CardDeck,
+  CardGroup,
+} from "react-bootstrap";
 import { useHistory, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import TheSpinner from "../components/TheSpinner";
@@ -7,7 +16,6 @@ import SelectPlants from "../components/SelectPlants";
 import "react-datepicker/dist/react-datepicker.css";
 import ErrorComponent from "../components/ErrorComponent";
 import { useErrorHandler } from "react-error-boundary";
-
 
 function PlantNewForm(props) {
   const axios = require("axios");
@@ -80,6 +88,14 @@ function PlantNewForm(props) {
       });
   };
 
+  const setActualPlantInfo = (plant) =>{
+    setPlant(plant);
+    setPlantName(plant.name);
+    setMinTemperature(plant.minTemperature);
+    setMaxTemperature(plant.maxTemperature);
+    setSeason(plant.season);
+  }
+
   return (
     <ErrorComponent onReset={() => setError(true)}>
       <div>
@@ -149,70 +165,88 @@ function PlantNewForm(props) {
                           )}
                       </Form.Control>
                     </Form.Group>
-                    <SelectPlants
-                      subcategory={subcategoryName}
-                      category={categoryName}
-                      setPlantName={setPlantName}
-                      setPlant={setPlant}
-                      setMinTemperature={setMinTemperature}
-                      setMaxTemperature={setMaxTemperature}
-                      setSeason={setSeason}
-                    ></SelectPlants>
 
-                    <Form.Group>
-                      <Form.Label> Minimálna možná teplota rastliny</Form.Label>
-                      <Form.Control
-                        type="text"
-                        defaultValue={minTemperature}
-                        onChange={(e) => {
-                          setMinTemperature(e.target.value);
-                        }}
-                      />
-                    </Form.Group>
+                    <Row>
+                      <SelectPlants
+                        subcategory={subcategoryName}
+                        category={categoryName}
+                        setActualPlantInfo={setActualPlantInfo}
+                      ></SelectPlants>
 
-                    <Form.Group>
-                      <Form.Label> Maximálna možná teplota rastliny</Form.Label>
-                      <Form.Control
-                        type="text"
-                        defaultValue={maxTemperature}
-                        onChange={(e) => {
-                          setMaxTemperature(e.target.value);
-                        }}
-                      />
-                    </Form.Group>
+                      <Col>
+                          <h4 style={{ color: "green" }}>
+                            {plantName !== "" ? plantName : ""}
+                          </h4>
+                          <Form.Group>
+                            <Form.Label>
+                              {" "}
+                              Minimálna možná teplota rastliny
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              value={minTemperature}
+                              onChange={(e) => {
+                                setMinTemperature(e.target.value);
+                              }}
+                            />
+                          </Form.Group>
 
-                    <Form.Group>
-                      <Form.Label> Sezóna rastliny</Form.Label>
-                      <Form.Control
-                        type="text"
-                        defaultValue={season}
-                        onChange={(e) => {
-                          setSeason(e.target.value);
-                        }}
-                      />
-                    </Form.Group>
+                          <Form.Group>
+                            <Form.Label>
+                              {" "}
+                              Maximálna možná teplota rastliny
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              value={maxTemperature}
+                              onChange={(e) => {
+                                setMaxTemperature(e.target.value);
+                              }}
+                            />
+                          </Form.Group>
 
-                    <Form.Group controlId="exampleForm.ControlSelect1">
-                      <Form.Label>Dátum zasadenia </Form.Label>
-                      <div>
-                        <DatePicker
-                          selected={dateOfPlant}
-                          className="form-control"
-                          onChange={(date) => setDateOfPlant(date)}
-                          dateFormat="y-MM-dd"
-                        />
-                      </div>
-                    </Form.Group>
+                          <Form.Group>
+                            <Form.Label> Sezóna rastliny</Form.Label>
+                            <Form.Control
+                              type="text"
+                              value={season}
+                              onChange={(e) => {
+                                setSeason(e.target.value);
+                              }}
+                            />
+                          </Form.Group>
+
+                          <Form.Group controlId="exampleForm.ControlSelect1">
+                            <Form.Label>Dátum zasadenia </Form.Label>
+                            <div>
+                              <DatePicker
+                                selected={dateOfPlant}
+                                className="form-control"
+                                onChange={(date) => setDateOfPlant(date)}
+                                dateFormat="y-MM-dd"
+                              />
+                            </div>
+                          </Form.Group>
+
+                          <Form.Group as={Row}>
+                            <Col className="d-flex justify-content-right">
+                              <Button type="submit">Pridať</Button>
+                            </Col>
+                          </Form.Group>
+                      </Col>
+                    </Row>
                   </>
                 ) : null}
-
-                <Form.Group as={Row}>
-                  <Col className="d-flex justify-content-right">
-                    <Button type="submit">Pridať</Button>
-                  </Col>
-                </Form.Group>
               </Form>
             </Col>
+          </Row>
+        </Container>
+
+        <Container>
+          <Row>
+            {/* <Col style={{ overflow: "scroll", height: "500px" }}>
+              
+            </Col> */}
           </Row>
         </Container>
       </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
+import { Form, Card, CardGroup, Row, Col } from "react-bootstrap";
 import ErrorComponent from "../components/ErrorComponent";
 
 function SelectPlants(props) {
@@ -42,41 +42,38 @@ function SelectPlants(props) {
 
   return (
     <ErrorComponent onReset={() => setError(true)}>
-      <div>
-        <Form.Group controlId="exampleForm.ControlSelect1">
-          <Form.Label>Rastlina</Form.Label>
-          <Form.Control
-            as="select"
-            onChange={(e) => {
-              props.setPlantName(e.target.value);
-              props.setPlant(
-                plants.find((plant) => plant.name == e.target.value)
-              );
-              props.setSeason(
-                plants.find((plant) => plant.name == e.target.value).season
-              );
-              props.setMinTemperature(
-                plants.find((plant) => plant.name == e.target.value)
-                  .minTemperature
-              );
-              props.setMaxTemperature(
-                plants.find((plant) => plant.name == e.target.value)
-                  .maxTemperature
-              );
-              console.log(plants.find((plant) => plant.name == e.target.value));
-            }}
-          >
-            <option value="default" selected="selected">
-              Vyber z možností
-            </option>
-            {props.subcategory !== "" && props.subcategory !== "default"
-              ? plants.map((plant) => (
-                  <option value={plant.name}>{plant.name}</option>
-                ))
-              : null}
-          </Form.Control>
-        </Form.Group>
-      </div>
+      <Col style={{ overflow: "scroll", minWidth: "50%", height: "500px" }}>
+        Rastlina
+        {props.subcategory !== "" && props.subcategory !== "default"
+          ? plants.map((plant) => (
+              <CardGroup
+                onClick={() => {
+                  props.setActualPlantInfo(plant);
+                }}
+              >
+                <Card className="mt-2 mr-0">
+                  <div className="d-flex justify-content-center bg-light">
+                    <Card.Img
+                      variant="top"
+                      src={"http://localhost:8080/gallery/" + plant.picture}
+                      style={{ maxWidth: "200px", maxHeight: "200px" }}
+                    />
+                  </div>
+                </Card>
+                <Card className="mt-2 mr-0">
+                  <Card.Body>
+                    <Card.Title style={{ color: "green" }}>
+                      {plant.name}
+                    </Card.Title>
+                    <Card.Title>Min: {plant.minTemperature}</Card.Title>
+                    <Card.Title>Max: {plant.maxTemperature}</Card.Title>
+                    <Card.Title>Sezóna: {plant.season}</Card.Title>
+                  </Card.Body>
+                </Card>
+              </CardGroup>
+            ))
+          : null}
+      </Col>
     </ErrorComponent>
   );
 }
