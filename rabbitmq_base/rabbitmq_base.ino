@@ -56,7 +56,7 @@ unsigned long lastTime = 0;
 boolean firstMeasure = true;
 
 const int AirValue = 330;  
-const int WaterValue = 600;  
+const int WaterValue = 585;  
 
 void ICACHE_RAM_ATTR handleInterrupt(){
   Serial.print("som tu");
@@ -150,6 +150,7 @@ void measureHumidity(){
 
 void measureSoilMoisture(){
   int soilMoistureValue = analogRead(A0);  //put Sensor insert into soil
+  Serial.println(soilMoistureValue);
   int soilmoisturepercent = map(soilMoistureValue, AirValue, WaterValue, 0, 100);
   if(soilmoisturepercent > 100)
   {
@@ -215,6 +216,8 @@ void loop() {
     measureTemp();
     measurePressure();
     measureSoilMoisture();
+    if(digitalRead(interruptPin)==0) {client.publish("rain1", "1");}
+    if(digitalRead(interruptPin)==1) {client.publish("rain1", "0");}
     firstMeasure = false;
       }
 // client.println(1.8 * bme.readTemperature() + 32); FAHRENHEIT
