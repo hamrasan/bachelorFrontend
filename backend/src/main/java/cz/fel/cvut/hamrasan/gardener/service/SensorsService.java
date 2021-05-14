@@ -90,13 +90,13 @@ public class SensorsService {
         }
         else {
             if(Float.parseFloat(data) > user.getHighTemperature() ){
-                String message = "Teplota stúpla na "+ Float.parseFloat(data) + " nad požadovanú teplotu " + user.getHighTemperature() + " °C.";
+                String message = "Teplota stúpla na "+ Float.parseFloat(data) + " °C, " +" nad požadovanú teplotu " + user.getHighTemperature() + " °C.";
 
                 notificationService.addNotification(LocalDate.now(), message, NotificationType.HIGHTEMPERATURE, user);
             }
 
             if(Float.parseFloat(data) < user.getLowTemperature() ){
-                String message = "Teplota klesla na " + Float.parseFloat(data) + " pod požadovanú teplotu " + user.getLowTemperature() + " °C.";
+                String message = "Teplota klesla na " + Float.parseFloat(data) + " °C, " + " pod požadovanú teplotu " + user.getLowTemperature() + " °C.";
 
                 notificationService.addNotification(LocalDate.now(), message, NotificationType.LOWTEMPERATURE, user);
             }
