@@ -31,7 +31,7 @@
 	mainlanguage = slovak,
 %	titlelanguage = english,
 %	otherlanguages = {czech},
-	title-slovak = {Systém pro plánování a řízení pěstovatelského prostředí},
+	title-slovak = {Systém pre plánovanie a riadenie pestovateľského prostredia},
 	title-czech = {Systém pro plánování a řízení pěstovatelského prostředí},
 	title-english = {Manual for {\myLaTeX} class ctuthesis},
 	doctype-english = {Bachelor Project},
@@ -39,15 +39,19 @@
 	xfaculty = F3,
 	fieldofstudy-slovak = Softwarové inžinierstvo a technológie,
 %	department-czech = {Katedra matematiky},
+	department-slovak = {Katedra počítačov},
 %	department-english = {Department of Mathematics},
 	author = {Sandra Hamráková},
 	supervisor = {Ing. Lukáš Zoubek},
 %	supervisor-address = {Ústav X, \\ Uliční 5, \\ Praha 99},
+	keywords-slovak = {manuál, záverečná práca, \LaTeX},
 	keywords-czech = {manuál, závěrečnná práce, \LaTeX},
 	keywords-english = {manual, degree project, \LaTeX},
 	day = 8,
 	month = 01,
 	year = 2021,
+	specification-file={zav_prace.pdf},
+	front-specification=true,
 %	list-of-figures = false,
 %	list-of-tables = false,
 %	monochrome = true,
@@ -109,7 +113,7 @@ This manual shows how to use the ctuthesis \LaTeX\ class, what are the requireme
 
 % Acknowledgements / Podekovani
 \begin{thanks}
-Ďakujem môjmu vedúcemu semestrálneho projektu Ing. Lukášovi Zoubkovi, za odbornú pomoc a teším sa na spoluprácu počas bakalárskej práce.
+Ďakujem môjmu školiteľovi bakalárskej práce Ing. Lukášovi Zoubkovi, za ochotu, rady a odbornú pomoc. Taktiež ďakujem rodičom a priateľom, ktorí ma po celú dobu štúdia plne podporovali.
 \end{thanks}
 
 % Declaration / Prohlaseni
@@ -785,7 +789,7 @@ Doska arduino je voľne dostupný vývojový open-source mikrokontrolér, schopn
 \end{itemize}
 
 \subsubsection*{Raspberry Pi}
-Rasberry Pi je využiteľný na rôzne spôsoby. Napríklad ako malý stolný počítač, smart home hub, kontrolér továrne, či ako mozog robota. Zabudované wifi, BLE, úložná kapacita tejto dosky a dostupná RAM, ktorá je v porovnaní s ostatnými doskami veľmi veľká, jej umožňuje fungovať ako server IoT vo väčšine konfigurácií siete IoT. Samotné Raspberry Pi pri kúpe neposkytuje žiadne senzory, avšak je možné si ich dokúpiť veľmi lacno. \cite{conclusionSolution} \cite{raspberryPi}
+Rasberry Pi je využiteľný na rôzne spôsoby. Napríklad ako malý stolný počítač, smart home hub, kontrolér továrne či ako mozog robota. Zabudované wifi, BLE, úložná kapacita tejto dosky a dostupná RAM, ktorá je v porovnaní s ostatnými doskami veľmi veľká, jej umožňuje fungovať ako server IoT vo väčšine konfigurácií siete IoT. Samotné Raspberry Pi pri kúpe neposkytuje žiadne senzory, avšak je možné si ich dokúpiť veľmi lacno. \cite{conclusionSolution} \cite{raspberryPi}
 \newline
 
 \textbf{VÝHODY}
@@ -808,9 +812,12 @@ Rasberry Pi je využiteľný na rôzne spôsoby. Napríklad ako malý stolný po
 \item od 35 \$= $\sim$ 875 Kč
 \end{itemize}
 
+\section{Vyhodnotenie prieskumu}
+Prieskum ukázal rôzne riešenia, ale ani jedno z nich úplne nezhŕňa všetky požadované vlastnosti systému. Cieľom by mala byť komplexná aplikácia, zahrňujúca ovládanie senzorov, informácie o pestovaných rastlinách, informácie o histórií meraní senzorov a mala by upozorňovať užívateľa pri požadovanej zmene vonkajšieho prostredia. V tomto prípade je najvhodnejšiou voľbou kombinácia existujúceho riešenia a vlastnej webovej aplikácie. Podrobnejšie bude výsledné riešenie popísané v nasledujúcej kapitole.
+
 \chapter{Návrh riešenia}
 
-Výsledkom navrhovaného riešenia bude existujúce hardvérové riešenie kombinované s vlastnou webovou aplikáciou. Navrhované riešenie pozostáva z mikročipu ESP8266 od spoločnosti Espressif Systems, na ktorom je napojené senzor na meranie teploty, vlhkosti vzduchu, tlaku vzduchu, vlhkosti pôdy a zrážkomer. Taktiež riadi spúšťanie senzoru na polievanie záhrady, ktorý následne spustí prívod vody k rastlinám. Namerané dáta zo senzorov sa následne odosielajú pomocou MQTT protokolu na server, ktorý pomocou JDBC uloží dáta do databázy. Backend a frontend medzi sebou komunikujú pomocou REST rozhrania.
+Výsledkom navrhovaného riešenia bude existujúce hardvérové riešenie kombinované s vlastnou webovou aplikáciou. Navrhované riešenie pozostáva z mikročipu ESP8266 od spoločnosti Espressif Systems, na ktorom je napojený senzor na meranie teploty, vlhkosti vzduchu, tlaku vzduchu, vlhkosti pôdy a zrážkomer. Taktiež riadi spustenie zatvárača ventilov na polievanie záhrady, ktorý následne spustí prívod vody k rastlinám. Namerané dáta zo senzorov sa následne odosielajú pomocou MQTT protokolu na server, ktorý pomocou JDBC uloží dáta do databázy. Backend a frontend medzi sebou komunikujú pomocou REST rozhrania.
 
 \begin{figure}[H]
 \includegraphics[width= 14 cm]{navrh.png}
@@ -819,7 +826,7 @@ Výsledkom navrhovaného riešenia bude existujúce hardvérové riešenie kombi
 \end{figure}
 
 \section{Hardvér}
- Súčasťou hardvérového riešenia je mikročip ESP8266, ktorý je podrobne popísaný v sekcií ~\ref{sec:esp}. Dôvod výberu bola ponuka vybavenia modulu, možnosť vlastného naprogramovania riadenia senzorov a cena. Senzor na meranie teploty, vlhkosti pôdy a zrážkomer bol vybraný z dôvodu potreby spracovávať dáta spojené s vlastnosťami týchto senzorov. Na riešenie polievania záhrady je použitý ventilový kontrolér pre otáčanie ventilu, podrobnejšie spomenutý v predchádzajúcej kapitole, v sekcií ~\ref{sec:agora}, na zatváranie kohútika pre reguláciu prívodu vody. Dôvod výberu bola možnosť bezdrôtového riadenia senzoru a cena. 
+ Súčasťou hardvérového riešenia je mikročip ESP8266, ktorý je podrobne popísaný v sekcií ~\ref{sec:esp}. Dôvod výberu bola ponuka vybavenia modulu, možnosť vlastného naprogramovania riadenia senzorov a cena. Senzor na meranie teploty, vlhkosti pôdy a zrážkomer bol vybraný z dôvodu potreby spracovávať dáta spojené s vlastnosťami týchto senzorov. Tieto senzory je nutné pripojiť k mikročipu a pre správne fungovanie je nutné ich nakonfigurovať. Polievanie záhrady rieši zatvárač ventilov pre otáčanie ventilu, podrobnejšie spomenutý v predchádzajúcej kapitole, v sekcií ~\ref{sec:agora} ako \textit{ "Zatvárač ventilov iQtech SmartLife"}. Toto riešenie nezahŕňa konkrétne zatvárač  iQtech SmartLife, ale lacnejšiu neznačkovú verziu senzora. Dôvod výberu bola možnosť bezdrôtového riadenia senzoru a priaznivá cena. 
  
 \section{Softvér}
 \label{sec:software}
@@ -827,7 +834,7 @@ Softvérové riešenie pozostáva z kombinácie backendovej a frontendovej aplik
 Na server sa budú posielať dáta namerané senzormi pomocou protokolu MQTT. MQTT komunikácia bola vybraná z dôvodu vysokej použiteľnosti v IoT projektoch a pre nízku spotrebu energie. 
 
 \subsection{Backend}
-Backendová aplikácia bude napísaná v jazyku Java a bude služíť na spracovanie dát a ich ukladanie do databázy pomocou JDBC. Jazyk Java pre backendovú aplikáciu bol zvolený kvôli mojim najväčším skúsenostiam v tomto jazyku.
+Backendová aplikácia bude napísaná v jazyku Java a bude slúžíť na spracovanie dát a ich ukladanie do databázy pomocou JDBC. Jazyk Java pre backendovú aplikáciu bol zvolený kvôli mojim najväčším skúsenostiam v tomto jazyku.
 
 \subsection{Frontend}
 Frontendovou aplikáciou bude javascriptová aplikácia, ktorá bude slúžiť ako užívateľské rozhranie. Dôvodom výberu jazyka JavaScript a nie JavaServer Pages bola možnosť využívať moderné technológie, ako sú modálne okná.  Aplikácie budú medzi sebou komunikovať pomocou REST rozhrania. To dovoľuje jednoduchý prístup k zdrojom vďaka CRUD metódam. Užívateľské rozhranie bude ponúkať informácie o teplote, vlhkosti vzduchu a pôdy, možnosť pridať informácie o svojich pestovaných rastlinách a bude ponúkať ovládanie jednotlivých senzorov.
@@ -853,12 +860,12 @@ Dáta budú ukladané do databázy PostgreSQL. Dôvod výberu bola dobrá odozva
 Zvolené implementačné riešenie naväzuje na navrhované riešenie v predchádzajúcej kapitole.
 
 \section{Softvér}
-V backendovom riešení aplikácie som zvolila konkrétne framework jazyka Java - Spring Boot, vo frontendovom riešení aplikácie javascriptovú knižnicu React. Podrobný popis použitia je popísaný v nasledujúcich sekciách.
+V backendovom riešení aplikácie sme zvolili konkrétne framework jazyka Java - Spring Boot, vo frontendovom riešení aplikácie javascriptovú knižnicu React. Podrobný popis použitia je popísaný v nasledujúcich sekciách.
 
 \subsection{Backend}
-Pre vývoj backendovej časti aplikácie som zvolila jazyk Spring Boot. Dôvody výberu jazyka Java sú spomenuté v sekcií ~\ref{sec:software}. Konkrétne framework Spring Boot ponúka auto konfiguráciu závislostí, čo uľahčuje prácu pre vývoj v jazyku Java, preto som sa rozhodla pre túto možnosť implementácie.
+Pre vývoj backendovej časti aplikácie sme zvolili jazyk Spring Boot. Dôvody výberu jazyka Java sú spomenuté v sekcií ~\ref{sec:software}. Konkrétne framework Spring Boot ponúka auto konfiguráciu závislostí, čo uľahčuje prácu pre vývoj v jazyku Java, preto sme sa rozhodli pre túto možnosť implementácie.
 
-Jednotlivá práca s dátami a ich úprava sa nachádza práve v Spring Boot aplikácii. Ide o dáta užívateľov, záhrad, rastlín, či senzorov. 
+Jednotlivá práca s dátami a ich úprava sa nachádza práve v Spring Boot aplikácii. Ide o dáta užívateľov, záhrad, rastlín či senzorov. 
 
 \subsubsection{Získavanie dát zo senzorov}
 Spring Boot pre získanie nameraných dát pomocou senzorov komunikuje prostredníctvom AMQP protokolu s RabbitMQ brokerom, ktorý slúži ako nástroj na spracovanie správ. Pomocou anotácie  \textsf{@RabbitListener} Spring dokáže počúvať na jednotlivých poradovníkoch brokera, z ktorých si dokáže brať dáta v momente ich výskytu.
@@ -866,9 +873,8 @@ Spring Boot pre získanie nameraných dát pomocou senzorov komunikuje prostredn
 \subsubsection{Dynamický rozvrh}
 Požiadavka ktorá znie \textit{"Systém umožní užívateľovi nastaviť čas pravidelného zalievania."} požaduje nastaviť plán zalievania dynamicky, v čase behu aplikácie. Táto požiadavka je vyriešená pomocou dvoch rozvrhových nástrojov. Metóda označená anotáciou \textsf{@Scheduled} sa spustí každú polnoc, kedy vykoná nastavenie jednotlivých dynamických rozvrhov pomocou \textsf{ScheduledExecutorService}. V momente dosiahnutia časového plánu rozvrhu, sa spustí metóda na otočenie ventilového kontroléra a zároveň nastaví kontreléru časovač na jeho uzatvorenie. Pred spustením zalievania sa skontroluje, či je rozvrh stále v databáze pre prípad, že ho užívateľ vymazal v daný deň polievania.
 
-\subsection{Užívateľské rozhranie}
-Užívateľské rozhranie je postavené pomocou JavaScriptovej knižnice React.  Konkrétne knižnicu React som si vybrala kvôli jeho flexibilite, ktorá dovoľuje vytváranie znovu použiteľných komponentov a kvôli využívaniu JSX syntaxe, ktorá umožňuje kombinovať HTML s JavaScriptom.
-
+\subsection{Frontend}
+Frontendová aplikácia je postavená pomocou JavaScriptovej knižnice React. Konkrétnu knižnicu React sme vybrali kvôli jej flexibilite, ktorá dovoľuje vytváranie znovu použiteľných komponentov a kvôli využívaniu JSX syntaxe, ktorá umožňuje kombinovať HTML s JavaScriptom. Taktiež bol použitý framework React Bootstrap, z ktorého využívame niektoré komponenty, ako sú formuláre, modálne okná či karty. \cite{react}
 
 \section{Komunikácia s hardvérom}
 Hardvérové komponenty pozostávajú z mikročipu ESP8266, senzorov pre meranie teploty, vlhkosti vzduchu, pôdy, tlaku vzduchu, zrážkomeru a senzoru, ktorý slúži na uzatvorenie ventilov.
@@ -880,17 +886,111 @@ Mikročip ESP8266 obsahuje implementáciu kódu napísanú v Arduino jazyku, kto
 Pre senzor BME280, ktorý je použitý na meranie teploty, tlaku a vlhkosti vzduchu, sú v Arduino kóde použité knižnice  <Adafruit\_Sensor.h> a  <Adafruit\_BME280.h>, ktoré poskytujú metódy na komunikáciu so senzorom a rozlišovanie jednotlivých hodnôt nameraných týmto senzorom. Dáta zo zrážkomera prijme mikročip ESP8266 z digitálneho výstupu senzora a dáta namerané senzorom pre vlhkosť pôdy prijme ESP8266 z analógového výstupu senzora.
 
 \subsection{Ventilový kontrolér}
-Riadenie uzatvárania ventilu pre prívod vody zabezpečuje Tuya inteligentný ventilový kontrolér. Vďaka zabudovanému wifi prijímaču v kontroléri je možné kontrolér pripojiť do lokálnej siete. Na nakonfigurovanie sieťových prístupových údajov je potrebné stiahnutie Tuya aplikácie. Pre ovládanie kontroléra pomocou API je nutná registrácia na Tuya IoT Development platforme. V tejto platforme je následne nutné nakonfigurovať nastavenia a prepojiť účet s pripojeným zariadením, v tomto prípade účet s ventilovým kontrolérom. V tomto okamihu je možné ovládať zariadenie pomocou API. Spring Boot následne komunikuje s rozhraním, a tak dokáže získať informácie od zariadení v tomto rozhraní, či ovládať ich funkcionalitu. V tomto prípade funkcionalitu kontroléra, ako je pohyb ventilu alebo nastavenie časovača, po ktorom sa tento pohyb ventilu vykoná.
+Riadenie uzatvárania ventilu pre prívod vody zabezpečuje Tuya inteligentný ventilový kontrolér. Vďaka zabudovanému wifi prijímaču v kontroléri je možné kontrolér pripojiť do lokálnej siete. Na nakonfigurovanie sieťových prístupových údajov je potrebné stiahnutie Tuya aplikácie. Pre ovládanie kontroléra pomocou API je nutná registrácia na Tuya IoT Development platforme. V tejto platforme je následne nutné nakonfigurovať nastavenia a prepojiť účet s pripojeným zariadením, v tomto prípade účet s ventilovým kontrolérom. V tomto okamihu je možné ovládať zariadenie pomocou API. Spring Boot následne komunikuje s rozhraním, a tak dokáže získať informácie od zariadení v tomto rozhraní či ovládať ich funkcionalitu. V tomto prípade funkcionalitu kontroléra, ako je pohyb ventilu alebo nastavenie časovača, po ktorom sa tento pohyb ventilu vykoná.
 
 \chapter{Testovanie}
+Po úspešnej implementácií nasleduje testovanie aplikácie.
 
+\section{Popis testovania}
+ Vytvorili sme 11 testovacích scenárov, ktoré boli následne otestované a vyhodnotené.
+\newline
+\newline
+	Jednotlivé scenáre sú:
+\begin{itemize}
+\item Registrácia užívateľa
+\item Pridanie novej pestovanej rastliny
+\item Pridanie senzoru na zalievanie
+\item Pridanie záhrady k senzoru na zalievanie
+\item Vytvorenie rozvrhu na polievanie
+\item Zapnutie senzora na zalievanie
+\item Pridanie novej záhrady
+\item Úprava pestovanej rastliny
+\item Nastavenie intervalu merania senzorov
+\item Odstránenie rozvrhu
+\item Odobratie záhrady zo senzoru na zalievanie
+\end{itemize}
+ 
+Testovacie scenáre \textit {\uv{Pridanie záhrady k senzoru na zalievanie}} a \textit {\uv{Odobratie záhrady zo senzoru na zalievanie}} po prvom otestovaní neprešli, kde záhrada sa nepridala ani neodobrala zo zoznamu záhrad v senzore na zalievanie. Po následnej oprave chyby všetkých 11 testov úspešne prešlo. 
+\newline 
+\newline 
+Detailný popis všetkých testovacích scenárov sa nachádza v prílohe ~\ref{sec:scenare}.
+
+
+\chapter{Stručný popis aplikácie}
+Táto kapitole stručne ukazuje funkcionalitu implementovanej aplikácie. 
+\newline
+\newline
+Pre kompletné využitie všetkých funkcionalít, ktoré aplikácia ponúka, je potrebné byť registrovaný vo webovej aplikácií, vlastniť senzory a zalievač. Pre čiastočné využitie funkcionality sa stačí do tejto webovej aplikácie iba zaregistrovať. Neprihlásený užívateľ nie je schopný využívať žiadnu funkcionalitu aplikácie.
+\newpage
+
+\begin{figure}[h]
+\fbox{\includegraphics[width= 12 cm]{domov.png}}
+\caption{Domovská stránka aplikácie}
+\label{fig:domov}
+\end{figure}
+
+Po prihlásení do aplikácie sa užívateľovi zobrazí domovská obrazovka, viď obrázok ~\ref{fig:domov}, s jeho jednotlivými záhradami. Každá záhrada obsahuje zoznam senzorov a hodnoty nimi namerané. Ak žiadne meranie zatiaľ neprebehlo alebo senzory nie sú pripojené, tak sa pri jednotlivom senzore zobrazí nápis  \textit {\uv{Senzor nie je dostupný}}. V prípade, že nameraných hodnôt na jednotlivých senzoroch je viac ako 6, je možné si zobraziť plnú históriu meraní po stlačení na tlačídko  \textit {\uv{Celá história}}. Časový interval merania senzorov je možné zmeniť v ľavom hornom rohu obrazovky.
+
+\begin{figure}[H]
+\fbox{\includegraphics[width= 12 cm]{mojaZahrada.png}}
+\caption{Stránka aplikácie \uv{Moja záhrada} }
+\label{fig:zahrada}
+\end{figure}
+
+Po kliknutí na odkaz v navigácií \textit {\uv{Moja záhrada}}, sa zobrazia všetky pestované rastliny v jednotlivých záhradách užívateľa, čo ukazuje obrázok ~\ref{fig:zahrada}. Po kliknutí na tlačídko \textit {\uv{Pridať záhradu}} si užívateľ môže vytvoriť novú záhradu, ktorá sa mu následne zobrazí v zozname pod daným tlačídkom.
+Užívateľ je schopný filtrovať výber zobrazených rastlín podľa kategórie a taktiež vyhľadať rastlinu podľa názvu pomocou vyhľadávacieho okna vedľa filtra. Kliknutím na jednu z rastlín, sa zobrazí podstránka s náhľadom rastliny, viď obrázok ~\ref{fig:nahladRastliny}. V náhľade sa zobrazujú hodnoty rastliny, ktoré si užívateľ môže upraviť alebo môže vymazať celú rastlinu zo svojej záhrady. Pre pridanie novej rastliny do konkrétnej záhrady musí mať užívateľ zakliknutú záhradu, kde chce rastlinu umiestniť a následne kliknúť na tlačídko  \textit {\uv{Pridaj novú rastlinu}}, ktoré ho presmeruje na formulár pre pridanie rastliny viď obrázok ~\ref{fig:pridanieRastliny}.
+
+
+\begin{figure}[H]
+\fbox{\includegraphics[width=12 cm]{nahladRastliny.png}}
+\caption{Detail rastliny}
+\label{fig:nahladRastliny}
+\end{figure}
+
+\begin{figure}[H]
+\fbox{\includegraphics[width= 12 cm]{pridanieRastliny.jpg}}
+\caption{Pridanie novej rastliny v záhrade}
+\label{fig:pridanieRastliny}
+\end{figure}
+
+Užívateľ si vo formulári pre pridanie novej rastliny vyberie kategóriu, podkategóriu a konkrétnu rastlinu, ktorú chce pridať do záhradky, viď obrázok  ~\ref{fig:pridanieRastliny}. Ak užívateľ nesúhlasí s prednastavenými hodnotami rastliny, môže ich ručne pozmeniť a následne odošle formulár. Po odoslaní sa rastlina pridá ku konkrétnej záhrade.
+
+\begin{figure}[H]
+\fbox{\includegraphics[width= 12 cm]{zalievanie.png}}
+\caption{Stránka aplikácie \uv{Zalievanie}}
+\label{fig:zalievanie}
+\end{figure}
+
+Po kliknutí na odkaz v navigácií\textit {\uv{Zalievanie}}, sa zobrazí podstránka s náhľadom jednotlivých zalievačov užívateľa. Užívateľ si môže pridať polievač pomocou tlačídka \textit {\uv{Pridaj polievač}}, kde zadá platné id senzora. Po úspešnom pridaní sa polievač objaví v zozname. Užívateľ si môže na každom polievači nastaviť rozvrh na zalievanie alebo nastaviť trvanie zálievky a poliať záhradu ihneď. V zozname \textit {\uv{V záhrade}} sa vypíšu záhrady priradené k tomuto polivaču, ktoré užívateľ môže regulovať tlačídkom \textit {\uv{Pridať/odobrať záhradu}}.
+
+\begin{figure}[H]
+\fbox{\includegraphics[width= 12 cm]{notifikacie.png}}
+\caption{Stránka aplikácie \uv{Notifikácie}}
+\label{fig:notifikacie}
+\end{figure}
+
+V neposlednom rade tu máme notifikácie aplikácie, ktoré sa zobrazujú po kliknutí na \textit {\uv{Notifikácie}} v navigácií aplikácie.  Každá notifikácia sa zobrazuje, kým užívateľ nepotvrdí, že notifikáciu videl, zakliknutím ikonky fajky, vpravo vedľa notifikácie. Užívateľ si tu môže nastaviť, kedy ho má aplikácia upozorniť, pri poklese alebo náraste nad určitú teplotu.
 \chapter{Záver}
-Cieľom práce bolo vytvoriť prieskum existujúcich riešení, zadefinovať požiadavky na systém a vytvoriť návrh implementácie, čo sa v tejto práci podarilo naplniť. Pre lepšie  pochopenie kontextu, práca obsahuje aj vysvetlenie používaných pojmov. Na túto prácu bude následne naväzovať bakalárska práca, s plánom nasledujúcej implementácie navrhovaného riešenia systému, pripojenie hardvérovej časti k softvérovej časti systému a vytvorenie testovacích scenárov, otestovania aplikácie a následného vyhodnotenia testovania. 
+V prvých kapitolách práce sme si vyjasnili dôležité pojmy spojené s touto prácou ako sú Internet of Things alebo Smart Homes a vykonali sme analýzu používaných technológií pre internet vecí.
+
+ Po vyjasnení si hlavných pojmov a technológií sme zadefinovali požiadavky na systém drobných pestovateľov, ktoré sme rozdelili do troch hlavných častí. Prvá časť definuje hlavnú funkcionalitu aplikácie, ktorá obnáša interakciu užívateľa s aplikáciou. V druhej časti požiadaviek sme si definovali požiadavky súvisiace s interakciou senzorov a posledná časť požiadaviek hovorí o požiadavkách súvisiacich s notifikáciami užívateľa na zmenu stavu vonkajšieho prostredia.
+
+Po definovaní všetkých potrebných požiadaviek na systém sme sa pustili do prieskumu existujúcich riešení, kde sme si rozobrali celkové riešenia systémov inteligentných záhrad, ale aj čiastočné riešenia, ktoré pozostávali buď z hardvérovej časti alebo z aplikačnej časti. Na základe tohoto prieskumu sme vyhodnotili, ako budeme postupovať v nasledujúcej implementácií. Na základe vyhodnotenia sme dospeli k záveru, že na vytvorenie výsledného systému budeme prepájať mikrokontrolér ESP8266, so senzormi merajúcimi relevantné veličiny okolitého prostredia. Senzormi namerané dáta spracuje mikrokontrolér a odošle ich na softvérové riešenie nášho systému.
+
+ Po tomto zistení sme podrobnejšie vytvorili návrh riešenia nášho systému, kde sme ukázali ako by softvér mohol komunikovať s hardvérom, z akých častí sa jednotlivé softvérové a harvérové komponenty budú skladať a vytvorili sme diagram tried a sekvenčný diagram. 
+ 
+ Ďalším krokom bola implementácia, kde sme vytvorili dve medzi sebou komunikujúce aplikácie. Frontendovú javascriptovú aplikáciu komunikujúcu s backendovovou aplikáciou napísanou v jazyku Java za pomoci frameworku Spring Boot. Dáta zo senzorov sa pomocou mikrokontroléra odosielajú do sprostredkovateľa správ, ktorý komunikuje s backendovou aplikáciou. Backendová aplikácia následne príjme dáta a spracuje ich do podoby vhodnej pre užívateľské rozhranie. Riešením tohoto systému je aj senzor pre polievanie záhrady, ktorý je prepojený k bezdrôtovej lokálnej sieti. S týmto senzorom komunikuje backendová aplikácia pomocou aplikačného programovateľného rozhrania a ovláda jeho funkcionalitu, ako je zapnutie či vypnutie prívodu vody. 
+
+V budúcnosti je možné tento systém rozšíriť o ďalšie funkcionality, ako je automatizovanie zalievania na základe dát namerných senzormi, obohatenie databázy rastlín, úprava užívateľského profilu či doplnenie lokálneho počasia zo satelitov. Tento systém ponúka obrovskú škálu funkcionalít, ktorými môže byť ďalej roširovaný.
 
 \printindex
+\appendix
+\chapter{Prílohy}
+\section{Detailné testovacie scenáre}
+\label{sec:scenare}
+\includepdf[pages=-]{testovacieScenare.pdf}
 
 \appendix
-
 \begin{thebibliography}{46}
 \bibitem{morgan} MORGAN, Jacob. A Simple Explanation Of 'The Internet Of Things'. \textit{Forbes} [online]. 2014 [cit. 2020-10-18]. Dostupné z: https://www.forbes.com/sites/jacobmorgan/2014/05/13/simple-explanation-internet-things-that-anyone-can-understand/\#767942d51d09
 \bibitem{economy} ALBARRAN, Alan B. \textit{The Media Economy}. 2nd edition. New York: Routledge, 2017, s.~93. ISBN 9781138886094.
@@ -938,6 +1038,7 @@ Cieľom práce bolo vytvoriť prieskum existujúcich riešení, zadefinovať po�
 \bibitem{arduino} \textit{Arduino} [online]. Arduino, 2020 [cit. 2020-12-12]. Dostupné z: https://www.arduino.cc
 \bibitem{prosconsArduino} SARWAR, Ismail. Advantages and Disadvantages of Using Arduino. \textit{Engineer Experiences} [online]. Engineer Experiences, 2020, 1 October 2016 [cit. 2020-12-12]. Dostupné z: https://engineerexperiences.com/advantages-and-disadvatages.html
 \bibitem{raspberryPi} \textit{Raspberry Pi} [online]. Cambridge: Raspberry Pi [cit. 2020-12-12]. Dostupné z: https://www.raspberrypi.org
+\bibitem{react} AGGARWAL, Sanchit. Modern Web-Development using ReactJS. In:  \textit{International Journal of Recent Research Aspects.} Vol.5. India: Institute of Institutional Industrial Research, 2018, s. 133-137. ISSN 2349-7688.
 \end{thebibliography}
 
 
