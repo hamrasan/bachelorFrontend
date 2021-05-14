@@ -259,10 +259,10 @@ function SensorsGarden(props) {
                 history={rainHistory.map((rain) => {
                   return {
                     date: rain.date,
-                    value: rain.value ? "Prší" : "Neprší",
+                    value: rain.raining ? "Prší" : "Neprší",
                   };
                 })}
-                text={rain.value ? "Prší" : "V tomto okamžiku neprší"}
+                text={rain.raining ? "Prší" : "V tomto okamžiku neprší"}
                 picture={
                   rain.raining
                     ? "assets/sensors/rain.jpg"
