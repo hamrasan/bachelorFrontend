@@ -33,7 +33,7 @@
 %	otherlanguages = {czech},
 	title-slovak = {Systém pre plánovanie a riadenie pestovateľského prostredia},
 	title-czech = {Systém pro plánování a řízení pěstovatelského prostředí},
-	title-english = {Manual for {\myLaTeX} class ctuthesis},
+	title-english = {System for planning and managing of growing environment},
 	doctype-english = {Bachelor Project},
 	doctype-slovak = {Bakalárska práca},
 	xfaculty = F3,
@@ -44,9 +44,8 @@
 	author = {Sandra Hamráková},
 	supervisor = {Ing. Lukáš Zoubek},
 %	supervisor-address = {Ústav X, \\ Uliční 5, \\ Praha 99},
-	keywords-slovak = {manuál, záverečná práca, \LaTeX},
-	keywords-czech = {manuál, závěrečnná práce, \LaTeX},
-	keywords-english = {manual, degree project, \LaTeX},
+	keywords-slovak = {internet vecí, inteligentná domácnosť, inteligentná záhrada, automatizované pestovanie},
+	keywords-english = {Internet of Things, Smart Home, Smart Garden, automated cultivation},
 	day = 8,
 	month = 01,
 	year = 2021,
@@ -101,14 +100,15 @@
 }
 \ExplSyntaxOff
 
-% Abstract in Czech
-\begin{abstract-czech}
-Abstrakt.
-\end{abstract-czech}
+% Abstract in Slovak
+\begin{abstract-slovak}
+V dnešnej dobe je takmer každé elektronické zariadenie možné pripojiť k internetu. Svet internetu vecí čím ďalej napreduje, preto je vhodné takého inteligentné riešenia využívať aj v záhradách. Práca poskytuje riešenie, ktoré pomôže drobným pestovateľom sprehľadniť pestovanie rastlín a automatizovať pestovateľské činnosti. Pomocou tohto systému dokážu pestovatelia zalievať záhradu prostredníctvom internetového pripojenia či získať informácie o vonkajšom prostredí konkrétnej záhrady pestovateľa. Sú to informácie o presnej teplote vzduchu, o aktuálnych zrážkach alebo o vlhkosti pôdy a vzduchu.
+Táto práca sa zaoberá prieskumom existujúcich riešení systémov pre plánovanie a riadenie pestovateľského prostredia, následným návrhom a implementáciou takéhoto systému pomocou internetu vecí. Výsledné riešenie systému tvorí kombinácia webovej aplikácie spolu s mikročipom ESP8266, senzormi merajúcimi podmienky vonkajšieho prostredia a inteligentným zariadením, ktoré ovláda zalievanie záhrady.
+\end{abstract-slovak}
 
 % Abstract in English
 \begin{abstract-english}
-This manual shows how to use the ctuthesis \LaTeX\ class, what are the requirements, etc.
+Nowadays, almost every electronic device is connected to the Internet. The world of the Internet of Things is advancing further, so it is appropriate to use such intelligent solutions in gardens. The work provides a solution that helps small growers to clarify plant cultivation and automate cultivation activities. With this system, growers can water the garden via the Internet connection or obtain information about the external environment of a particular grower's garden. These are information about the exact air temperature, current precipitation or soil and air humidity. This work deals with the research of existing systems for planning and managing the growing environment, the subsequent design and implementation of such a system, using the Internet of Things. The final solution of the system is a combination of a web application and the ESP8266 microchip, sensors measuring the conditions of the external environment, and an intelligent device that controls the garden's watering.
 \end{abstract-english}
 
 % Acknowledgements / Podekovani
@@ -973,15 +973,15 @@ V neposlednom rade tu máme notifikácie aplikácie, ktoré sa zobrazujú po kli
 \chapter{Záver}
 V prvých kapitolách práce sme si vyjasnili dôležité pojmy spojené s touto prácou ako sú Internet of Things alebo Smart Homes a vykonali sme analýzu používaných technológií pre internet vecí.
 
- Po vyjasnení si hlavných pojmov a technológií sme zadefinovali požiadavky na systém drobných pestovateľov, ktoré sme rozdelili do troch hlavných častí. Prvá časť definuje hlavnú funkcionalitu aplikácie, ktorá obnáša interakciu užívateľa s aplikáciou. V druhej časti požiadaviek sme si definovali požiadavky súvisiace s interakciou senzorov a posledná časť požiadaviek hovorí o požiadavkách súvisiacich s notifikáciami užívateľa na zmenu stavu vonkajšieho prostredia.
+Po vyjasnení si hlavných pojmov a technológií sme zadefinovali požiadavky na systém drobných pestovateľov, ktoré sme rozdelili do troch hlavných častí. Prvá časť definuje hlavnú funkcionalitu aplikácie, ktorá obnáša interakciu užívateľa s aplikáciou. V druhej časti sme definovali požiadavky súvisiace s interakciou senzorov a posledná časť požiadaviek suvisí s notifikáciami užívateľa na zmenu stavu vonkajšieho prostredia.
 
-Po definovaní všetkých potrebných požiadaviek na systém sme sa pustili do prieskumu existujúcich riešení, kde sme si rozobrali celkové riešenia systémov inteligentných záhrad, ale aj čiastočné riešenia, ktoré pozostávali buď z hardvérovej časti alebo z aplikačnej časti. Na základe tohoto prieskumu sme vyhodnotili, ako budeme postupovať v nasledujúcej implementácií. Na základe vyhodnotenia sme dospeli k záveru, že na vytvorenie výsledného systému budeme prepájať mikrokontrolér ESP8266, so senzormi merajúcimi relevantné veličiny okolitého prostredia. Senzormi namerané dáta spracuje mikrokontrolér a odošle ich na softvérové riešenie nášho systému.
+Po definovaní všetkých potrebných požiadaviek na systém sme sa pustili do prieskumu existujúcich riešení, kde sme si rozobrali celkové riešenia systémov inteligentných záhrad, ale aj čiastočné riešenia, ktoré pozostávali buď len z hardvérovej časti alebo iba z aplikačnej časti. Na základe tohoto prieskumu sme vyhodnotili, ako budeme postupovať v nasledujúcej implementácií. Na základe vyhodnotenia sme dospeli k záveru, že na vytvorenie výsledného systému budeme prepájať mikrokontrolér ESP8266, so senzormi merajúcimi relevantné veličiny okolitého prostredia. Senzormi namerané dáta spracuje mikrokontrolér a odošle ich na softvérové riešenie nášho systému.
 
- Po tomto zistení sme podrobnejšie vytvorili návrh riešenia nášho systému, kde sme ukázali ako by softvér mohol komunikovať s hardvérom, z akých častí sa jednotlivé softvérové a harvérové komponenty budú skladať a vytvorili sme diagram tried a sekvenčný diagram. 
+ Ďalej sme podrobnejšie vytvorili návrh riešenia nášho systému, kde sme ukázali ako by softvér mohol komunikovať s hardvérom, z akých častí sa jednotlivé softvérové a hardvérové komponenty budú skladať a vytvorili sme diagram tried a sekvenčný diagram. 
  
- Ďalším krokom bola implementácia, kde sme vytvorili dve medzi sebou komunikujúce aplikácie. Frontendovú javascriptovú aplikáciu komunikujúcu s backendovovou aplikáciou napísanou v jazyku Java za pomoci frameworku Spring Boot. Dáta zo senzorov sa pomocou mikrokontroléra odosielajú do sprostredkovateľa správ, ktorý komunikuje s backendovou aplikáciou. Backendová aplikácia následne príjme dáta a spracuje ich do podoby vhodnej pre užívateľské rozhranie. Riešením tohoto systému je aj senzor pre polievanie záhrady, ktorý je prepojený k bezdrôtovej lokálnej sieti. S týmto senzorom komunikuje backendová aplikácia pomocou aplikačného programovateľného rozhrania a ovláda jeho funkcionalitu, ako je zapnutie či vypnutie prívodu vody. 
-
-V budúcnosti je možné tento systém rozšíriť o ďalšie funkcionality, ako je automatizovanie zalievania na základe dát namerných senzormi, obohatenie databázy rastlín, úprava užívateľského profilu či doplnenie lokálneho počasia zo satelitov. Tento systém ponúka obrovskú škálu funkcionalít, ktorými môže byť ďalej roširovaný.
+ Ďalším krokom bola implementácia, kde sme vytvorili dve medzi sebou komunikujúce aplikácie. Frontendovú javascriptovú aplikáciu komunikujúcu s backendovovou aplikáciou napísanou v jazyku Java za pomoci frameworku Spring Boot. Dáta zo senzorov sa pomocou mikrokontroléra odosielajú do sprostredkovateľa správ, ktorý komunikuje s backendovou aplikáciou. Backendová aplikácia následne príjme dáta a spracuje ich do podoby vhodnej pre užívateľské rozhranie. Riešením tohoto systému je aj inteligentné zariadenie pre polievanie záhrady, ktoré je prepojené k bezdrôtovej lokálnej sieti. S týmto zariadením komunikuje backendová aplikácia pomocou aplikačného programovateľného rozhrania a ovláda jeho funkcionality, ktorými sú otvorenie či zatvorenie prívodu vody. 
+\newpage
+V budúcnosti je možné tento systém rozšíriť o ďalšie funkcionality, napríklad automatizovanie zalievania na základe dát namerných senzormi, obohatenie databázy rastlín, úprava užívateľského profilu či doplnenie lokálneho počasia zo satelitov. Existuje mnoho funkcionalít, ktorými môžeme tento systém ďalej rozširovať.
 
 \printindex
 \appendix
