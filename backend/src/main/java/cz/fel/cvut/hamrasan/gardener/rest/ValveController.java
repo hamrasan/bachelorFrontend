@@ -47,7 +47,7 @@ public class ValveController {
     }
 
     @PostMapping(value = "/create/{name}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void createValve(@PathVariable String name) throws NotAllowedException, NoSuchAlgorithmException, InvalidKeyException, IOException, AlreadyExistsException {
+    public void createValve(@PathVariable String name) throws NotAllowedException, NoSuchAlgorithmException, InvalidKeyException, IOException, AlreadyExistsException, NotFoundException {
 
 //        @RequestBody HashMap<String,List<Integer>> hashMap
         if(!SecurityUtils.isAuthenticatedAnonymously()) {
@@ -83,7 +83,7 @@ public class ValveController {
     }
 
     @PostMapping(value = "/move")
-    public void moveValve(@RequestBody HashMap<String,String> request) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException {
+    public void moveValve(@RequestBody HashMap<String,String> request) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException, NotFoundException {
         valveService.moveValve(request.get("deviceId"), request.get("onOffValve"));
     }
 

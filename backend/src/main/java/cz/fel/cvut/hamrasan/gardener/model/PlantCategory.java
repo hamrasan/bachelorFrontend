@@ -16,7 +16,7 @@ import java.util.List;
 public class PlantCategory extends AbstractEntity {
 
     @Basic(optional = false)
-    @Column(nullable = false, length = 50)
+    @Column(unique = true, nullable = false, length = 50)
     @Size(max = 50, min = 1, message = "Name is in incorrect format.")
     @NotBlank(message = "Name cannot be blank")
     private String name;

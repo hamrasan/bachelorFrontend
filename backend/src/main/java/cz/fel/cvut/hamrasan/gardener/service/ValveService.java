@@ -1,6 +1,7 @@
 package cz.fel.cvut.hamrasan.gardener.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import cz.fel.cvut.hamrasan.gardener.dao.GardenDao;
 import cz.fel.cvut.hamrasan.gardener.dao.NotificationDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
@@ -83,7 +84,7 @@ public class ValveService {
     }
 
     @Transactional
-    public void createValve(String valveName) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException, AlreadyExistsException {
+    public void createValve(String valveName) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException, AlreadyExistsException, NotFoundException {
         if(entity == null) setupApi();
         if(device == null) getDeviceInfo(valveName);
 
@@ -199,32 +200,37 @@ public class ValveService {
         else throw new NotAllowedException("Cannot refresh API token");
     }
 
-    public void getDeviceInfo(String deviceId) throws NotAllowedException, NoSuchAlgorithmException, InvalidKeyException, IOException {
+    public void getDeviceInfo(String deviceId) throws NotAllowedException, NoSuchAlgorithmException, InvalidKeyException, IOException, NotFoundException {
         String timestamp = String.valueOf(new Date().getTime());
         OkHttpClient client = new OkHttpClient();
 
-        if(entity!=null){
-            System.out.println(entity.getResult().getAccess_token());
-            Request request = new Request.Builder()
-                    .url("https://openapi.tuyaeu.com/v1.0/devices/"+deviceId)
-                    .header("client_id", "uhc3xnmragt6r07yrbc4")
-                    .header("access_token", entity.getResult().getAccess_token())
-                    .header("t", timestamp)
-                    .header("sign", calcSing("uhc3xnmragt6r07yrbc4",entity.getResult().getAccess_token(),"33d229ebad1743979ddf6253ce210be1", timestamp ))
-                    .header("sign_method", "HMAC-SHA256")
-                    .build(); // defaults to GET
+        try{
+            if(entity!=null){
+                System.out.println(entity.getResult().getAccess_token());
+                Request request = new Request.Builder()
+                        .url("https://openapi.tuyaeu.com/v1.0/devices/"+deviceId)
+                        .header("client_id", "uhc3xnmragt6r07yrbc4")
+                        .header("access_token", entity.getResult().getAccess_token())
+                        .header("t", timestamp)
+                        .header("sign", calcSing("uhc3xnmragt6r07yrbc4",entity.getResult().getAccess_token(),"33d229ebad1743979ddf6253ce210be1", timestamp ))
+                        .header("sign_method", "HMAC-SHA256")
+                        .build(); // defaults to GET
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            ResponseBody responseBody = client.newCall(request).execute().body();
+                ObjectMapper objectMapper = new ObjectMapper();
+                ResponseBody responseBody = client.newCall(request).execute().body();
 
-             mapperDevice = objectMapper.readValue(responseBody.string(), MapperDevice.class);
-             device = mapperDevice.getResult();
+                mapperDevice = objectMapper.readValue(responseBody.string(), MapperDevice.class);
 
-        }else throw new NotAllowedException("Cannot get device data");
+                device = mapperDevice.getResult();
 
+            }
+        }
+        catch (Exception e){
+            throw new NotAllowedException("Cannot get device data");
+        }
     }
 
-    public void moveValve(String deviceId, String onOffValue) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException {
+    public void moveValve(String deviceId, String onOffValue) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException, NotFoundException {
         String json = "";
         if( entity==null){
             setupApi();
@@ -248,7 +254,7 @@ public class ValveService {
         }else throw new NotAllowedException("Cannot turn on Valve");
     }
 
-    public String getValveStatus(String deviceId) throws NotAllowedException, NoSuchAlgorithmException, InvalidKeyException, IOException {
+    public String getValveStatus(String deviceId) throws NotAllowedException, NoSuchAlgorithmException, InvalidKeyException, IOException, NotFoundException {
         if(device==null){
             setupApi();
             getDeviceInfo(deviceId);

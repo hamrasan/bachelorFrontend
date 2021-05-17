@@ -15,7 +15,7 @@ import java.util.List;
 public class Plant extends AbstractPlant{
 
     @Basic(optional = false)
-    @Column(nullable = false, length = 30)
+    @Column(unique = true, nullable = false, length = 30)
     @Size(max = 30, min = 1, message = "Name is in incorrect format.")
     @NotBlank(message = "Name cannot be blank")
     private String name;
