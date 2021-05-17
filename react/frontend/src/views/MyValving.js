@@ -5,12 +5,10 @@ import MyVerticallyCenteredModal from "../components/MyVerticallyCenteredModal";
 import ErrorComponent from "../components/ErrorComponent";
 import { useErrorHandler } from "react-error-boundary";
 
-
 function MyValving() {
   const [valves, setValves] = useState([]);
   const [gardens, setGardens] = useState([]);
   const [modalShow, setModalShow] = useState(false);
-  const [modalException, setModalException] = useState(false);
   const [error, setError] = useState(false);
   const axios = require("axios");
   const handleError = useErrorHandler();
@@ -118,11 +116,17 @@ function MyValving() {
       .then((res) => {
         if (res.status == 200) {
           fetchValves();
-        }
+        } 
+        else throw Error(res.status);
       })
       .catch((error) => {
-        console.error(error);
-        handleError(error);
+        if (error.response.status == 403) {
+          error.message= "Pridanie zariadenia s týmto identifikačným číslom nie je možné. Skontrolujte identifikačné číslo a skúste to znova.";
+          handleError(error);
+        }
+        else{
+          handleError(error);
+        }
       });
   };
 
