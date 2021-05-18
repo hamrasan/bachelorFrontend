@@ -24,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/plants")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials="true")
+@CrossOrigin(origins = SecurityConstants.ORIGIN_URI, allowCredentials="true")
 public class PlantController {
 
     private PlantService plantService;

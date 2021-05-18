@@ -22,6 +22,8 @@ public class SecurityConstants {
 
     public static final String COOKIE_URI = "/";
 
+    public static final String ORIGIN_URI = "http://localhost:3000";
+
     /**
      * Session timeout in seconds.
      */

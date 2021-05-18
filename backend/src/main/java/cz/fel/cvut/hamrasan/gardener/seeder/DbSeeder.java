@@ -72,6 +72,13 @@ public class DbSeeder implements
                 plantDao.persist(plant2);
             }
 
+            if(sub.getName().equals("Kôstkoviny") && sub.getCategory().getName().equals("ovocie")) {
+                Plant plant2 = new Plant("Marhuľa", "marhule.jpg", -12, 40,  "Júl-August", sub );
+                plantDao.persist(plant2);
+                Plant plant12 = new Plant("Broskyňa", "broskyna.jpg", -12, 40,  "Júl-August", sub );
+                plantDao.persist(plant12);
+            }
+
             if(sub.getName().equals("None") && sub.getCategory().getName().equals("ovocie")){
                 Plant plant5 = new Plant("Banánovník", "banany.jpg", 20, 30,  "Leto", sub);
                 plantDao.persist(plant5);
@@ -123,6 +130,12 @@ public class DbSeeder implements
                 plantDao.persist(plant8);
                 Plant plant9 = new Plant("Ľuľok zemiakový", "zemiak.jpg", 7, 25,  "Jún-September", sub);
                 plantDao.persist(plant9);
+                Plant plant19 = new Plant("Chilly paprička", "chilly.jpg", 20, 35,  "August-November", sub);
+                plantDao.persist(plant19);
+                Plant plant2 = new Plant("Artyčok", "articoky.jpg", 10, 35,  "Júl-August", sub);
+                plantDao.persist(plant2);
+                Plant plant3 = new Plant("Avokádo", "avokado.jpg", -4, 40,  "Celoročne", sub);
+                plantDao.persist(plant3);
             }
 
             if(sub.getName().equals("None") && sub.getCategory().getName().equals("bylinky")) {
@@ -205,10 +218,12 @@ public class DbSeeder implements
                 Subcategory subcategory2 = new Subcategory("Citrusy", category, new ArrayList<>());
                 Subcategory subcategory3 = new Subcategory("Bobuľoviny", category, new ArrayList<>());
                 Subcategory subcategory4 = new Subcategory("Jablone", category, new ArrayList<>());
+                Subcategory subcategory5 = new Subcategory("Kôstkoviny", category, new ArrayList<>());
                 subcategoryDao.persist(subcategory1);
                 subcategoryDao.persist(subcategory2);
                 subcategoryDao.persist(subcategory3);
                 subcategoryDao.persist(subcategory4);
+                subcategoryDao.persist(subcategory5);
             }
             else if(category.getName().equals("zelenina")){
                 Subcategory subcategory1 = new Subcategory("Koreňová zelenina", category, new ArrayList<>());

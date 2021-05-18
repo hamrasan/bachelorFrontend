@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/garden")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials="true")
+@CrossOrigin(origins = SecurityConstants.ORIGIN_URI, allowCredentials="true")
 public class GardenController {
 
     private GardenService gardenService;

@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @Controller
 @RequestMapping("/gallery")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials="true")
+@CrossOrigin(origins = SecurityConstants.ORIGIN_URI, allowCredentials="true")
 public class GalleryController {
 
     @GetMapping(value = "/{src}", produces = MediaType.IMAGE_JPEG_VALUE)

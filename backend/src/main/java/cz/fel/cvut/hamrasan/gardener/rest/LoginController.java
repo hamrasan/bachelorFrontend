@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials="true", allowedHeaders = "*")
+@CrossOrigin(origins = SecurityConstants.ORIGIN_URI, allowCredentials="true", allowedHeaders = "*")
 public class LoginController {
 
     private LoginService service;

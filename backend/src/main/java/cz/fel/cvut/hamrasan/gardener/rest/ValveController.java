@@ -6,6 +6,7 @@ import cz.fel.cvut.hamrasan.gardener.dto.ValveWithScheduleDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.AlreadyExistsException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
+import cz.fel.cvut.hamrasan.gardener.security.SecurityConstants;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.ValveService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/valve")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials="true")
+@CrossOrigin(origins = SecurityConstants.ORIGIN_URI, allowCredentials="true")
 public class ValveController {
 
     private ValveService valveService;
