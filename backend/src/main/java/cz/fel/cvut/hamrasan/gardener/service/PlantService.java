@@ -101,6 +101,14 @@ public class PlantService {
         User user = userDao.find(current_user.getId());
     }
 
+
+    /**
+     * Method gets all Plants of concrete subcategory
+     * @param categoryName
+     * @param subcategoryName
+     * @return List<PlantWithoutDateDto>
+     * @throws NotFoundException
+     */
     @Transactional
     public List<PlantWithoutDateDto> findAllOfSubcategory(String categoryName, String subcategoryName) throws NotFoundException {
         PlantCategory plantCategory = plantCategoryDao.findByName(categoryName);
@@ -118,6 +126,14 @@ public class PlantService {
         return plantsDtos;
     }
 
+
+    /**
+     * Method gets all plants in garden
+     * @param gardenId - garden id
+     * @return  List<PlantDto>
+     * @throws NotFoundException
+     * @throws NotAllowedException
+     */
     @Transactional
     public List<PlantDto> getGardenPlants(Long gardenId) throws NotFoundException, NotAllowedException {
         List<PlantDto> plantDtos = new ArrayList<>();

@@ -1,9 +1,7 @@
 package cz.fel.cvut.hamrasan.gardener.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import cz.fel.cvut.hamrasan.gardener.dao.GardenDao;
-import cz.fel.cvut.hamrasan.gardener.dao.NotificationDao;
 import cz.fel.cvut.hamrasan.gardener.dao.UserDao;
 import cz.fel.cvut.hamrasan.gardener.dao.ValveDao;
 import cz.fel.cvut.hamrasan.gardener.dto.ValveDto;
@@ -17,8 +15,6 @@ import okhttp3.*;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -60,6 +56,11 @@ public class ValveService {
         this.notificationService = notificationService;
     }
 
+    /**
+     * Method gets all valves without schedule of user
+     * @return  List<ValveDto>
+     * @throws NotFoundException
+     */
     @Transactional
     public List<ValveDto> getAllOfUserRaw() throws NotFoundException {
         User user = userDao.find( SecurityUtils.getCurrentUser().getId());
@@ -72,6 +73,12 @@ public class ValveService {
         return valveDtos;
     }
 
+
+    /**
+     * Method gets all valves with schedule of user
+     * @return List<ValveWithScheduleDto>
+     * @throws NotFoundException
+     */
     @Transactional
     public List<ValveWithScheduleDto> getAllOfUserFull() throws NotFoundException {
         User user = userDao.find( SecurityUtils.getCurrentUser().getId());
@@ -83,6 +90,17 @@ public class ValveService {
         return ValveWithScheduleDto;
     }
 
+
+    /**
+     * Method creates valve into database
+     * @param valveName -  name(id) of valve in API
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IOException
+     * @throws NotAllowedException
+     * @throws AlreadyExistsException
+     * @throws NotFoundException
+     */
     @Transactional
     public void createValve(String valveName) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException, AlreadyExistsException, NotFoundException {
         if(entity == null) setupApi();
@@ -94,6 +112,17 @@ public class ValveService {
         valveDao.persist(valve);
     }
 
+
+    /**
+     * This method turns on valving of concrete valve
+     * @param valveName - name(id) of valve in API
+     * @param length - length of valving in minutes
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IOException
+     * @throws NotAllowedException
+     * @throws NotFoundException
+     */
     @Transactional
     public void valvingImmediately(String valveName, Integer length) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException, NotFoundException {
         if(entity == null) setupApi();
@@ -110,6 +139,12 @@ public class ValveService {
                 " " +LocalDateTime.now().getHour() + ":" + minutesString + " - Polievam polievačom " + valveName), NotificationType.VALVING, valve.getUser());
     }
 
+
+    /**
+     * This method updates garden list in valve.
+     * @param id - valve id
+     * @param gardensId - ids of new garden list
+     */
     @Transactional
     public void updateGardensToValve(Long id, List<Long> gardensId){
         Valve valve = valveDao.find(id);
@@ -134,6 +169,16 @@ public class ValveService {
     }
 
 
+    /**
+     * This method is calculing sing for Tuya API for setupApi
+     * @param cliendId
+     * @param secret
+     * @param timestamp
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws UnsupportedEncodingException
+     */
     private String calcSing(String cliendId, String secret, String timestamp) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
         String str = cliendId + timestamp;
         Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
@@ -147,6 +192,16 @@ public class ValveService {
         return Hex.encodeHexString(sha256_HMAC.doFinal(str.getBytes("UTF-8"))).toUpperCase();
     }
 
+    /**
+     * This method is calculing sing for Tuya API
+     * @param cliendId
+     * @param secret
+     * @param timestamp
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws UnsupportedEncodingException
+     */
     private String calcSing(String cliendId, String accessToken, String secret, String timestamp) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
         String str = cliendId + accessToken + timestamp;
         Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
@@ -160,6 +215,13 @@ public class ValveService {
         return Hex.encodeHexString(sha256_HMAC.doFinal(str.getBytes("UTF-8"))).toUpperCase();
     }
 
+
+    /**
+     * This method setup API user login
+     * @throws IOException
+     * @throws InvalidKeyException
+     * @throws NoSuchAlgorithmException
+     */
     public void setupApi() throws IOException, InvalidKeyException, NoSuchAlgorithmException {
         String timestamp = String.valueOf(new Date().getTime());
 
@@ -180,6 +242,14 @@ public class ValveService {
         System.out.println(entity.getResult().getAccess_token());
     }
 
+
+    /**
+     * Method refreshing API token.
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IOException
+     * @throws NotAllowedException
+     */
     public void refreshApiToken() throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException {
         OkHttpClient client = new OkHttpClient();
         String timestamp = String.valueOf(new Date().getTime());
@@ -200,6 +270,16 @@ public class ValveService {
         else throw new NotAllowedException("Cannot refresh API token");
     }
 
+
+    /**
+     * Method gets info of concrete device from API.
+     * @param deviceId - name(id) of valve in API
+     * @throws NotAllowedException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IOException
+     * @throws NotFoundException
+     */
     public void getDeviceInfo(String deviceId) throws NotAllowedException, NoSuchAlgorithmException, InvalidKeyException, IOException, NotFoundException {
         String timestamp = String.valueOf(new Date().getTime());
         OkHttpClient client = new OkHttpClient();
@@ -230,6 +310,17 @@ public class ValveService {
         }
     }
 
+
+    /**
+     * Method posts request to API for moving valve
+     * @param deviceId - name(id) of valve in API
+     * @param onOffValue - describe true or false, means whether turning on or turning off valve
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IOException
+     * @throws NotAllowedException
+     * @throws NotFoundException
+     */
     public void moveValve(String deviceId, String onOffValue) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException, NotFoundException {
         String json = "";
         if( entity==null){
@@ -254,6 +345,17 @@ public class ValveService {
         }else throw new NotAllowedException("Cannot turn on Valve");
     }
 
+
+    /**
+     * Method finding out status of state on valve
+     * @param deviceId - name(id) of valve in API
+     * @return valve status
+     * @throws NotAllowedException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IOException
+     * @throws NotFoundException
+     */
     public String getValveStatus(String deviceId) throws NotAllowedException, NoSuchAlgorithmException, InvalidKeyException, IOException, NotFoundException {
         if(device==null){
             setupApi();
@@ -271,6 +373,16 @@ public class ValveService {
     }
 
 
+    /**
+     * Method sets when valve should stop valving
+     * @param deviceId - name(id) of valve in API
+     * @param length - length of valving in minutes
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws IOException
+     * @throws NotAllowedException
+     * @throws NotFoundException
+     */
     public void setStopValving(String deviceId, Integer length) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NotAllowedException, NotFoundException {
         String json = "";
         Integer seconds = length*60;
@@ -291,6 +403,14 @@ public class ValveService {
     }
 
 
+    /**
+     * Method is sending command request to API.
+     * @param deviceId - name(id) of valve in API
+     * @param json - request body
+     * @throws IOException
+     * @throws InvalidKeyException
+     * @throws NoSuchAlgorithmException
+     */
     private void sendCommandRequest(String deviceId, String json) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
         String timestamp = String.valueOf(new Date().getTime());
         OkHttpClient client = new OkHttpClient();

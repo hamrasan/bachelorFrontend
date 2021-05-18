@@ -29,6 +29,11 @@ public class GardenService {
         this.translateService = translateService;
     }
 
+
+    /**
+     * Method gets all gardens of user
+     * @return List<GardenDto>
+     */
     @Transactional
     public List<GardenDto> findAllOfUser(){
         List<GardenDto> gardenDtos = new ArrayList<>();
@@ -41,6 +46,12 @@ public class GardenService {
         return gardenDtos;
     }
 
+
+    /**
+     * Creating garden
+     * @param name - name of new garden
+     * @param location - location of new garden
+     */
     @Transactional
     public void create(String name, String location) {
         User user = SecurityUtils.getCurrentUser();

@@ -46,12 +46,26 @@ public class NotificationService {
         return notificationDtos;
     }
 
+
+    /**
+     * Method saves new notification to database
+     * @param date - date of notification
+     * @param message - message of notification
+     * @param type - type of notification
+     * @param user
+     */
     @Transactional
     public void addNotification(LocalDate date, String message, NotificationType type, User user){
         Notification notification = new Notification(date, message, type, user);
         notificationDao.persist(notification);
     }
 
+
+    /**
+     * Method sets notification as seen.
+     * @param id - notification id
+     * @throws NotFoundException
+     */
     @Transactional
     public void setSeenNotification(Long id) throws NotFoundException {
         Notification notification = notificationDao.find(id);
@@ -60,25 +74,4 @@ public class NotificationService {
         notificationDao.update(notification);
     }
 
-//    private List<String> getNotifications(Long id) throws NotFoundException {
-//        User user = userDao.find(id);
-//        if (user == null) throw new NotFoundException("User not found");
-//        return cache.get(user.getId());
-//        return null;
-//    }
-
-//    @Transactional
-//    public void createListNotifications(Long id) {
-//        cache.put(id, new ArrayList<>());
-//    }
-
-//    @Transactional
-//    public void addNotification(Long id, String message) throws NotFoundException {
-//        User user = userDao.find(id);
-//        if (user == null) throw new NotFoundException("User not found");
-//        if(!cache.containsKey(user.getId())) throw new NotFoundException("User in cache not found");
-//        List<String> nofications = getNotifications(user.getId());
-//        nofications.add(message);
-//        cache.replace(user.getId(), nofications);
-//    }
 }

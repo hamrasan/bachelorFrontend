@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +22,8 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.logging.Logger;
+
 import static java.util.concurrent.TimeUnit.*;
 
 @Service
@@ -35,6 +38,8 @@ public class ScheduleService {
     private UserDao userDao;
     private TranslateService translateService;
     private NotificationDao notificationDao;
+    private final static Logger LOGGER = Logger.getLogger(ScheduleService.class.getName());
+
 
     @Autowired
     public ScheduleService(ValveDao valveDao, ValveService valveService, ValveScheduleDao valveScheduleDao, UserDao userDao,
@@ -49,16 +54,16 @@ public class ScheduleService {
     }
 
 
+    /**
+     * Method sets all schedule of valves every day at 00:00
+     */
     @Scheduled(cron = "0 0 0 * * *", zone = "CET")
     public void scheduler() {
 
         for (Valve valve : valveDao.findAll()) {
-            System.out.println(valve.getName());
-
             for (ValveSchedule valveSchedule: valveScheduleDao.findByValve(valve.getId())) {
                 final Runnable valving = new Runnable() {
                     public void run() {
-                        System.out.println(valveSchedule.getHour());
                         if(valveScheduleDao.find(valveSchedule.getId()) != null) {
                             try {
                                 valveService.moveValve(valve.getName(), "true");
@@ -79,28 +84,40 @@ public class ScheduleService {
                 if(valveSchedule.getDays().contains(c.get(Calendar.DAY_OF_WEEK)+1)){
                     System.out.println(c.get(Calendar.DAY_OF_WEEK));
                     final ScheduledFuture<?> valveHandle = scheduler.schedule(valving, (valveSchedule.getHour()*60) + valveSchedule.getMinutes(), MINUTES);
+                    LOGGER.info("Valving schedule at " + valveSchedule.getHour() + ":" + valveSchedule.getMinutes() +" for valve " + valve.getName() +" is set");
                 }
-//                scheduler.schedule(new Runnable() {
-//
-//                    public void run() { beeperHandle.cancel(true); }
-//                }, 60 * 60, SECONDS);
             }
         }
     }
 
+
+    /**
+     * Method saves schedule of valve to database and setup schedule if schedule is today
+     * @param nameValve
+     * @param days
+     * @param time
+     * @param valvingLength
+     * @throws NotAllowedException
+     */
     @Transactional
     public void setSchedule(String nameValve, List<Integer> days, String time, Integer valvingLength) throws NotAllowedException {
         Valve valve = valveDao.findByName(nameValve);
         User user = userDao.find(SecurityUtils.getCurrentUser().getId());
-        System.out.println(user.getValves());
         String[] arrOfStr = time.split(":");
-        System.out.println(user.getValves().contains(valve));
 
         if(!user.getValves().contains(valve)) throw new NotAllowedException("Not allowed operation");
         ValveSchedule valveSchedule = new ValveSchedule(Integer.parseInt(arrOfStr[0]), Integer.parseInt(arrOfStr[1]), valvingLength, valve, days);
         valveScheduleDao.persist(valveSchedule);
+        LOGGER.info("Valving schedule for user with id: " + user.getId() + " and valve name " + valve.getName() +" is set");
     }
 
+
+    /**
+     * Method gets all schedules of user
+     * @param valveName
+     * @return
+     * @throws NotAllowedException
+     */
     @Transactional
     public List<ValveScheduleDto> getUserSchedules(String valveName) throws NotAllowedException {
         User user = userDao.find(SecurityUtils.getCurrentUser().getId());
@@ -118,6 +135,6 @@ public class ScheduleService {
     public void deleteSchedule(Long id){
         ValveSchedule valveSchedule = valveScheduleDao.find(id);
         valveScheduleDao.remove(valveSchedule);
-
     }
+
 }

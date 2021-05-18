@@ -52,6 +52,13 @@ public class SensorsService {
         pressureDao.persist(new Pressure(LocalDateTime.now(), Float.parseFloat(data), gardenDao.find(Long.parseLong(key.substring(8))) ));
     }
 
+
+    /**
+     * Method saves temperature data to database and sends notifications about change  and saves that to database
+     * @param data - temperature data
+     * @param key - garden id
+     * @throws NotFoundException
+     */
     @Transactional
     public void saveTemperatue(String data, String key) throws NotFoundException {
         Garden garden =  gardenDao.find(Long.parseLong(key.substring(4)));
@@ -164,6 +171,11 @@ public class SensorsService {
         return translateService.translateRain(rainDao.findLatest(garden));
     }
 
+
+    /**
+     * Method sets time of measure to ESP
+     * @param minutes
+     */
     @Transactional
     public void setMeassureMinutes(String minutes){
         client.setMeassureMinutes(minutes);
@@ -183,6 +195,12 @@ public class SensorsService {
         return translateService.translateSoil(soilDao.findLatest(garden));
     }
 
+    /**
+     * Method gets 5 soil values of garden history
+     * @param gardenId - garden id
+     * @return List<SoilDto>
+     * @throws NotAllowedException
+     */
     @Transactional
     public List<SoilDto> getShortHistorySoil(Long gardenId) throws NotAllowedException {
         List<SoilDto> soilDtos = new ArrayList<>();
@@ -198,6 +216,12 @@ public class SensorsService {
         else return new ArrayList<>();
     }
 
+    /**
+     * Method gets 5 rain values of garden history
+     * @param gardenId - garden id
+     * @return List<RainDto>
+     * @throws NotAllowedException
+     */
     @Transactional
     public List<RainDto> getShortHistoryRain(Long gardenId) throws NotAllowedException {
         List<RainDto> rainDtos = new ArrayList<>();
@@ -213,6 +237,12 @@ public class SensorsService {
         else return new ArrayList<>();
     }
 
+    /**
+     * Method gets 5 humidity values of garden history
+     * @param gardenId - garden id
+     * @return List<HumidityDto>
+     * @throws NotAllowedException
+     */
     @Transactional
     public List<HumidityDto> getShortHistoryHumidity(Long gardenId) throws NotAllowedException {
         List<HumidityDto> humidityDtos = new ArrayList<>();
@@ -227,6 +257,12 @@ public class SensorsService {
         else return new ArrayList<>();
     }
 
+    /**
+     * Method gets 5 pressure values of garden history
+     * @param gardenId - garden id
+     * @return List<PressureDto>
+     * @throws NotAllowedException
+     */
     @Transactional
     public List<PressureDto> getShortHistoryPressure(Long gardenId) throws NotAllowedException {
         List<PressureDto> pressureDtos = new ArrayList<>();
@@ -242,6 +278,12 @@ public class SensorsService {
         else return new ArrayList<>();
     }
 
+    /**
+     * Method gets 5 temperature values of garden history
+     * @param gardenId - garden id
+     * @return List<TemperatureDto>
+     * @throws NotAllowedException
+     */
     @Transactional
     public List<TemperatureDto> getShortHistoryTemperature(Long gardenId) throws NotAllowedException {
         List<TemperatureDto> temperatureDtos = new ArrayList<>();
@@ -257,6 +299,12 @@ public class SensorsService {
         else return new ArrayList<>();
     }
 
+    /**
+     * Method gets all soil history of garden
+     * @param gardenName - garden name
+     * @return List<SoilDto>
+     * @throws NotAllowedException
+     */
     @Transactional
     public List<SoilDto> getHistorySoil(String gardenName) throws NotAllowedException {
         List<SoilDto> soilDtos = new ArrayList<>();
@@ -271,6 +319,12 @@ public class SensorsService {
         return soilDtos;
     }
 
+    /**
+     * Method gets all humidity history of garden
+     * @param gardenName - garden name
+     * @return List<HumidityDto>
+     * @throws NotAllowedException
+     */
     @Transactional
     public List<HumidityDto> getHistoryHumidity(String gardenName) throws NotAllowedException {
         List<HumidityDto> humidityDtos = new ArrayList<>();
@@ -285,6 +339,12 @@ public class SensorsService {
         return humidityDtos;
     }
 
+    /**
+     * Method gets all pressure history of garden
+     * @param gardenName - garden name
+     * @return List<PressureDto>
+     * @throws NotAllowedException
+     */
     @Transactional
     public List<PressureDto> getHistoryPressure(String gardenName) throws NotAllowedException {
         List<PressureDto> pressureDtos = new ArrayList<>();
@@ -299,6 +359,12 @@ public class SensorsService {
         return pressureDtos;
     }
 
+    /**
+     * Method gets all temperature history of garden
+     * @param gardenName - garden name
+     * @return List<TemperatureDto>
+     * @throws NotAllowedException
+     */
     @Transactional
     public List<TemperatureDto> getHistoryTemperature(String gardenName) throws NotAllowedException {
         List<TemperatureDto> temperatureDtos = new ArrayList<>();
@@ -312,6 +378,13 @@ public class SensorsService {
         return temperatureDtos;
     }
 
+
+    /**
+     * Method gets all rain history of garden
+     * @param gardenName - garden name
+     * @return  List<RainDto>
+     * @throws NotAllowedException
+     */
     @Transactional
     public List<RainDto> getHistoryRain(String gardenName) throws NotAllowedException {
         List<RainDto> rainDtos = new ArrayList<>();

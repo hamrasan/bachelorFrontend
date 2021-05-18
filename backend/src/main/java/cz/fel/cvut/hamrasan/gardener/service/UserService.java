@@ -31,6 +31,7 @@ public class UserService {
         this.notificationService = notificationService;
     }
 
+    @Transactional
     public List<UserDto> findAll() {
         List<UserDto> userDtos = new ArrayList<>();
 
