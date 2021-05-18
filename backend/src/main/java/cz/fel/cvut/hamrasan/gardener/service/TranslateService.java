@@ -8,13 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 @Service
 public class TranslateService {
 
+    private final static Logger LOGGER = Logger.getLogger(ScheduleService.class.getName());
+
     @Transactional
     public UserDto translateUser(User user) {
-        System.out.println(user.toString());
         Objects.requireNonNull(user);
 
         List<GardenDto> gardenDtos = new ArrayList<GardenDto>();
@@ -102,20 +104,38 @@ public class TranslateService {
 
     @Transactional
     public TemperatureDto translateTemp(Temperature temperature){
-        Objects.requireNonNull(temperature);
-        return new TemperatureDto(temperature.getId(),temperature.getDate(), temperature.getValue(), temperature.getGarden().getId());
+        try{
+            Objects.requireNonNull(temperature);
+            return new TemperatureDto(temperature.getId(),temperature.getDate(), temperature.getValue(), temperature.getGarden().getId());
+        }
+         catch (NullPointerException e){
+            LOGGER.info("Temperature is not available");
+            return null;
+        }
     }
 
     @Transactional
     public PressureDto translatePressure(Pressure pressure){
-        Objects.requireNonNull(pressure);
-        return new PressureDto(pressure.getId(),pressure.getDate(), pressure.getValue(), pressure.getGarden().getId());
+        try{
+            Objects.requireNonNull(pressure);
+            return new PressureDto(pressure.getId(),pressure.getDate(), pressure.getValue(), pressure.getGarden().getId());
+        }
+        catch (NullPointerException e){
+            LOGGER.info("Pressure is not available");
+            return null;
+        }
     }
 
     @Transactional
     public HumidityDto translateHumidity(Humidity humidity){
-        Objects.requireNonNull(humidity);
-        return new HumidityDto(humidity.getId(),humidity.getDate(), humidity.getValue(), humidity.getGarden().getId());
+        try{
+            Objects.requireNonNull(humidity);
+            return new HumidityDto(humidity.getId(),humidity.getDate(), humidity.getValue(), humidity.getGarden().getId());
+        }
+         catch (NullPointerException e){
+            LOGGER.info("Humidity is not available");
+            return null;
+        }
     }
 
     @Transactional
@@ -136,8 +156,14 @@ public class TranslateService {
 
     @Transactional
     public RainDto translateRain(Rain rain){
-        Objects.requireNonNull(rain);
-        return new RainDto(rain.getId(), rain.getDate(), rain.getRaining(), rain.getGarden().getId());
+        try{
+            Objects.requireNonNull(rain);
+            return new RainDto(rain.getId(), rain.getDate(), rain.getRaining(), rain.getGarden().getId());
+        }
+        catch (NullPointerException e){
+            LOGGER.info("Rain is not available");
+            return null;
+        }
     }
 
     @Transactional
@@ -177,8 +203,14 @@ public class TranslateService {
 
     @Transactional
     public SoilDto translateSoil(Soil soil) {
-        Objects.requireNonNull(soil);
-        return new SoilDto(soil.getId(), soil.getDate(), soil.getValue(), soil.getGarden().getId());
+        try{
+            Objects.requireNonNull(soil);
+            return new SoilDto(soil.getId(), soil.getDate(), soil.getValue(), soil.getGarden().getId());
+        }
+        catch (NullPointerException e){
+            LOGGER.info("Soil is not available");
+            return null;
+        }
     }
 
     @Transactional

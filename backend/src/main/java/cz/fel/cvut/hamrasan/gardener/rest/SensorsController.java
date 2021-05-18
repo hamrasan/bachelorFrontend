@@ -3,6 +3,7 @@ package cz.fel.cvut.hamrasan.gardener.rest;
 import cz.fel.cvut.hamrasan.gardener.amqp.rpc.Tut6Client;
 import cz.fel.cvut.hamrasan.gardener.dto.*;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
+import cz.fel.cvut.hamrasan.gardener.security.SecurityConstants;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.SensorsService;
 import org.springframework.beans.factory.annotation.Autowired;

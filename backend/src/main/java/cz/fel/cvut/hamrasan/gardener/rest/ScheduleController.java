@@ -3,6 +3,7 @@ package cz.fel.cvut.hamrasan.gardener.rest;
 import cz.fel.cvut.hamrasan.gardener.dto.RequestWrapperSchedule;
 import cz.fel.cvut.hamrasan.gardener.dto.ValveScheduleDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
+import cz.fel.cvut.hamrasan.gardener.security.SecurityConstants;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,6 +2,7 @@ package cz.fel.cvut.hamrasan.gardener.rest;
 
 import java.io.InputStream;
 
+import cz.fel.cvut.hamrasan.gardener.security.SecurityConstants;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;

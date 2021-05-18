@@ -6,6 +6,7 @@ import cz.fel.cvut.hamrasan.gardener.exceptions.BadPassword;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotAllowedException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.exceptions.UnauthorizedException;
+import cz.fel.cvut.hamrasan.gardener.security.SecurityConstants;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

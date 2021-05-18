@@ -8,6 +8,7 @@ import cz.fel.cvut.hamrasan.gardener.exceptions.NotFoundException;
 import cz.fel.cvut.hamrasan.gardener.model.Garden;
 import cz.fel.cvut.hamrasan.gardener.model.Plant;
 import cz.fel.cvut.hamrasan.gardener.model.UserPlant;
+import cz.fel.cvut.hamrasan.gardener.security.SecurityConstants;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.PlantService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;

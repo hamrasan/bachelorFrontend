@@ -3,6 +3,7 @@ package cz.fel.cvut.hamrasan.gardener.rest;
 import cz.fel.cvut.hamrasan.gardener.dto.UserDto;
 import cz.fel.cvut.hamrasan.gardener.exceptions.AlreadyLoginException;
 import cz.fel.cvut.hamrasan.gardener.model.User;
+import cz.fel.cvut.hamrasan.gardener.security.SecurityConstants;
 import cz.fel.cvut.hamrasan.gardener.service.security.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

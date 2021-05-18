@@ -1,6 +1,7 @@
 package cz.fel.cvut.hamrasan.gardener.rest;
 
 import cz.fel.cvut.hamrasan.gardener.dto.GardenDto;
+import cz.fel.cvut.hamrasan.gardener.security.SecurityConstants;
 import cz.fel.cvut.hamrasan.gardener.security.SecurityUtils;
 import cz.fel.cvut.hamrasan.gardener.service.GardenService;
 import org.springframework.beans.factory.annotation.Autowired;
