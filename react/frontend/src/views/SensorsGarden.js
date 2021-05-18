@@ -22,10 +22,10 @@ function SensorsGarden(props) {
       url: "http://localhost:8080/sensors/temperature/" + props.gardenId,
     })
       .then((res) => {
-        if ((res.status == 200)) {
+        if ((res.status == 200) && (res.data != "")) {
           setTemperature(res.data);
           console.log(res);
-        } else throw Error(res.status);
+        } else if((res.status != 200)) throw Error(res.status);
       })
       .catch((error) => {
         console.error(error);
@@ -56,10 +56,11 @@ function SensorsGarden(props) {
       url: "http://localhost:8080/sensors/soil/" + props.gardenId,
     })
       .then((res) => {
-        if ((res.status == 200)) {
+        if ((res.status == 200) && (res.data != "")) {
           setSoil(res.data);
           console.log(res);
-        } else throw Error(res.status);
+        } 
+        else if((res.status != 200)) throw Error(res.status);
       })
       .catch((error) => {
         console.error(error);
@@ -90,10 +91,10 @@ function SensorsGarden(props) {
       url: "http://localhost:8080/sensors/pressure/" + props.gardenId,
     })
       .then((res) => {
-        if ((res.status == 200)) {
+        if ((res.status == 200) && (res.data != "")) {
           setPressure(res.data);
           console.log(res);
-        } else throw Error(res.status);
+        } else if((res.status != 200)) throw Error(res.status);
       })
       .catch((error) => {
         console.error(error);
@@ -124,10 +125,11 @@ function SensorsGarden(props) {
       url: "http://localhost:8080/sensors/humidity/" + props.gardenId,
     })
       .then((res) => {
-        if ((res.status == 200)) {
+        if ((res.status == 200) && (res.data != "")) {
           setHumidity(res.data);
           console.log(res);
-        } else throw Error(res.status);
+          console.log("humidity");
+        } else if((res.status != 200)) throw Error(res.status);
       })
       .catch((error) => {
         console.error(error);
@@ -158,10 +160,10 @@ function SensorsGarden(props) {
       url: "http://localhost:8080/sensors/rain/" + props.gardenId,
     })
       .then((res) => {
-        if ((res.status == 200)) {
+        if ((res.status == 200) && (res.data != "")) {
           setRain(res.data);
           console.log(res);
-        } else throw Error(res.status);
+        } else if((res.status != 200)) throw Error(res.status);
       })
       .catch((error) => {
         console.error(error);
