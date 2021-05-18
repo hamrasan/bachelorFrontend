@@ -81,8 +81,7 @@ public class ScheduleService {
                 Calendar c = Calendar.getInstance();
                 c.setTime(date);
                     //DAY must be +1 bcs Sunday is 1 in Calendar
-                if(valveSchedule.getDays().contains(c.get(Calendar.DAY_OF_WEEK)+1)){
-                    System.out.println(c.get(Calendar.DAY_OF_WEEK));
+                if(valveSchedule.getDays().contains(c.get(Calendar.DAY_OF_WEEK)-1)){
                     final ScheduledFuture<?> valveHandle = scheduler.schedule(valving, (valveSchedule.getHour()*60) + valveSchedule.getMinutes(), MINUTES);
                     LOGGER.info("Valving schedule at " + valveSchedule.getHour() + ":" + valveSchedule.getMinutes() +" for valve " + valve.getName() +" is set");
                 }
@@ -107,6 +106,35 @@ public class ScheduleService {
 
         if(!user.getValves().contains(valve)) throw new NotAllowedException("Not allowed operation");
         ValveSchedule valveSchedule = new ValveSchedule(Integer.parseInt(arrOfStr[0]), Integer.parseInt(arrOfStr[1]), valvingLength, valve, days);
+
+        final Runnable valving = new Runnable() {
+            public void run() {
+                    try {
+                        valveService.moveValve(valve.getName(), "true");
+                        valveService.setStopValving(valve.getName(), valveSchedule.getLength());
+                        Notification notification = new Notification(LocalDate.now(), "Polievam polievačom " + valve.getName(), NotificationType.VALVING, valve.getUser());
+                        notificationDao.persist(notification);
+                        LOGGER.info("Valving for user with id: " + user.getId() + " is running");
+                    } catch (Exception e) {
+                        LOGGER.warning("The problem with valving of valve name "+ valve.getName());
+                        e.printStackTrace();
+                    }
+            }
+        };
+
+        Date date = new Date(System.currentTimeMillis());
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        //DAY must be +1 bcs Sunday is 1 in Calendar
+        if(valveSchedule.getDays().contains(c.get(Calendar.DAY_OF_WEEK)-1)){
+            if(valveSchedule.getHour() > LocalDateTime.now().getHour()){
+                final ScheduledFuture<?> valveHandle = scheduler.schedule(valving, (valveSchedule.getHour()- LocalDateTime.now().getHour())*60 + (valveSchedule.getMinutes() - LocalDateTime.now().getMinute()), MINUTES);
+            }
+            else if((valveSchedule.getHour() == LocalDateTime.now().getHour()) && (valveSchedule.getMinutes() > LocalDateTime.now().getMinute())){
+                final ScheduledFuture<?> valveHandle = scheduler.schedule(valving,  valveSchedule.getMinutes() - LocalDateTime.now().getMinute(), MINUTES);
+            }
+        }
+
         valveScheduleDao.persist(valveSchedule);
         LOGGER.info("Valving schedule for user with id: " + user.getId() + " and valve name " + valve.getName() +" is set");
     }
