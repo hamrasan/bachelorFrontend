@@ -29,7 +29,7 @@ function LoginForm() {
       .then((res) => {
         if (res.status == 200) {
           context.login();
-        } else throw Error(res.status);
+        }
       })
       .catch((error) => {
         if (error.response.status == 401) {
