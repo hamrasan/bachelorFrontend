@@ -25,7 +25,7 @@ function SensorsGarden(props) {
         if ((res.status == 200) && (res.data != "")) {
           setTemperature(res.data);
           console.log(res);
-        } else if((res.status != 200)) throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);
@@ -42,7 +42,7 @@ function SensorsGarden(props) {
         if ((res.status == 200)) {
           setTemperatureHistory(res.data);
           console.log(res);
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);
@@ -60,7 +60,6 @@ function SensorsGarden(props) {
           setSoil(res.data);
           console.log(res);
         } 
-        else if((res.status != 200)) throw Error(res.status);
       })
       .catch((error) => {
         console.error(error);
@@ -77,7 +76,7 @@ function SensorsGarden(props) {
         if ((res.status == 200)) {
           setSoilHistory(res.data);
           console.log(res);
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);
@@ -94,7 +93,7 @@ function SensorsGarden(props) {
         if ((res.status == 200) && (res.data != "")) {
           setPressure(res.data);
           console.log(res);
-        } else if((res.status != 200)) throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);
@@ -111,7 +110,7 @@ function SensorsGarden(props) {
         if ((res.status == 200)) {
           setPressureHistory(res.data);
           console.log(res);
-        } else throw Error(res.status);
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -129,7 +128,7 @@ function SensorsGarden(props) {
           setHumidity(res.data);
           console.log(res);
           console.log("humidity");
-        } else if((res.status != 200)) throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);
@@ -146,7 +145,7 @@ function SensorsGarden(props) {
         if ((res.status == 200)) {
           setHumidityHistory(res.data);
           console.log(res);
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);
@@ -163,7 +162,7 @@ function SensorsGarden(props) {
         if ((res.status == 200) && (res.data != "")) {
           setRain(res.data);
           console.log(res);
-        } else if((res.status != 200)) throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);
@@ -180,7 +179,7 @@ function SensorsGarden(props) {
         if ((res.status == 200)) {
           setRainHistory(res.data);
           console.log(res);
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);

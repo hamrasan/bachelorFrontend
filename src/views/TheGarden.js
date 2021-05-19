@@ -36,7 +36,7 @@ function TheGarden() {
       .then((res) => {
         if (res.status == 200) {
           setPlants(res.data);
-        } else throw Error(res.status);
+        }
       })
       .catch((error) => {
         handleError(error);
@@ -59,7 +59,7 @@ function TheGarden() {
             setActualGardenSlug(res.data[0].slug);
             fetchPlants(res.data[0].id, res.data[0].name, res.data[0].slug);
           }
-        }else throw Error(res.status);
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -84,7 +84,7 @@ function TheGarden() {
       .then((res) => {
         if (res.status == 200) {
           fetchGardens();
-        }else throw Error(res.status);
+        }
       })
       .catch((error) => {
         console.error(error);

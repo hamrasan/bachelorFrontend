@@ -33,7 +33,7 @@ function TheNotification() {
       .then((res) => {
         if (res.status === 200) {
           setNotifications(res.data);
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         handleError(error);
@@ -51,7 +51,7 @@ function TheNotification() {
         if (res.status === 200) {
           console.log(res.data);
           setLowTemp(res.data);
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);
@@ -69,7 +69,7 @@ function TheNotification() {
         if (res.status === 200) {
           console.log(res.data);
           setHighTemp(res.data);
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);
@@ -89,7 +89,7 @@ function TheNotification() {
     })
       .then((res) => {
         if (res.status === 200) {
-        } else throw Error(res.status);
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -107,7 +107,7 @@ function TheNotification() {
       .then((res) => {
         if (res.status === 200) {
           fetchNotifications();
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);

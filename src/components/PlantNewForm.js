@@ -46,7 +46,7 @@ function PlantNewForm(props) {
       .then((res) => {
         if (res.status == 200) {
           setCategories(res.data);
-        } else throw Error(res.status);
+        }
       })
       .catch((error) => {
         handleError(error);
@@ -80,7 +80,7 @@ function PlantNewForm(props) {
         if (res.status == 200) {
           console.log("plant was send");
           history.push("/garden");
-        } else throw Error(res.status);
+        }
       })
       .catch((error) => {
         handleError(error);
