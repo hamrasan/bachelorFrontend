@@ -33,12 +33,14 @@ function LoginForm() {
       })
       .catch((error) => {
         if (error.response.status == 401) {
-          error.message =
-            " Nesprávne meno alebo heslo. Skontrolujte vaše údaje a skúste to znova.";
+          error.message = " Nesprávne meno alebo heslo. Skontrolujte vaše údaje a skúste to znova.";
+          handleError(error);
+          context.logout();
+        }
+        else{
+          context.logout();
           handleError(error);
         }
-        handleError(error);
-        context.logout();
         console.error(error);
       });
   };
