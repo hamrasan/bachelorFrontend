@@ -25,8 +25,6 @@ function LoginForm() {
     
     fetch(process.env.REACT_APP_API_URL + "/login", requestOptions).then((res) => {
       if (res.status == 200) {
-        console.log(res);
-        console.log("PRIHLASUJEM");
         context.login();
       }
       else throw Error(res.status);
@@ -34,7 +32,6 @@ function LoginForm() {
     ).catch((error) => {
       handleError(error);
       context.logout();
-      console.log("after logout");
       console.error(error);
     });
   };
