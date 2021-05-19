@@ -31,7 +31,7 @@ function TheNotification() {
       url: process.env.REACT_APP_API_URL + "/notifications/all",
     })
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           setNotifications(res.data);
         } else throw Error(res.status);
       })
@@ -48,7 +48,7 @@ function TheNotification() {
       url: process.env.REACT_APP_API_URL + "/user/lowTemp",
     })
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           console.log(res.data);
           setLowTemp(res.data);
         } else throw Error(res.status);
@@ -66,7 +66,7 @@ function TheNotification() {
       url: process.env.REACT_APP_API_URL + "/user/highTemp",
     })
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           console.log(res.data);
           setHighTemp(res.data);
         } else throw Error(res.status);
@@ -88,7 +88,7 @@ function TheNotification() {
       },
     })
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
         } else throw Error(res.status);
       })
       .catch((error) => {
@@ -105,7 +105,7 @@ function TheNotification() {
       data: {},
     })
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           fetchNotifications();
         } else throw Error(res.status);
       })

@@ -9,6 +9,7 @@ function LoginForm() {
   const axios = require("axios");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
   let context = useContext(appContext);
   const handleError = useErrorHandler();
 
