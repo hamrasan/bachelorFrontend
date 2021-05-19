@@ -45,6 +45,9 @@ function LoginForm() {
       });
   };
 
+  useEffect(() => {
+  }, [error]);
+
   return (
     <ErrorComponent onReset={() => setError(true)}>
       <div className="loginForm">
