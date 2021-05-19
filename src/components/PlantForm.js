@@ -24,7 +24,7 @@ function PlantForm(props) {
         <Row>
           <Col className="d-flex flex-row-reverse mb-3">
             <img
-              src={"http://localhost:8080/gallery/" + plant.picture}
+              src={process.env.REACT_APP_API_URL + "/gallery/" + plant.picture}
               class="img-fluid rounded mx-auto"
               alt={plant.name}
               style={{ maxWidth: "400px", maxHeight: "400px" }}

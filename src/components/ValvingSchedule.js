@@ -40,7 +40,7 @@ function ValvingSchedule() {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/schedule/all/" + params.id,
+      url: process.env.REACT_APP_API_URL + "/schedule/all/" + params.id,
     })
       .then((res) => {
         if (res.status == 200) {
@@ -63,7 +63,7 @@ function ValvingSchedule() {
         "Access-Control-Allow-Origin": "*",
       },
       withCredentials: true,
-      url: "http://localhost:8080/schedule/" + params.id,
+      url: process.env.REACT_APP_API_URL + "/schedule/" + params.id,
       data: {
         days: days,
         time: time,
@@ -93,7 +93,7 @@ function ValvingSchedule() {
       },
       withCredentials: true,
       data: {},
-      url: "http://localhost:8080/schedule/" + id,
+      url: process.env.REACT_APP_API_URL + "/schedule/" + id,
     })
       .then((res) => {
         console.log(res);

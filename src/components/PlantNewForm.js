@@ -40,7 +40,7 @@ function PlantNewForm(props) {
   const getCategories = () => {
     axios({
       method: "get",
-      url: "http://localhost:8080/categories",
+      url: process.env.REACT_APP_API_URL + "/categories",
       withCredentials: true,
     })
       .then((res) => {
@@ -61,7 +61,7 @@ function PlantNewForm(props) {
 
     axios({
       method: "post",
-      url: "http://localhost:8080/plants",
+      url: process.env.REACT_APP_API_URL + "/plants",
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,7 @@ function PlantNewForm(props) {
         minTemperature: minTemperature,
         maxTemperature: maxTemperature,
         season: season,
-        garden: params.name,
+        garden: params.slug,
       },
     })
       .then((res) => {

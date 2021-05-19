@@ -32,7 +32,7 @@ function MyHistory() {
       method: "get",
       withCredentials: true,
       url:
-        "http://localhost:8080/sensors/history_all/" +
+        process.env.REACT_APP_API_URL + "/sensors/history_all/" +
         params.sensor +
         "/" +
         params.name,

@@ -28,7 +28,7 @@ function TheNotification() {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/notifications/all",
+      url: process.env.REACT_APP_API_URL + "/notifications/all",
     })
       .then((res) => {
         if (res.status == 200) {
@@ -45,7 +45,7 @@ function TheNotification() {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/user/lowTemp",
+      url: process.env.REACT_APP_API_URL + "/user/lowTemp",
     })
       .then((res) => {
         if (res.status == 200) {
@@ -63,7 +63,7 @@ function TheNotification() {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/user/highTemp",
+      url: process.env.REACT_APP_API_URL + "/user/highTemp",
     })
       .then((res) => {
         if (res.status == 200) {
@@ -81,7 +81,7 @@ function TheNotification() {
     axios({
       method: "post",
       withCredentials: true,
-      url: "http://localhost:8080/user/notifications/",
+      url: process.env.REACT_APP_API_URL + "/user/notifications/",
       data: {
         lowTemp: lowTemp,
         highTemp: highTemp,
@@ -101,7 +101,7 @@ function TheNotification() {
     axios({
       method: "post",
       withCredentials: true,
-      url: "http://localhost:8080/notifications/seen/" + id,
+      url: process.env.REACT_APP_API_URL + "/notifications/seen/" + id,
       data: {},
     })
       .then((res) => {

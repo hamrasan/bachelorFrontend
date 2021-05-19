@@ -17,7 +17,7 @@ function PlantDetail(props) {
   const fetchPlant = () => {
     axios({
       method: "get",
-      url: "http://localhost:8080/plants/" + params.id,
+      url: process.env.REACT_APP_API_URL + "/plants/" + params.id,
       withCredentials: true,
     })
       .then((res) => {
@@ -37,7 +37,7 @@ function PlantDetail(props) {
   const updatePlant = (id) => {
     axios({
       method: "post",
-      url: "http://localhost:8080/plants/update",
+      url: process.env.REACT_APP_API_URL + "/plants/update",
       withCredentials: true,
       data: {
         id: id,
@@ -78,7 +78,7 @@ function PlantDetail(props) {
       },
       withCredentials: true,
       data: {},
-      url: "http://localhost:8080/plants/" + id,
+      url: process.env.REACT_APP_API_URL + "/plants/" + id,
     })
       .then((res) => {
         console.log(res);

@@ -20,15 +20,17 @@ function TheGarden() {
   const [modalShow, setModalShow] = useState(false);
   const [gardens, setGardens] = useState([]);
   const [actualGardenName, setActualGardenName] = useState("");
+  const [actualGardenSlug, setActualGardenSlug] = useState("");
   const [error, setError] = useState(false);
   const handleError = useErrorHandler();
 
 
-  const fetchPlants = (id, name) => {
+  const fetchPlants = (id, name, slug) => {
     setActualGardenName(name);
+    setActualGardenSlug(slug);
     axios({
       method: "get",
-      url: "http://localhost:8080/plants/garden/" +id,
+      url: process.env.REACT_APP_API_URL + "/plants/garden/" +id,
       withCredentials: true,
     })
       .then((res) => {
@@ -46,7 +48,7 @@ function TheGarden() {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/garden/all",
+      url: process.env.REACT_APP_API_URL + "/garden/all",
     })
       .then((res) => {
         if ((res.status == 200)) {
@@ -54,7 +56,8 @@ function TheGarden() {
           console.log(res.data);
           if(res.data.length>0){
             setActualGardenName(res.data[0].name);
-            fetchPlants(res.data[0].id, res.data[0].name);
+            setActualGardenSlug(res.data[0].slug);
+            fetchPlants(res.data[0].id, res.data[0].name, res.data[0].slug);
           }
         }else throw Error(res.status);
       })
@@ -67,7 +70,7 @@ function TheGarden() {
   const createGarden = (name, location) => {
     axios({
       method: "post",
-      url: "http://localhost:8080/garden/",
+      url: process.env.REACT_APP_API_URL + "/garden/",
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
@@ -107,7 +110,7 @@ function TheGarden() {
   };
 
   const fetchCategories = () => {
-    axios.get("http://localhost:8080/categories").then((res) => {
+    axios.get(process.env.REACT_APP_API_URL + "/categories").then((res) => {
       console.log(res.data);
       setCategories(res.data);
     });
@@ -153,7 +156,7 @@ function TheGarden() {
         {gardens.length > 1 ? (
           <Nav variant="tabs" defaultActiveKey={gardens[0].id} className="mb-3">
             {gardens.map((garden) => (
-              <Nav.Item onClick={() => fetchPlants(garden.id)}>
+              <Nav.Item onClick={() => fetchPlants(garden.id, garden.name, garden.slug)}>
                 <Nav.Link eventKey={garden.id}>{garden.name}</Nav.Link>
               </Nav.Item>
             ))}
@@ -173,7 +176,7 @@ function TheGarden() {
                />
              </Col>
              <Col className="d-flex flex-row-reverse">
-               <Link to={"/garden/new/" + actualGardenName}>
+               <Link to={"/garden/new/" + actualGardenSlug}>
                  <Button variant="info"> Pridaj novú rastlinu </Button>{" "}
                </Link>
              </Col>

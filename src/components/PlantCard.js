@@ -13,7 +13,7 @@ function PlantCard(props) {
       <div className="d-flex justify-content-center bg-light">
         <Card.Img
           variant="top"
-          src={"http://localhost:8080/gallery/" + plant.picture}
+          src={process.env.REACT_APP_API_URL + "/gallery/" + plant.picture}
           style={styleImg}
         />
       </div>

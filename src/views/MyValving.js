@@ -23,7 +23,7 @@ function MyValving() {
   const valvingImmediately = (valveName, length) => {
     axios({
       method: "post",
-      url: "http://localhost:8080/valve/immediately/" + valveName,
+      url: process.env.REACT_APP_API_URL + "/valve/immediately/" + valveName,
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +47,7 @@ function MyValving() {
   const postAddGardens = (id, valveGardens) => {
     axios({
       method: "post",
-      url: "http://localhost:8080/valve/add_gardens/" + id,
+      url: process.env.REACT_APP_API_URL + "/valve/add_gardens/" + id,
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
@@ -69,7 +69,7 @@ function MyValving() {
   const fetchValves = () => {
     axios({
       method: "get",
-      url: "http://localhost:8080/valve/all",
+      url: process.env.REACT_APP_API_URL + "/valve/all",
       withCredentials: true,
     })
       .then((res) => {
@@ -87,7 +87,7 @@ function MyValving() {
   const fetchGardens = () => {
     axios({
       method: "get",
-      url: "http://localhost:8080/garden/all",
+      url: process.env.REACT_APP_API_URL + "/garden/all",
       withCredentials: true,
     })
       .then((res) => {
@@ -105,7 +105,7 @@ function MyValving() {
   const createValve = (id) => {
     axios({
       method: "post",
-      url: "http://localhost:8080/valve/create/" + id,
+      url: process.env.REACT_APP_API_URL + "/valve/create/" + id,
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",

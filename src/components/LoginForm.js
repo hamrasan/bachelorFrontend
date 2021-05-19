@@ -4,7 +4,6 @@ import { useState, useEffect, useContext } from "react";
 import appContext from "../appContext";
 import { useErrorHandler } from "react-error-boundary";
 
-
 function LoginForm() {
   const axios = require("axios");
   const [email, setEmail] = useState("");
@@ -14,31 +13,30 @@ function LoginForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(process.env.REACT_APP_API_URL);
 
-    axios({
-      method: 'post',
-      url: 'http://localhost:8080/login',
-      withCredentials: true,
-      headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-      },
-      data: {
-        email: email,
-        password: password,
-      }
-    }).then(res => {
-      if(res.status == 200){
+    const requestOptions = {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, password: password }),
+    };
+    
+    fetch(process.env.REACT_APP_API_URL + "/login", requestOptions).then((res) => {
+      if (res.status == 200) {
+        console.log(res);
+        console.log("PRIHLASUJEM");
         context.login();
-      } else throw Error(res.status);
-    })
-    .catch((error) => {
+      }
+      else throw Error(res.status);
+    }
+    ).catch((error) => {
       handleError(error);
       context.logout();
       console.log("after logout");
       console.error(error);
     });
-  
   };
 
   return (

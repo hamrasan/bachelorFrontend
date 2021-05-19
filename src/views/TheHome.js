@@ -21,7 +21,7 @@ function TheHome() {
       axios({
         method: "get",
         withCredentials: true,
-        url: "http://localhost:8080/garden/all",
+        url: process.env.REACT_APP_API_URL + "/garden/all",
       })
         .then((res) => {
           if ((res.status == 200)) {
@@ -36,7 +36,7 @@ function TheHome() {
     };
 
   const setRefreshData = () => {
-    axios.get("http://localhost:8080/sensors/request/" + minutes);
+    axios.get(process.env.REACT_APP_API_URL + "/sensors/request/" + minutes);
   };
 
   const handleSubmit = (minutes) => {

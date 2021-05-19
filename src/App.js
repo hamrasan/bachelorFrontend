@@ -19,7 +19,6 @@ import { Redirect, Switch } from "react-router-dom";
 import axios from "axios";
 import ErrorComponent from "./components/ErrorComponent";
 
-
 function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [oldUrl, setOldUrl] = useState(null);
@@ -29,10 +28,15 @@ function App() {
   const login = () => {
     console.log("login name");
     console.log(user);
+    console.log(process.env.REACT_APP_API_URL);
     axios({
       method: "get",
-      url: "http://localhost:8080/user",
+      url: process.env.REACT_APP_API_URL + "/user",
       withCredentials: true,
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   "Access-Control-Allow-Origin": "*",
+      // },
     })
       .then((res) => {
         console.log("res.data");
@@ -58,7 +62,7 @@ function App() {
     axios({
       method: "post",
       withCredentials: true,
-      url: "http://localhost:8080/logout",
+      url: process.env.REACT_APP_API_URL + "/logout",
       data: {},
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -90,7 +94,6 @@ function App() {
     user: user,
   };
 
-
   return (
     <Context.Provider value={contextValue}>
       <div className="App">
@@ -98,7 +101,7 @@ function App() {
           <TheNavigation user={user} />
         </header>
 
-        <ErrorComponent onReset={ () => setError(true)}>
+        <ErrorComponent onReset={() => setError(true)}>
           <div>
             <Switch>
               <AuthRoute path="/login" guest={true}>
@@ -128,7 +131,7 @@ function App() {
               <AuthRoute path="/garden" exact>
                 <TheGarden />
               </AuthRoute>
-              <AuthRoute path="/garden/new/:name">
+              <AuthRoute path="/garden/new/:slug">
                 <PlantNewForm user={user} />
               </AuthRoute>
               <AuthRoute path="/profile">

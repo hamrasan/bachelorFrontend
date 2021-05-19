@@ -19,7 +19,7 @@ function SensorsGarden(props) {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/sensors/temperature/" + props.gardenId,
+      url: process.env.REACT_APP_API_URL + "/sensors/temperature/" + props.gardenId,
     })
       .then((res) => {
         if ((res.status == 200) && (res.data != "")) {
@@ -36,7 +36,7 @@ function SensorsGarden(props) {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/sensors/history/temperature/" + props.gardenId,
+      url: process.env.REACT_APP_API_URL + "/sensors/history/temperature/" + props.gardenId,
     })
       .then((res) => {
         if ((res.status == 200)) {
@@ -53,7 +53,7 @@ function SensorsGarden(props) {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/sensors/soil/" + props.gardenId,
+      url: process.env.REACT_APP_API_URL + "/sensors/soil/" + props.gardenId,
     })
       .then((res) => {
         if ((res.status == 200) && (res.data != "")) {
@@ -71,7 +71,7 @@ function SensorsGarden(props) {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/sensors/history/soil/" + props.gardenId,
+      url: process.env.REACT_APP_API_URL + "/sensors/history/soil/" + props.gardenId,
     })
       .then((res) => {
         if ((res.status == 200)) {
@@ -88,7 +88,7 @@ function SensorsGarden(props) {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/sensors/pressure/" + props.gardenId,
+      url: process.env.REACT_APP_API_URL + "/sensors/pressure/" + props.gardenId,
     })
       .then((res) => {
         if ((res.status == 200) && (res.data != "")) {
@@ -105,7 +105,7 @@ function SensorsGarden(props) {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/sensors/history/pressure/" + props.gardenId,
+      url: process.env.REACT_APP_API_URL + "/sensors/history/pressure/" + props.gardenId,
     })
       .then((res) => {
         if ((res.status == 200)) {
@@ -122,7 +122,7 @@ function SensorsGarden(props) {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/sensors/humidity/" + props.gardenId,
+      url: process.env.REACT_APP_API_URL + "/sensors/humidity/" + props.gardenId,
     })
       .then((res) => {
         if ((res.status == 200) && (res.data != "")) {
@@ -140,7 +140,7 @@ function SensorsGarden(props) {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/sensors/history/humidity/" + props.gardenId,
+      url: process.env.REACT_APP_API_URL + "/sensors/history/humidity/" + props.gardenId,
     })
       .then((res) => {
         if ((res.status == 200)) {
@@ -157,7 +157,7 @@ function SensorsGarden(props) {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/sensors/rain/" + props.gardenId,
+      url: process.env.REACT_APP_API_URL + "/sensors/rain/" + props.gardenId,
     })
       .then((res) => {
         if ((res.status == 200) && (res.data != "")) {
@@ -174,7 +174,7 @@ function SensorsGarden(props) {
     axios({
       method: "get",
       withCredentials: true,
-      url: "http://localhost:8080/sensors/history/rain/" + props.gardenId,
+      url: process.env.REACT_APP_API_URL + "/sensors/history/rain/" + props.gardenId,
     })
       .then((res) => {
         if ((res.status == 200)) {

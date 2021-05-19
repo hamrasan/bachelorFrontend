@@ -22,7 +22,7 @@ function RegisterForm() {
         "Access-Control-Allow-Origin": "*",
       },
       withCredentials: true,
-      url: "http://localhost:8080/user",
+      url: process.env.REACT_APP_API_URL + "/user",
       data: {
         user: {
           firstName: firstName,

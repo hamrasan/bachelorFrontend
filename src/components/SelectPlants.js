@@ -21,7 +21,7 @@ function SelectPlants(props) {
       axios({
         method: "get",
         url:
-          "http://localhost:8080/plants/" +
+          process.env.REACT_APP_API_URL + "/plants/" +
           props.category +
           "/" +
           props.subcategory,
@@ -59,7 +59,7 @@ function SelectPlants(props) {
                   <div className="d-flex justify-content-center bg-light">
                     <Card.Img
                       variant="top"
-                      src={"http://localhost:8080/gallery/" + plant.picture}
+                      src={process.env.REACT_APP_API_URL + "/gallery/" + plant.picture}
                       style={{ maxWidth: "200px", maxHeight: "200px" }}
                     />
                   </div>
