@@ -36,7 +36,7 @@ function MyValving() {
       .then((res) => {
         if (res.status == 200) {
           console.log(res);
-        } else throw Error(res.status);
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -76,7 +76,7 @@ function MyValving() {
         if (res.status == 200) {
           console.log(res);
           setValves(res.data);
-        } else throw Error(res.status);
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -94,7 +94,7 @@ function MyValving() {
         if (res.status == 200) {
           console.log(res);
           setGardens(res.data);
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);
@@ -117,7 +117,6 @@ function MyValving() {
         if (res.status == 200) {
           fetchValves();
         } 
-        else throw Error(res.status);
       })
       .catch((error) => {
         if (error.response.status == 403) {
