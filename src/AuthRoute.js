@@ -7,8 +7,8 @@ function AuthRoute(props) {
   const context = useContext(contextValue);
 
   if (context.isAuth && props.guest) {
-    if(context.oldUrl) return <Redirect to={context.oldUrl}/>;
-    return <Redirect to="/" />;
+    return  <Redirect to="/" />;
+    // <Redirect to={context.oldUrl}/>;   
   }
   else if (context.isAuth) {
     return <Route {...props}>{props.children}</Route>;
