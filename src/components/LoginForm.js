@@ -2,7 +2,7 @@ import { Form, Col, Button, Row, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import appContext from "../appContext";
-import ErrorComponent from "../components/ErrorComponent";
+import ErrorComponent from "./ErrorComponent";
 import { useErrorHandler } from "react-error-boundary";
 
 function LoginForm() {
@@ -15,7 +15,6 @@ function LoginForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(process.env.REACT_APP_API_URL);
 
     const requestOptions = {
       method: "POST",

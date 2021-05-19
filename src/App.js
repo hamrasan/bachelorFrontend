@@ -24,19 +24,15 @@ function App() {
   const [oldUrl, setOldUrl] = useState(null);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(false);
+  const handleError = useErrorHandler();
 
   const login = () => {
     console.log("login name");
     console.log(user);
-    console.log(process.env.REACT_APP_API_URL);
     axios({
       method: "get",
       url: process.env.REACT_APP_API_URL + "/user",
       withCredentials: true,
-      // headers: {
-      //   "Content-Type": "application/json",
-      //   "Access-Control-Allow-Origin": "*",
-      // },
     })
       .then((res) => {
         console.log("res.data");
@@ -45,6 +41,7 @@ function App() {
         setIsAuth(true);
       })
       .catch((error) => {
+        handleError(error);
         logoutFrontEnd();
         console.log("after logout");
         console.error(error);
@@ -74,6 +71,7 @@ function App() {
         logoutFrontEnd();
       })
       .catch((error) => {
+        handleError(error);
         console.log("after logout");
         console.error(error);
       });
