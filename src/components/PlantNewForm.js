@@ -5,13 +5,9 @@ import {
   Col,
   Container,
   Button,
-  Card,
-  CardDeck,
-  CardGroup,
 } from "react-bootstrap";
 import { useHistory, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import TheSpinner from "../components/TheSpinner";
 import SelectPlants from "../components/SelectPlants";
 import "react-datepicker/dist/react-datepicker.css";
 import ErrorComponent from "../components/ErrorComponent";
@@ -44,7 +40,7 @@ function PlantNewForm(props) {
       withCredentials: true,
     })
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           setCategories(res.data);
         }
       })
@@ -77,7 +73,7 @@ function PlantNewForm(props) {
       },
     })
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           console.log("plant was send");
           history.push("/garden");
         }
@@ -149,7 +145,7 @@ function PlantNewForm(props) {
                           Vyber z možností
                         </option>
                         {categories
-                          .filter((category) => category.name == categoryName)
+                          .filter((category) => category.name === categoryName)
                           .map((category) =>
                             category.subcategoryNames.map((subcategory) =>
                               subcategory === "None" ? (

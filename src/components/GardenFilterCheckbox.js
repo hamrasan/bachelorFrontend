@@ -1,4 +1,4 @@
-import { Container, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
 function GardenFilterCheckbox(props) {
   const item = props.item;

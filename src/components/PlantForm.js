@@ -1,12 +1,10 @@
 import { Form, Row, Col, Container, Button } from "react-bootstrap";
-import { useState, useEffect } from "react";
 import TheSpinner from "../components/TheSpinner";
 import ModalConfirm from "../components/ModalConfirm";
 
 function PlantForm(props) {
   let plant = props.plant;
   console.log(plant);
-  const [modal, setModal] = useState(false);
 
   if (plant == null) {
     return <TheSpinner></TheSpinner>;

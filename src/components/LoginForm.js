@@ -6,7 +6,6 @@ import ErrorComponent from "./ErrorComponent";
 import { useErrorHandler } from "react-error-boundary";
 
 function LoginForm() {
-  const axios = require("axios");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -26,7 +25,7 @@ function LoginForm() {
 
     fetch(process.env.REACT_APP_API_URL + "/login", requestOptions)
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           context.login();
         }
       })

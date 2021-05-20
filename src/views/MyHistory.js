@@ -1,5 +1,3 @@
-import ProfileStyle from "../components/ProfileStyle";
-import contextValue from "../appContext";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ErrorComponent from "../components/ErrorComponent";
@@ -7,10 +5,6 @@ import { useErrorHandler } from "react-error-boundary";
 
 import {
   Container,
-  Row,
-  Form,
-  Col,
-  Button,
   ListGroup,
   ListGroupItem,
 } from "react-bootstrap";
@@ -41,7 +35,7 @@ function MyHistory() {
         if ((res.status == 200)) {
           setHistory(res.data);
           console.log(res);
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         handleError(error);
@@ -63,13 +57,13 @@ function MyHistory() {
               {" "}
               <span>{makeFormattedDate(item.date)}</span>{" "}
               <span>
-                {params.sensor == "rain"
+                {params.sensor === "rain"
                   ? item.value == false
                     ? "Neprší"
                     : "Prší"
-                  : params.sensor == "temperature"
+                  : params.sensor === "temperature"
                   ? item.value + " °C"
-                  : params.sensor == "pressure"
+                  : params.sensor === "pressure"
                   ? item.value + " hPa"
                   : item.value + " %"}
               </span>

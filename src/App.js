@@ -18,6 +18,8 @@ import Cookies from "js-cookie";
 import { Redirect, Switch } from "react-router-dom";
 import axios from "axios";
 import ErrorComponent from "./components/ErrorComponent";
+import { useErrorHandler } from "react-error-boundary";
+
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -50,10 +52,10 @@ function App() {
   };
 
   useLayoutEffect(() => {
-    if (Cookies.get("JSESSIONID") && isAuth == false) {
+    if (Cookies.get("JSESSIONID") && isAuth === false) {
       login();
     }
-  }, isAuth);
+  }, [isAuth, error]);
 
   const logout = () => {
     axios({

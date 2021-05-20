@@ -1,4 +1,4 @@
-import { Container, CardDeck, Card, Button, Accordion } from "react-bootstrap";
+import { Container, Card, Button, Accordion } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import ModalSetSensorsTime from "../components/ModalSetSensorsTime";
 import SensorsGarden from "./SensorsGarden";
@@ -8,9 +8,7 @@ import { useErrorHandler } from "react-error-boundary";
 
 function TheHome() {
   const axios = require("axios");
-  const [userTemp, setUserTemp] = useState(15);
   const [minutes, setMinutes] = useState(15);
-  const [modalShowTemp, setModalShowTemp] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [gardenId, setGardenId] = useState(null);
   const [gardens, setGardens] = useState([]);

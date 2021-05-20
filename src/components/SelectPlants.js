@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Form, Card, CardGroup, Row, Col } from "react-bootstrap";
+import { Card, CardGroup, Col } from "react-bootstrap";
 import ErrorComponent from "../components/ErrorComponent";
 
 function SelectPlants(props) {

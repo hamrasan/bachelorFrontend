@@ -2,8 +2,6 @@ import ProfileStyle from "../components/ProfileStyle";
 import contextValue from "../appContext";
 import { useContext } from "react";
 
-import { Container, Row, Form, Col, Button } from "react-bootstrap";
-
 function MyProfile() {
   let context = useContext(contextValue);
   console.log(context.user);

@@ -1,8 +1,6 @@
 import {
-  CardDeck,
   Container,
   Button,
-  Form,
   ListGroup,
   Row,
   Col,
@@ -23,7 +21,6 @@ function ValvingSchedule() {
   const [modalShowConfirm, setModalShowConfirm] = useState(false);
   const [scheduleIdRemove, setScheduleIdRemove] = useState(null);
   const [error, setError] = useState(false);
-  let history = useHistory();
   const params = useParams();
 
   const handleCheckbox = (id) => {
@@ -43,10 +40,10 @@ function ValvingSchedule() {
       url: process.env.REACT_APP_API_URL + "/schedule/all/" + params.id,
     })
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           setSchedules(res.data);
           console.log(res);
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);
@@ -73,9 +70,9 @@ function ValvingSchedule() {
       .then((res) => {
         console.log("daaata");
         console.log(res);
-        if (res.status == 200) {
+        if (res.status === 200) {
           fetchSchedules();
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.log("after register");
@@ -97,9 +94,9 @@ function ValvingSchedule() {
     })
       .then((res) => {
         console.log(res);
-        if (res.status == 200) {
+        if (res.status === 200) {
           fetchSchedules();
-        } else throw Error(res.status);
+        } 
       })
       .catch((error) => {
         console.error(error);
